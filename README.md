@@ -16,7 +16,7 @@ To get started you instantiate a `Logger` using the `LoggerFactory`:
 // usually a logger will be per-class, getLogger() also can take a String label
 private static final Logger logger = LoggerFactory.getLogger(MyClass.class);
 ...
-// log a trace statement with arguments, the toString() on the args won't be called unless trace messages enabled
+// log trace messagge with arguments. toString() on the args only called if trace messages enabled
 logger.trace("some trace information: {} and {}", arg1, arg2);
 ...
 // exception messages coment _before_ the message format to not confuse the arguments
