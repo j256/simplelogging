@@ -11,10 +11,6 @@ import java.io.StringWriter;
 
 import org.junit.Test;
 
-import com.j256.simplelogging.LocalLogBackend;
-import com.j256.simplelogging.LogBackend;
-import com.j256.simplelogging.LogBackend.Level;
-
 public class LocalLogBackendTest extends BaseLogBackendTest {
 
 	public LocalLogBackendTest() {

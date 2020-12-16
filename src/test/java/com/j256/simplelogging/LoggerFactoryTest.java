@@ -12,7 +12,6 @@ import java.lang.reflect.Constructor;
 
 import org.junit.Test;
 
-import com.j256.simplelogging.LogBackend.Level;
 import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
 import com.j256.simplelogging.LoggerFactory.LogBackendType;
 

@@ -4,9 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.j256.simplelogging.LogBackend;
-import com.j256.simplelogging.LogBackend.Level;
-
 public abstract class BaseLogBackendTest {
 
 	private final LogBackend log;
