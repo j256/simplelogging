@@ -101,7 +101,7 @@ public class LocalLogBackendTest extends BaseLogBackendTest {
 		// invalid line
 		stringWriter.write("x\n");
 		// invalid level
-		stringWriter.write("com\\.j256\\.ormlite\\.stmt\\.StatementExecutor = INVALID_LEVEL\n");
+		stringWriter.write("com\\.foo\\.myclass\\.StatementExecutor = INVALID_LEVEL\n");
 		LocalLogBackend.readLevelResourceFile(new ByteArrayInputStream(stringWriter.toString().getBytes()));
 	}
 
@@ -112,6 +112,7 @@ public class LocalLogBackendTest extends BaseLogBackendTest {
 			public int read() throws IOException {
 				throw new IOException("simulated exception");
 			}
+
 			@Override
 			public void close() throws IOException {
 				throw new IOException("simulated exception");

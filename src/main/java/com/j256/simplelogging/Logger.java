@@ -11,11 +11,11 @@ import com.j256.simplelogging.LogBackend.Level;
  * </p>
  * 
  * <p>
- * <b>NOTE:</b> We do the (msg, arg0), (msg, arg0, arg1), (msg, arg0, arg1, arg2), and (msg, argArray) patterns because
- * if we do ... for everything, we will get a new Object[] each log call which we don't want -- even if the message is
- * never logged because of the log level. Also, we don't use ... at all because we want to know <i>when</i> we are
- * creating a new Object[] so we can make sure it is what we want. I thought ... was so much better than slf4j but it
- * turns out they were spot on. Sigh.
+ * <b>NOTE:</b> We do the (msg, arg0), (msg, arg0, arg1), (msg, arg0, arg1, arg2), (msg, arg0, arg1, arg2, arg3), and
+ * (msg, argArray) patterns because if we do ... for everything, we will get a new Object[] each log call which we don't
+ * want -- even if the message is never logged because of the log level. Also, we don't use ... at all because we want
+ * to know <i>when</i> we are creating a new Object[] so we can make sure it is what we want. I thought ... was so much
+ * better than slf4j but it turns out they were spot on. Sigh.
  * </p>
  * 
  * <p>
@@ -42,9 +42,9 @@ public class Logger {
 	}
 
 	/**
-	 * Set the log level for all of the loggers. This should be done very early in your application's main or launch
-	 * methods. It allows you to set a filter on all log messages. Set to null to disable any global log level filtering
-	 * of messages and go back to the per-log level matching.
+	 * Set the log level for all of the loggers. This should be done very early in an application's main or launch
+	 * methods. It allows the caller to set a filter on all log messages. Set to null to disable any global log level
+	 * filtering of messages and go back to the per-log level matching.
 	 */
 	public static void setGlobalLogLevel(Level level) {
 		Logger.globalLevel = level;

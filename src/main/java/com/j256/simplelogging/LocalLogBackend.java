@@ -21,30 +21,30 @@ import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
  * Log that uses logging classes if they are not available.
  * 
  * <p>
- * You can set the log level by setting the System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, "trace"). Acceptable
- * values are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. You can also redirect the log to a file by setting the
- * System.setProperty(LocalLog.LOCAL_LOG_FILE_PROPERTY, "log.out"). Otherwise, log output will go to stdout.
+ * You can set the log level by setting the System.setProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY, "trace").
+ * Acceptable values are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. You can also redirect the log to a file by setting
+ * the System.setProperty(LocalLogBackend.LOCAL_LOG_FILE_PROPERTY, "log.out"). Otherwise, log output will go to stdout.
  * </p>
  * 
  * <p>
- * It also supports a file ormliteLocalLog.properties file which contains lines such as:
+ * It also supports a file simpleLoggingLocalLog.properties file which contains lines such as:
  * </p>
  * 
  * <pre>
  * # regex-pattern = Level
- * log4j\.logger\.com\.j256\.ormlite.*=DEBUG
- * log4j\.logger\.com\.j256\.ormlite\.stmt\.mapped.BaseMappedStatement=TRACE
- * log4j\.logger\.com\.j256\.ormlite\.stmt\.mapped.MappedCreate=TRACE
- * log4j\.logger\.com\.j256\.ormlite\.stmt\.StatementExecutor=TRACE
+ * log4j\.logger\.com\.foo\.yourclass.*=DEBUG
+ * log4j\.logger\.com\.foo\.yourclass\.BaseMappedStatement=TRACE
+ * log4j\.logger\.com\.foo\.yourclass\.MappedCreate=TRACE
+ * log4j\.logger\.com\.foo\.yourclass\.StatementExecutor=TRACE
  * </pre>
  * 
  * @author graywatson
  */
 public class LocalLogBackend implements LogBackend {
 
-	public static final String LOCAL_LOG_LEVEL_PROPERTY = "com.j256.ormlite.logger.level";
-	public static final String LOCAL_LOG_FILE_PROPERTY = "com.j256.ormlite.logger.file";
-	public static final String LOCAL_LOG_PROPERTIES_FILE = "/ormliteLocalLog.properties";
+	public static final String LOCAL_LOG_LEVEL_PROPERTY = "com.j256.simplelogging.level";
+	public static final String LOCAL_LOG_FILE_PROPERTY = "com.j256.simplelogging.file";
+	public static final String LOCAL_LOG_PROPERTIES_FILE = "/simpleLoggingLocalLog.properties";
 
 	private static final Level DEFAULT_LEVEL = Level.DEBUG;
 	// used with clone()

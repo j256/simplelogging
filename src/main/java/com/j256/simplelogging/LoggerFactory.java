@@ -5,18 +5,17 @@ import java.lang.reflect.Constructor;
 import com.j256.simplelogging.LogBackend.Level;
 
 /**
- * Factory that creates {@link Logger} instances. It uses reflection to see what loggers are installed on the system and
- * tries to find the most appropriate one.
+ * Factory that creates {@link Logger} instances. It uses reflection to see what logging backends are available on the
+ * classpath and tries to find the most appropriate one.
  * 
  * <p>
- * To set the logger to a particular type, set the system property ("com.j256.ormlite.logger.type") contained in
- * {@link #LOG_TYPE_SYSTEM_PROPERTY} ("com.j256.ormlite.logger.type") to be one of the values in
- * {@link LoggerFactory.LogBackendType} enum.
+ * To set the logger to a particular type, set the system property ("com.j256.simplelogger.backend") contained in
+ * {@link #LOG_TYPE_SYSTEM_PROPERTY} to be name of one of the enumerated types in {@link LoggerFactory.LogBackendType}.
  * </p>
  */
 public class LoggerFactory {
 
-	public static final String LOG_TYPE_SYSTEM_PROPERTY = "com.j256.ormlite.logger.type";
+	public static final String LOG_TYPE_SYSTEM_PROPERTY = "com.j256.simplelogger.backend";
 	private static LogBackendFactory logBackendFactory;
 
 	/**
@@ -75,8 +74,8 @@ public class LoggerFactory {
 				return LogBackendType.valueOf(logTypeString);
 			} catch (IllegalArgumentException e) {
 				LogBackend backend = new LocalLogBackend(LoggerFactory.class.getName());
-				backend.log(Level.WARNING, "Could not find valid log-type from system property '" + LOG_TYPE_SYSTEM_PROPERTY
-						+ "', value '" + logTypeString + "'");
+				backend.log(Level.WARNING, "Could not find valid log-type from system property '"
+						+ LOG_TYPE_SYSTEM_PROPERTY + "', value '" + logTypeString + "'");
 			}
 		}
 

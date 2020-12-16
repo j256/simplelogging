@@ -10,7 +10,7 @@ import android.util.Log;
  * </p>
  * 
  * <pre>
- * adb shell setprop log.tag.OrmLiteBaseActivity VERBOSE
+ * adb shell setprop log.tag.YourActivity VERBOSE
  * </pre>
  * 
  * <p>
@@ -24,11 +24,11 @@ import android.util.Log;
  * </pre>
  * 
  * <p>
- * To see all ORMLite log messages use:
+ * To see all log messages use:
  * </p>
  * 
  * <pre>
- * adb shell setprop log.tag.ORMLite DEBUG
+ * adb shell setprop log.tag.simplelogging DEBUG
  * </pre>
  * 
  * @author graywatson

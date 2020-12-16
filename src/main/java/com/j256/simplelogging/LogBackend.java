@@ -1,7 +1,7 @@
 package com.j256.simplelogging;
 
 /**
- * Interface so we can front various log code which may or may not be in the classpath.
+ * Class which fronts various log code which may or may not be in the classpath.
  * 
  * @author graywatson
  */
@@ -51,8 +51,9 @@ public interface LogBackend {
 
 		/**
 		 * Return whether or not a level argument is enabled for this level value. So,
-		 * {@code Level.INFO.isEnabled(Level.WARN)} returns true but {@code Level.INFO.isEnabled(Level.DEBUG)} returns
-		 * false.
+		 * {@code Level.INFO.isEnabled(Level.WARN)} returns true because if INFO level is enabled, WARN messages are
+		 * displayed but {@code Level.INFO.isEnabled(Level.DEBUG)} returns false because if INFO level is enabled, DEBUG
+		 * messages are not displayed.
 		 */
 		public boolean isEnabled(Level otherLevel) {
 			return (this != Level.OFF && otherLevel != Level.OFF && level <= otherLevel.level);
