@@ -28,7 +28,7 @@ public class Log4jLogBackend implements LogBackend {
 		logger.log(levelToLog4jLevel(level), msg, t);
 	}
 
-	private org.apache.log4j.Level levelToLog4jLevel(com.j256.simplelogging.LogBackend.Level level) {
+	private org.apache.log4j.Level levelToLog4jLevel(Level level) {
 		switch (level) {
 			case TRACE:
 				return org.apache.log4j.Level.TRACE;

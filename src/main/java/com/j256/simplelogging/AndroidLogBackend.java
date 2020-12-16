@@ -33,7 +33,7 @@ import android.util.Log;
  * 
  * @author graywatson
  */
-public class AndroidLogBackend implements com.j256.simplelogging.LogBackend {
+public class AndroidLogBackend implements LogBackend {
 
 	private final static String ALL_LOGS_NAME = "simplelogging";
 	private final static int REFRESH_LEVEL_CACHE_EVERY = 200;
@@ -55,7 +55,7 @@ public class AndroidLogBackend implements com.j256.simplelogging.LogBackend {
 		}
 		// find the maximum level value
 		int maxLevel = 0;
-		for (com.j256.simplelogging.LogBackend.Level level : com.j256.simplelogging.LogBackend.Level.values()) {
+		for (Level level : Level.values()) {
 			int androidLevel = levelToAndroidLevel(level);
 			if (androidLevel > maxLevel) {
 				maxLevel = androidLevel;
@@ -135,7 +135,7 @@ public class AndroidLogBackend implements com.j256.simplelogging.LogBackend {
 	}
 
 	private void refreshLevelCache() {
-		for (com.j256.simplelogging.LogBackend.Level level : com.j256.simplelogging.LogBackend.Level.values()) {
+		for (Level level : Level.values()) {
 			int androidLevel = levelToAndroidLevel(level);
 			if (androidLevel < levelCache.length) {
 				levelCache[androidLevel] = isLevelEnabledInternal(androidLevel);
@@ -148,7 +148,7 @@ public class AndroidLogBackend implements com.j256.simplelogging.LogBackend {
 		return Log.isLoggable(className, androidLevel) || Log.isLoggable(ALL_LOGS_NAME, androidLevel);
 	}
 
-	private int levelToAndroidLevel(com.j256.simplelogging.LogBackend.Level level) {
+	private int levelToAndroidLevel(Level level) {
 		switch (level) {
 			case TRACE:
 				return Log.VERBOSE;

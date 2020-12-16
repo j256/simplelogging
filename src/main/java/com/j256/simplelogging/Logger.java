@@ -2,8 +2,6 @@ package com.j256.simplelogging;
 
 import java.lang.reflect.Array;
 
-import com.j256.simplelogging.LogBackend.Level;
-
 /**
  * <p>
  * Class which wraps our {@link LogBackend} interface and provides {} argument features like slf4j. It allows us to plug

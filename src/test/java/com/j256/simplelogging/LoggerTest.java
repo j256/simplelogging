@@ -16,10 +16,6 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.j256.simplelogging.LogBackend;
-import com.j256.simplelogging.Logger;
-import com.j256.simplelogging.LogBackend.Level;
-
 public class LoggerTest {
 
 	private Logger logger;

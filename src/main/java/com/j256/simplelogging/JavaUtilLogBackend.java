@@ -15,21 +15,21 @@ public class JavaUtilLogBackend implements LogBackend {
 	}
 
 	@Override
-	public boolean isLevelEnabled(com.j256.simplelogging.LogBackend.Level level) {
+	public boolean isLevelEnabled(Level level) {
 		return logger.isLoggable(levelToJavaLevel(level));
 	}
 
 	@Override
-	public void log(com.j256.simplelogging.LogBackend.Level level, String msg) {
+	public void log(Level level, String msg) {
 		logger.log(levelToJavaLevel(level), msg);
 	}
 
 	@Override
-	public void log(com.j256.simplelogging.LogBackend.Level level, String msg, Throwable throwable) {
+	public void log(Level level, String msg, Throwable throwable) {
 		logger.log(levelToJavaLevel(level), msg, throwable);
 	}
 
-	private java.util.logging.Level levelToJavaLevel(com.j256.simplelogging.LogBackend.Level level) {
+	private java.util.logging.Level levelToJavaLevel(Level level) {
 		switch (level) {
 			case TRACE:
 				return java.util.logging.Level.FINER;
