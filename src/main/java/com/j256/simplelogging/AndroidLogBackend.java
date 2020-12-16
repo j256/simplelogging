@@ -33,7 +33,7 @@ import android.util.Log;
  * 
  * @author graywatson
  */
-public class AndroidLog implements com.j256.simplelogging.Log {
+public class AndroidLogBackend implements com.j256.simplelogging.LogBackend {
 
 	private final static String ALL_LOGS_NAME = "simplelogging";
 	private final static int REFRESH_LEVEL_CACHE_EVERY = 200;
@@ -45,7 +45,7 @@ public class AndroidLog implements com.j256.simplelogging.Log {
 	private volatile int levelCacheC = 0;
 	private final boolean levelCache[];
 
-	public AndroidLog(String className) {
+	public AndroidLogBackend(String className) {
 		// get the last part of the class name
 		this.className = LoggerFactory.getSimpleClassName(className);
 		// make sure that our tag length is not too long
@@ -55,7 +55,7 @@ public class AndroidLog implements com.j256.simplelogging.Log {
 		}
 		// find the maximum level value
 		int maxLevel = 0;
-		for (com.j256.simplelogging.Log.Level level : com.j256.simplelogging.Log.Level.values()) {
+		for (com.j256.simplelogging.LogBackend.Level level : com.j256.simplelogging.LogBackend.Level.values()) {
 			int androidLevel = levelToAndroidLevel(level);
 			if (androidLevel > maxLevel) {
 				maxLevel = androidLevel;
@@ -135,7 +135,7 @@ public class AndroidLog implements com.j256.simplelogging.Log {
 	}
 
 	private void refreshLevelCache() {
-		for (com.j256.simplelogging.Log.Level level : com.j256.simplelogging.Log.Level.values()) {
+		for (com.j256.simplelogging.LogBackend.Level level : com.j256.simplelogging.LogBackend.Level.values()) {
 			int androidLevel = levelToAndroidLevel(level);
 			if (androidLevel < levelCache.length) {
 				levelCache[androidLevel] = isLevelEnabledInternal(androidLevel);
@@ -148,7 +148,7 @@ public class AndroidLog implements com.j256.simplelogging.Log {
 		return Log.isLoggable(className, androidLevel) || Log.isLoggable(ALL_LOGS_NAME, androidLevel);
 	}
 
-	private int levelToAndroidLevel(com.j256.simplelogging.Log.Level level) {
+	private int levelToAndroidLevel(com.j256.simplelogging.LogBackend.Level level) {
 		switch (level) {
 			case TRACE:
 				return Log.VERBOSE;

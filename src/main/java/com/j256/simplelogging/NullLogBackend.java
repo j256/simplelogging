@@ -1,18 +1,18 @@
 package com.j256.simplelogging;
 
-import com.j256.simplelogging.LoggerFactory.LogFactory;
+import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
 
 /**
  * Log that ignores all log requests.
  * 
  * @author graywatson
  */
-public class NullLog implements Log {
+public class NullLogBackend implements LogBackend {
 
 	/**
 	 * This has an ignored param to match the other log implementations.
 	 */
-	public NullLog(String classLabel) {
+	public NullLogBackend(String classLabel) {
 		// no-op
 	}
 
@@ -33,12 +33,12 @@ public class NullLog implements Log {
 
 	/**
 	 * Factory for generating NullLog instances. This can be used with the
-	 * {@link LoggerFactory#setLogFactory(LogFactory)} method to completely disable all logging.
+	 * {@link LoggerFactory#setLogFactory(LogBackendFactory)} method to completely disable all logging.
 	 */
-	public static class NullLogFactory implements LogFactory {
+	public static class NullLogFactory implements LogBackendFactory {
 		@Override
-		public Log createLog(String classLabel) {
-			return new NullLog(classLabel);
+		public LogBackend createLogBackend(String classLabel) {
+			return new NullLogBackend(classLabel);
 		}
 	}
 }

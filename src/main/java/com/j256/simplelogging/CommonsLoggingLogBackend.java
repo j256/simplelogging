@@ -5,11 +5,11 @@ package com.j256.simplelogging;
  * 
  * @author graywatson
  */
-public class CommonsLoggingLog implements Log {
+public class CommonsLoggingLogBackend implements LogBackend {
 
 	private final org.apache.commons.logging.Log log;
 
-	public CommonsLoggingLog(String className) {
+	public CommonsLoggingLogBackend(String className) {
 		this.log = org.apache.commons.logging.LogFactory.getLog(className);
 	}
 

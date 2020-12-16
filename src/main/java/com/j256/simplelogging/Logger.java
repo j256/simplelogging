@@ -2,12 +2,12 @@ package com.j256.simplelogging;
 
 import java.lang.reflect.Array;
 
-import com.j256.simplelogging.Log.Level;
+import com.j256.simplelogging.LogBackend.Level;
 
 /**
  * <p>
- * Class which wraps our {@link Log} interface and provides {} argument features like slf4j. It allows us to plug in
- * additional log systems if necessary.
+ * Class which wraps our {@link LogBackend} interface and provides {} argument features like slf4j. It allows us to plug
+ * in additional log backends if necessary.
  * </p>
  * 
  * <p>
@@ -34,11 +34,11 @@ public class Logger {
 	private final static String ARG_STRING = "{}";
 	private final static Object UNKNOWN_ARG = new Object();
 	private final static int DEFAULT_FULL_MESSAGE_LENGTH = 128;
-	private final Log log;
+	private final LogBackend backend;
 	private static Level globalLevel;
 
-	public Logger(Log log) {
-		this.log = log;
+	public Logger(LogBackend backend) {
+		this.backend = backend;
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class Logger {
 	 * Return if logging level is enabled.
 	 */
 	public boolean isLevelEnabled(Level level) {
-		return log.isLevelEnabled(level);
+		return backend.isLevelEnabled(level);
 	}
 
 	/**
@@ -646,22 +646,22 @@ public class Logger {
 	}
 
 	/**
-	 * Get the underlying Log implementation for testing purposes.
+	 * Get the underlying log backend implementation for testing purposes.
 	 */
-	public Log getLog() {
-		return log;
+	public LogBackend getLog() {
+		return backend;
 	}
 
 	private void logIfEnabled(Level level, Throwable throwable, String msg, Object arg0, Object arg1, Object arg2,
 			Object arg3, Object[] argArray) {
 		if (globalLevel != null && !globalLevel.isEnabled(level)) {
 			// don't log the message if the global-level is set and not enabled
-		} else if (log.isLevelEnabled(level)) {
+		} else if (backend.isLevelEnabled(level)) {
 			String fullMsg = buildFullMessage(msg, arg0, arg1, arg2, arg3, argArray);
 			if (throwable == null) {
-				log.log(level, fullMsg);
+				backend.log(level, fullMsg);
 			} else {
-				log.log(level, fullMsg, throwable);
+				backend.log(level, fullMsg, throwable);
 			}
 		}
 	}
@@ -736,7 +736,7 @@ public class Logger {
 			}
 			sb.append(']');
 		} else {
-			// might as well to the toString here because we know it isn't null
+			// might as well do the toString here because we know it isn't null
 			sb.append(arg.toString());
 		}
 	}

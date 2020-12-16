@@ -5,7 +5,7 @@ package com.j256.simplelogging;
  * 
  * @author graywatson
  */
-public interface Log {
+public interface LogBackend {
 
 	/**
 	 * Returns true if the log mode is in trace or higher.

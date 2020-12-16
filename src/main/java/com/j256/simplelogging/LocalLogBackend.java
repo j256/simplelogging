@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import com.j256.simplelogging.LoggerFactory.LogFactory;
+import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
 
 /**
  * Log that uses logging classes if they are not available.
@@ -40,7 +40,7 @@ import com.j256.simplelogging.LoggerFactory.LogFactory;
  * 
  * @author graywatson
  */
-public class LocalLog implements Log {
+public class LocalLogBackend implements LogBackend {
 
 	public static final String LOCAL_LOG_LEVEL_PROPERTY = "com.j256.ormlite.logger.level";
 	public static final String LOCAL_LOG_FILE_PROPERTY = "com.j256.ormlite.logger.file";
@@ -56,7 +56,7 @@ public class LocalLog implements Log {
 	private final Level level;
 
 	static {
-		InputStream stream = LocalLog.class.getResourceAsStream(LOCAL_LOG_PROPERTIES_FILE);
+		InputStream stream = LocalLogBackend.class.getResourceAsStream(LOCAL_LOG_PROPERTIES_FILE);
 		List<PatternLevel> levels = readLevelResourceFile(stream);
 		classLevels = levels;
 
@@ -68,7 +68,7 @@ public class LocalLog implements Log {
 		openLogFile(logPath);
 	}
 
-	public LocalLog(String className) {
+	public LocalLogBackend(String className) {
 		// get the last part of the class name
 		this.className = LoggerFactory.getSimpleClassName(className);
 
@@ -217,12 +217,12 @@ public class LocalLog implements Log {
 
 	/**
 	 * Internal factory for LocalLog instances. This can be used with the
-	 * {@link LoggerFactory#setLogFactory(LogFactory)} method to send all log messages to a file.
+	 * {@link LoggerFactory#setLogFactory(LogBackendFactory)} method to send all log messages to a file.
 	 */
-	public static class LocalLogFactory implements LogFactory {
+	public static class LocalLogFactory implements LogBackendFactory {
 		@Override
-		public Log createLog(String classLabel) {
-			return new LocalLog(classLabel);
+		public LogBackend createLogBackend(String classLabel) {
+			return new LocalLogBackend(classLabel);
 		}
 	}
 

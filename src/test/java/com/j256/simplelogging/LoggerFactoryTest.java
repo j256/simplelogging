@@ -12,9 +12,9 @@ import java.lang.reflect.Constructor;
 
 import org.junit.Test;
 
-import com.j256.simplelogging.Log.Level;
-import com.j256.simplelogging.LoggerFactory.LogFactory;
-import com.j256.simplelogging.LoggerFactory.LogType;
+import com.j256.simplelogging.LogBackend.Level;
+import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
+import com.j256.simplelogging.LoggerFactory.LogBackendType;
 
 public class LoggerFactoryTest {
 
@@ -39,20 +39,20 @@ public class LoggerFactoryTest {
 
 	@Test
 	public void testLogTypes() {
-		checkLog(LogType.SLF4J, Slf4jLoggingLog.class, true);
-		checkLog(LogType.ANDROID, LocalLog.class, false);
-		checkLog(LogType.COMMONS_LOGGING, CommonsLoggingLog.class, true);
-		checkLog(LogType.LOG4J2, Log4j2Log.class, true);
-		checkLog(LogType.LOG4J, Log4jLog.class, true);
-		checkLog(LogType.LOCAL, LocalLog.class, true);
-		checkLog(LogType.JAVA_UTIL, JavaUtilLog.class, true);
-		checkLog(LogType.NULL, NullLog.class, false);
+		checkLog(LogBackendType.SLF4J, Slf4jLoggingLogBackend.class, true);
+		checkLog(LogBackendType.ANDROID, LocalLogBackend.class, false);
+		checkLog(LogBackendType.COMMONS_LOGGING, CommonsLoggingLogBackend.class, true);
+		checkLog(LogBackendType.LOG4J2, Log4j2LogBackend.class, true);
+		checkLog(LogBackendType.LOG4J, Log4jLogBackend.class, true);
+		checkLog(LogBackendType.LOCAL, LocalLogBackend.class, true);
+		checkLog(LogBackendType.JAVA_UTIL, JavaUtilLogBackend.class, true);
+		checkLog(LogBackendType.NULL, NullLogBackend.class, false);
 	}
 
 	@Test
 	public void testLogTypeKnownLog() {
-		Log log = LoggerFactory.LogType.LOCAL.createLog(getClass().getName());
-		assertTrue(log instanceof LocalLog);
+		LogBackend backend = LoggerFactory.LogBackendType.LOCAL.createLogBackend(getClass().getName());
+		assertTrue(backend instanceof LocalLogBackend);
 	}
 
 	@Test
@@ -69,7 +69,7 @@ public class LoggerFactoryTest {
 	@Test
 	public void testSetLogFactory() {
 		OurLogFactory ourLogFactory = new OurLogFactory();
-		Log log = createMock(Log.class);
+		LogBackend log = createMock(LogBackend.class);
 		ourLogFactory.log = log;
 		LoggerFactory.setLogFactory(ourLogFactory);
 
@@ -100,19 +100,19 @@ public class LoggerFactoryTest {
 		}
 	}
 
-	private void checkLog(LogType logType, Class<?> logClass, boolean available) {
+	private void checkLog(LogBackendType logType, Class<?> logClass, boolean available) {
 		assertEquals(logType + " available should be " + available, available, logType.isAvailable());
-		Log log = logType.createLog(getClass().getName());
-		assertNotNull(logType + " should not general null log", log);
-		assertEquals(logClass, log.getClass());
+		LogBackend backend = logType.createLogBackend(getClass().getName());
+		assertNotNull(logType + " should not general null log", backend);
+		assertEquals(logClass, backend.getClass());
 	}
 
-	private static class OurLogFactory implements LogFactory {
+	private static class OurLogFactory implements LogBackendFactory {
 
-		Log log;
+		LogBackend log;
 
 		@Override
-		public Log createLog(String classLabel) {
+		public LogBackend createLogBackend(String classLabel) {
 			return log;
 		}
 	}

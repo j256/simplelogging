@@ -16,19 +16,19 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.j256.simplelogging.Log;
+import com.j256.simplelogging.LogBackend;
 import com.j256.simplelogging.Logger;
-import com.j256.simplelogging.Log.Level;
+import com.j256.simplelogging.LogBackend.Level;
 
 public class LoggerTest {
 
 	private Logger logger;
-	private Log mockLog;
+	private LogBackend mockLog;
 	private Throwable throwable = new Throwable();
 
 	@Before
 	public void before() {
-		mockLog = createMock(Log.class);
+		mockLog = createMock(LogBackend.class);
 		logger = new Logger(mockLog);
 	}
 

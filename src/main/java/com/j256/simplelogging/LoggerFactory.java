@@ -2,7 +2,7 @@ package com.j256.simplelogging;
 
 import java.lang.reflect.Constructor;
 
-import com.j256.simplelogging.Log.Level;
+import com.j256.simplelogging.LogBackend.Level;
 
 /**
  * Factory that creates {@link Logger} instances. It uses reflection to see what loggers are installed on the system and
@@ -11,13 +11,13 @@ import com.j256.simplelogging.Log.Level;
  * <p>
  * To set the logger to a particular type, set the system property ("com.j256.ormlite.logger.type") contained in
  * {@link #LOG_TYPE_SYSTEM_PROPERTY} ("com.j256.ormlite.logger.type") to be one of the values in
- * {@link LoggerFactory.LogType} enum.
+ * {@link LoggerFactory.LogBackendType} enum.
  * </p>
  */
 public class LoggerFactory {
 
 	public static final String LOG_TYPE_SYSTEM_PROPERTY = "com.j256.ormlite.logger.type";
-	private static LogFactory logFactory;
+	private static LogBackendFactory logBackendFactory;
 
 	/**
 	 * For static calls only.
@@ -34,20 +34,20 @@ public class LoggerFactory {
 
 	/**
 	 * Set the log factory to be a specific instance. This allows you to easily redirect log messages to your own
-	 * {@link Log} implementation.
+	 * {@link LogBackend} implementation.
 	 */
-	public static void setLogFactory(LogFactory logFactory) {
-		LoggerFactory.logFactory = logFactory;
+	public static void setLogFactory(LogBackendFactory logFactory) {
+		LoggerFactory.logBackendFactory = logFactory;
 	}
 
 	/**
 	 * Return a logger associated with a particular class name.
 	 */
 	public static Logger getLogger(String className) {
-		if (logFactory == null) {
-			logFactory = findLogFactory();
+		if (logBackendFactory == null) {
+			logBackendFactory = findLogFactory();
 		}
-		return new Logger(logFactory.createLog(className));
+		return new Logger(logBackendFactory.createLogBackend(className));
 	}
 
 	/**
@@ -64,59 +64,60 @@ public class LoggerFactory {
 	}
 
 	/**
-	 * Return the most appropriate log factory. This should _never_ return null.
+	 * Return the most appropriate log backend factory. This should _never_ return null.
 	 */
-	private static LogFactory findLogFactory() {
+	private static LogBackendFactory findLogFactory() {
 
 		// see if the log-type was specified as a system property
 		String logTypeString = System.getProperty(LOG_TYPE_SYSTEM_PROPERTY);
 		if (logTypeString != null) {
 			try {
-				return LogType.valueOf(logTypeString);
+				return LogBackendType.valueOf(logTypeString);
 			} catch (IllegalArgumentException e) {
-				Log log = new LocalLog(LoggerFactory.class.getName());
-				log.log(Level.WARNING, "Could not find valid log-type from system property '" + LOG_TYPE_SYSTEM_PROPERTY
+				LogBackend backend = new LocalLogBackend(LoggerFactory.class.getName());
+				backend.log(Level.WARNING, "Could not find valid log-type from system property '" + LOG_TYPE_SYSTEM_PROPERTY
 						+ "', value '" + logTypeString + "'");
 			}
 		}
 
-		for (LogType logType : LogType.values()) {
+		for (LogBackendType logType : LogBackendType.values()) {
 			if (logType.isAvailable()) {
 				return logType;
 			}
 		}
 		// fall back is always LOCAL, probably never reached
-		return LogType.LOCAL;
+		return LogBackendType.LOCAL;
 	}
 
 	/**
-	 * Log factory for generating Log instances.
+	 * Log backend factory for generating backend instances.
 	 */
-	public interface LogFactory {
+	public interface LogBackendFactory {
 		/**
-		 * Create a log implementation from the class-label.
+		 * Create a log backend implementation from the class-label.
 		 */
-		public Log createLog(String classLabel);
+		public LogBackend createLogBackend(String classLabel);
 	}
 
 	/**
-	 * Type of internal logs supported. This is package permissions for testing.
+	 * Type of logging backends that are supported. The classes are specified as strings so there is not a direct
+	 * dependency placed on them since these classes may reference types not on the classpath.
 	 */
-	public enum LogType implements LogFactory {
-		SLF4J("org.slf4j.LoggerFactory", "com.j256.simplelogging.Slf4jLoggingLog"),
+	public enum LogBackendType implements LogBackendFactory {
+		SLF4J("org.slf4j.LoggerFactory", "com.j256.simplelogging.Slf4jLoggingLogBackend"),
 		/**
 		 * WARNING: Android log must be _before_ commons logging since Android provides commons logging but logging
 		 * messages are ignored that are sent there. Grrrrr.
 		 */
-		ANDROID("android.util.Log", "com.j256.simplelogging.AndroidLog"),
-		COMMONS_LOGGING("org.apache.commons.logging.LogFactory", "com.j256.simplelogging.CommonsLoggingLog"),
-		LOG4J2("org.apache.logging.log4j.LogManager", "com.j256.simplelogging.Log4j2Log"),
-		LOG4J("org.apache.log4j.Logger", "com.j256.simplelogging.Log4jLog"),
+		ANDROID("android.util.Log", "com.j256.simplelogging.AndroidLogBackend"),
+		COMMONS_LOGGING("org.apache.commons.logging.LogFactory", "com.j256.simplelogging.CommonsLoggingLogBackend"),
+		LOG4J2("org.apache.logging.log4j.LogManager", "com.j256.simplelogging.Log4j2LogBackend"),
+		LOG4J("org.apache.log4j.Logger", "com.j256.simplelogging.Log4jLogBackend"),
 		// this should always be at the end as the fall-back, so it's always available
-		LOCAL(LocalLog.class.getName(), LocalLog.class.getName()) {
+		LOCAL(LocalLogBackend.class.getName(), LocalLogBackend.class.getName()) {
 			@Override
-			public Log createLog(String classLabel) {
-				return new LocalLog(classLabel);
+			public LogBackend createLogBackend(String classLabel) {
+				return new LocalLogBackend(classLabel);
 			}
 
 			@Override
@@ -126,11 +127,11 @@ public class LoggerFactory {
 			}
 		},
 		// we put this down here because it's always available but we rarely want to use it
-		JAVA_UTIL("java.util.logging.Logger", "com.j256.simplelogging.JavaUtilLog"),
-		NULL(NullLog.class.getName(), NullLog.class.getName()) {
+		JAVA_UTIL("java.util.logging.Logger", "com.j256.simplelogging.JavaUtilLogBackend"),
+		NULL(NullLogBackend.class.getName(), NullLogBackend.class.getName()) {
 			@Override
-			public Log createLog(String classLabel) {
-				return new NullLog(classLabel);
+			public LogBackend createLogBackend(String classLabel) {
+				return new NullLogBackend(classLabel);
 			}
 
 			@Override
@@ -145,21 +146,21 @@ public class LoggerFactory {
 		private final String detectClassName;
 		private final String logClassName;
 
-		private LogType(String detectClassName, String logClassName) {
+		private LogBackendType(String detectClassName, String logClassName) {
 			this.detectClassName = detectClassName;
 			this.logClassName = logClassName;
 		}
 
 		@Override
-		public Log createLog(String classLabel) {
+		public LogBackend createLogBackend(String classLabel) {
 			try {
 				return createLogFromClassName(classLabel);
 			} catch (Exception e) {
 				// oh well, fall back to the local log
-				Log log = new LocalLog(classLabel);
-				log.log(Level.WARNING, "Unable to call constructor with single String argument for class "
+				LogBackend backend = new LocalLogBackend(classLabel);
+				backend.log(Level.WARNING, "Unable to call constructor with single String argument for class "
 						+ logClassName + ", so had to use local log: " + e.getMessage());
-				return log;
+				return backend;
 			}
 		}
 
@@ -173,8 +174,8 @@ public class LoggerFactory {
 			}
 			try {
 				// try to actually use the logger which resolves problems with the Android stub
-				Log log = createLogFromClassName(getClass().getName());
-				log.isLevelEnabled(Level.INFO);
+				LogBackend backend = createLogFromClassName(getClass().getName());
+				backend.isLevelEnabled(Level.INFO);
 				return true;
 			} catch (Exception e) {
 				return false;
@@ -184,10 +185,10 @@ public class LoggerFactory {
 		/**
 		 * Try to create the log from the class name which may throw.
 		 */
-		private Log createLogFromClassName(String classLabel) throws Exception {
+		private LogBackend createLogFromClassName(String classLabel) throws Exception {
 			Class<?> clazz = Class.forName(logClassName);
 			@SuppressWarnings("unchecked")
-			Constructor<Log> constructor = (Constructor<Log>) clazz.getConstructor(String.class);
+			Constructor<LogBackend> constructor = (Constructor<LogBackend>) clazz.getConstructor(String.class);
 			return constructor.newInstance(classLabel);
 		}
 

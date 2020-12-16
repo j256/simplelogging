@@ -4,14 +4,14 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.j256.simplelogging.Log;
-import com.j256.simplelogging.Log.Level;
+import com.j256.simplelogging.LogBackend;
+import com.j256.simplelogging.LogBackend.Level;
 
-public abstract class BaseLogTest {
+public abstract class BaseLogBackendTest {
 
-	private final Log log;
+	private final LogBackend log;
 
-	protected BaseLogTest(Log log) {
+	protected BaseLogBackendTest(LogBackend log) {
 		this.log = log;
 	}
 

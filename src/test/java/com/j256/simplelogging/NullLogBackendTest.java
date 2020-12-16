@@ -4,13 +4,13 @@ import org.junit.Test;
 
 import com.j256.simplelogging.Logger;
 import com.j256.simplelogging.LoggerFactory;
-import com.j256.simplelogging.NullLog;
-import com.j256.simplelogging.NullLog.NullLogFactory;
+import com.j256.simplelogging.NullLogBackend;
+import com.j256.simplelogging.NullLogBackend.NullLogFactory;
 
-public class NullLogTest extends BaseLogTest {
+public class NullLogBackendTest extends BaseLogBackendTest {
 
-	public NullLogTest() {
-		super(new NullLog(null));
+	public NullLogBackendTest() {
+		super(new NullLogBackend(null));
 	}
 
 	@Test

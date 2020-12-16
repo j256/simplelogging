@@ -11,38 +11,38 @@ import java.io.StringWriter;
 
 import org.junit.Test;
 
-import com.j256.simplelogging.LocalLog;
-import com.j256.simplelogging.Log;
-import com.j256.simplelogging.Log.Level;
+import com.j256.simplelogging.LocalLogBackend;
+import com.j256.simplelogging.LogBackend;
+import com.j256.simplelogging.LogBackend.Level;
 
-public class LocalLogTest extends BaseLogTest {
+public class LocalLogBackendTest extends BaseLogBackendTest {
 
-	public LocalLogTest() {
-		super(new LocalLog("CommonsLoggingLogTest"));
+	public LocalLogBackendTest() {
+		super(new LocalLogBackend("CommonsLoggingLogBackendTest"));
 	}
 
 	@Test
 	public void testLevelProperty() {
-		Log log = new LocalLog("foo");
+		LogBackend log = new LocalLogBackend("foo");
 		if (log.isLevelEnabled(Level.TRACE)) {
 			return;
 		}
-		System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, "TRACE");
+		System.setProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY, "TRACE");
 		try {
-			log = new LocalLog("foo");
+			log = new LocalLogBackend("foo");
 			assertTrue(log.isLevelEnabled(Level.TRACE));
 		} finally {
-			System.clearProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY);
+			System.clearProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY);
 		}
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testInvalidLevelProperty() {
-		System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, "not a valid level");
+		System.setProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY, "not a valid level");
 		try {
-			new LocalLog("foo");
+			new LocalLogBackend("foo");
 		} finally {
-			System.clearProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY);
+			System.clearProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY);
 		}
 	}
 
@@ -51,9 +51,9 @@ public class LocalLogTest extends BaseLogTest {
 		String logPath = "target/foo.txt";
 		File logFile = new File(logPath);
 		logFile.delete();
-		LocalLog.openLogFile(logPath);
+		LocalLogBackend.openLogFile(logPath);
 		try {
-			LocalLog log = new LocalLog("foo");
+			LocalLogBackend log = new LocalLogBackend("foo");
 			assertTrue(log.isLevelEnabled(Level.FATAL));
 			String msg = "fpjwefpwejfpwfjwe";
 			log.log(Level.FATAL, msg);
@@ -63,14 +63,14 @@ public class LocalLogTest extends BaseLogTest {
 				Thread.sleep(100);
 			}
 		} finally {
-			LocalLog.openLogFile(null);
+			LocalLogBackend.openLogFile(null);
 			logFile.delete();
 		}
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testInvalidFileProperty() {
-		LocalLog.openLogFile("not-a-proper-directory-name-we-hope/foo.txt");
+		LocalLogBackend.openLogFile("not-a-proper-directory-name-we-hope/foo.txt");
 	}
 
 	@Test
@@ -78,9 +78,9 @@ public class LocalLogTest extends BaseLogTest {
 		String logPath = "target/foo.txt";
 		File logFile = new File(logPath);
 		logFile.delete();
-		LocalLog.openLogFile(logPath);
+		LocalLogBackend.openLogFile(logPath);
 		try {
-			LocalLog log = new LocalLog("foo");
+			LocalLogBackend log = new LocalLogBackend("foo");
 			if (log.isLevelEnabled(Level.TRACE)) {
 				return;
 			}
@@ -90,7 +90,7 @@ public class LocalLogTest extends BaseLogTest {
 			assertTrue(logFile.exists());
 			assertEquals(0, logFile.length());
 		} finally {
-			LocalLog.openLogFile(null);
+			LocalLogBackend.openLogFile(null);
 			logFile.delete();
 		}
 	}
@@ -102,7 +102,7 @@ public class LocalLogTest extends BaseLogTest {
 		stringWriter.write("x\n");
 		// invalid level
 		stringWriter.write("com\\.j256\\.ormlite\\.stmt\\.StatementExecutor = INVALID_LEVEL\n");
-		LocalLog.readLevelResourceFile(new ByteArrayInputStream(stringWriter.toString().getBytes()));
+		LocalLogBackend.readLevelResourceFile(new ByteArrayInputStream(stringWriter.toString().getBytes()));
 	}
 
 	@Test
@@ -117,12 +117,12 @@ public class LocalLogTest extends BaseLogTest {
 				throw new IOException("simulated exception");
 			}
 		};
-		LocalLog.readLevelResourceFile(errorStream);
+		LocalLogBackend.readLevelResourceFile(errorStream);
 	}
 
 	@Test
 	public void testInputStreamNull() {
-		LocalLog.readLevelResourceFile(null);
+		LocalLogBackend.readLevelResourceFile(null);
 	}
 
 }

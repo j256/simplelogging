@@ -5,11 +5,11 @@ package com.j256.simplelogging;
  * 
  * @author graywatson
  */
-public class Log4jLog implements Log {
+public class Log4jLogBackend implements LogBackend {
 
 	private final org.apache.log4j.Logger logger;
 
-	public Log4jLog(String className) {
+	public Log4jLogBackend(String className) {
 		this.logger = org.apache.log4j.Logger.getLogger(className);
 	}
 
@@ -28,7 +28,7 @@ public class Log4jLog implements Log {
 		logger.log(levelToLog4jLevel(level), msg, t);
 	}
 
-	private org.apache.log4j.Level levelToLog4jLevel(com.j256.simplelogging.Log.Level level) {
+	private org.apache.log4j.Level levelToLog4jLevel(com.j256.simplelogging.LogBackend.Level level) {
 		switch (level) {
 			case TRACE:
 				return org.apache.log4j.Level.TRACE;

@@ -1,16 +1,16 @@
 package com.j256.simplelogging;
 
 /**
- * Log that delegates to slf4j.
+ * Log that delegates to Apache Log4j2.
  * 
  * @author graywatson
  */
-public class Slf4jLoggingLog implements Log {
+public class Log4j2LogBackend implements LogBackend {
 
-	private final org.slf4j.Logger logger;
+	private final org.apache.logging.log4j.Logger logger;
 
-	public Slf4jLoggingLog(String className) {
-		this.logger = org.slf4j.LoggerFactory.getLogger(className);
+	public Log4j2LogBackend(String className) {
+		this.logger = org.apache.logging.log4j.LogManager.getLogger(className);
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class Slf4jLoggingLog implements Log {
 			case ERROR:
 				return logger.isErrorEnabled();
 			case FATAL:
-				return logger.isErrorEnabled();
+				return logger.isFatalEnabled();
 			default:
 				return logger.isInfoEnabled();
 		}
@@ -52,7 +52,7 @@ public class Slf4jLoggingLog implements Log {
 				logger.error(msg);
 				break;
 			case FATAL:
-				logger.error(msg);
+				logger.fatal(msg);
 				break;
 			default:
 				logger.info(msg);
@@ -79,7 +79,7 @@ public class Slf4jLoggingLog implements Log {
 				logger.error(msg, t);
 				break;
 			case FATAL:
-				logger.error(msg, t);
+				logger.fatal(msg, t);
 				break;
 			default:
 				logger.info(msg, t);

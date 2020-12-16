@@ -6,30 +6,30 @@ package com.j256.simplelogging;
  * 
  * @author graywatson
  */
-public class JavaUtilLog implements Log {
+public class JavaUtilLogBackend implements LogBackend {
 
 	private final java.util.logging.Logger logger;
 
-	public JavaUtilLog(String className) {
+	public JavaUtilLogBackend(String className) {
 		this.logger = java.util.logging.Logger.getLogger(className);
 	}
 
 	@Override
-	public boolean isLevelEnabled(com.j256.simplelogging.Log.Level level) {
+	public boolean isLevelEnabled(com.j256.simplelogging.LogBackend.Level level) {
 		return logger.isLoggable(levelToJavaLevel(level));
 	}
 
 	@Override
-	public void log(com.j256.simplelogging.Log.Level level, String msg) {
+	public void log(com.j256.simplelogging.LogBackend.Level level, String msg) {
 		logger.log(levelToJavaLevel(level), msg);
 	}
 
 	@Override
-	public void log(com.j256.simplelogging.Log.Level level, String msg, Throwable throwable) {
+	public void log(com.j256.simplelogging.LogBackend.Level level, String msg, Throwable throwable) {
 		logger.log(levelToJavaLevel(level), msg, throwable);
 	}
 
-	private java.util.logging.Level levelToJavaLevel(com.j256.simplelogging.Log.Level level) {
+	private java.util.logging.Level levelToJavaLevel(com.j256.simplelogging.LogBackend.Level level) {
 		switch (level) {
 			case TRACE:
 				return java.util.logging.Level.FINER;
