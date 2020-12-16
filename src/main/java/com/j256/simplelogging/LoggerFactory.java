@@ -103,16 +103,38 @@ public class LoggerFactory {
 	 * dependency placed on them since these classes may reference types not on the classpath.
 	 */
 	public enum LogBackendType implements LogBackendFactory {
+		/**
+		 * SLF4J. See: http://www.slf4j.org/
+		 */
 		SLF4J("org.slf4j.LoggerFactory", "com.j256.simplelogging.Slf4jLoggingLogBackend"),
 		/**
-		 * WARNING: Android log must be _before_ commons logging since Android provides commons logging but logging
+		 * Android Log mechanism. See: https://developer.android.com/reference/android/util/Log
+		 * 
+		 * <p>
+		 * WARNING: Android log must be before commons logging since Android provides commons logging but logging
 		 * messages are ignored that are sent there. Grrrrr.
+		 * </p>
 		 */
 		ANDROID("android.util.Log", "com.j256.simplelogging.AndroidLogBackend"),
+		/**
+		 * Apache commons logging. See https://commons.apache.org/proper/commons-logging/
+		 */
 		COMMONS_LOGGING("org.apache.commons.logging.LogFactory", "com.j256.simplelogging.CommonsLoggingLogBackend"),
+		/**
+		 * Version 2 of the log4j package. See https://logging.apache.org/log4j/2.x/
+		 */
 		LOG4J2("org.apache.logging.log4j.LogManager", "com.j256.simplelogging.Log4j2LogBackend"),
+		/**
+		 * Old version of the log4j package. See https://logging.apache.org/log4j/2.x/
+		 */
 		LOG4J("org.apache.log4j.Logger", "com.j256.simplelogging.Log4jLogBackend"),
-		// this should always be at the end as the fall-back, so it's always available
+		/**
+		 * Local simple log backend that writes to a output file.
+		 * 
+		 * <p>
+		 * NOTE: this should always be at the end as the fall-back, so it's always available
+		 * </p>
+		 */
 		LOCAL(LocalLogBackend.class.getName(), LocalLogBackend.class.getName()) {
 			@Override
 			public LogBackend createLogBackend(String classLabel) {
@@ -125,8 +147,15 @@ public class LoggerFactory {
 				return true;
 			}
 		},
-		// we put this down here because it's always available but we rarely want to use it
+		/**
+		 * Internal JVM logging implementation almost always available. We put this down here because it's always
+		 * available but we rarely want to use it. See
+		 * https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html.
+		 */
 		JAVA_UTIL("java.util.logging.Logger", "com.j256.simplelogging.JavaUtilLogBackend"),
+		/**
+		 * Logging backend which ignores all messages. Used to disable all logging. This is never chosen automatically.
+		 */
 		NULL(NullLogBackend.class.getName(), NullLogBackend.class.getName()) {
 			@Override
 			public LogBackend createLogBackend(String classLabel) {
