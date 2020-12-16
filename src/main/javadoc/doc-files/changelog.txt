@@ -1,0 +1,4 @@
+1.1: 12/16/2020
+	* Brought the code over from ORMLite into it's own repo.
+	* Did some wholesale renaming of stuff to rename the confusing Log to LogBackend.
+	* Added a 4th argument to the logger methods.
