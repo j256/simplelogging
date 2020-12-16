@@ -5,7 +5,7 @@ import org.junit.Test;
 import com.j256.simplelogging.Logger;
 import com.j256.simplelogging.LoggerFactory;
 import com.j256.simplelogging.NullLogBackend;
-import com.j256.simplelogging.NullLogBackend.NullLogFactory;
+import com.j256.simplelogging.NullLogBackend.NullLogBackendFactory;
 
 public class NullLogBackendTest extends BaseLogBackendTest {
 
@@ -15,7 +15,7 @@ public class NullLogBackendTest extends BaseLogBackendTest {
 
 	@Test
 	public void testStuff() {
-		LoggerFactory.setLogFactory(new NullLogFactory());
+		LoggerFactory.setLogBackendFactory(new NullLogBackendFactory());
 		Logger logger = LoggerFactory.getLogger(getClass());
 		logger.fatal("shouldn't see this");
 	}

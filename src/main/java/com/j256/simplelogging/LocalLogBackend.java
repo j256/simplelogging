@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
 
 /**
- * Log that uses logging classes if they are not available.
+ * Log backend that uses logging classes if they are not available.
  * 
  * <p>
  * You can set the log level by setting the System.setProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY, "trace").
@@ -216,10 +216,10 @@ public class LocalLogBackend implements LogBackend {
 	}
 
 	/**
-	 * Internal factory for LocalLog instances. This can be used with the
-	 * {@link LoggerFactory#setLogFactory(LogBackendFactory)} method to send all log messages to a file.
+	 * Internal factory for LocalLogBackend instances. This can be used with the
+	 * {@link LoggerFactory#setLogBackendFactory(LogBackendFactory)} method to send all log messages to a file.
 	 */
-	public static class LocalLogFactory implements LogBackendFactory {
+	public static class LocalLogBackendFactory implements LogBackendFactory {
 		@Override
 		public LogBackend createLogBackend(String classLabel) {
 			return new LocalLogBackend(classLabel);

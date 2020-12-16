@@ -57,12 +57,26 @@ public class LoggerFactoryTest {
 	@Test
 	public void testGetSimpleClassName() {
 		String first = "foo";
-		String name = LoggerFactory.getSimpleClassName(first);
-		assertEquals(first, name);
+		assertEquals(first, LoggerFactory.getSimpleClassName(first));
 		String second = "bar";
 		String className = first + "." + second;
-		name = LoggerFactory.getSimpleClassName(className);
-		assertEquals(second, name);
+		assertEquals(second, LoggerFactory.getSimpleClassName(className));
+		className = first + ".";
+		assertEquals(className, LoggerFactory.getSimpleClassName(className));
+	}
+
+	@Test
+	public void testLogTypeProperty() {
+		LogBackendFactory factory = LoggerFactory.getLogBackendFactory();
+		try {
+			LoggerFactory.setLogBackendFactory(null);
+			System.setProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY, LogBackendType.NULL.name());
+			LoggerFactory.getLogger("foo");
+			assertEquals(LogBackendType.NULL, LoggerFactory.getLogBackendFactory());
+		} finally {
+			LoggerFactory.setLogBackendFactory(factory);
+			System.clearProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY);
+		}
 	}
 
 	@Test
@@ -70,7 +84,7 @@ public class LoggerFactoryTest {
 		OurLogFactory ourLogFactory = new OurLogFactory();
 		LogBackend log = createMock(LogBackend.class);
 		ourLogFactory.log = log;
-		LoggerFactory.setLogFactory(ourLogFactory);
+		LoggerFactory.setLogBackendFactory(ourLogFactory);
 
 		String message = "hello";
 		expect(log.isLevelEnabled(Level.INFO)).andReturn(true);
@@ -84,19 +98,22 @@ public class LoggerFactoryTest {
 
 	@Test
 	public void testLogFactoryProperty() {
-		LoggerFactory.setLogFactory(null);
-		String logTypeProp = System.getProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY);
+		LoggerFactory.setLogBackendFactory(null);
 		System.setProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY, "some.wrong.class");
 		try {
 			// this should work and not throw
 			LoggerFactory.getLogger(getClass());
 		} finally {
-			if (logTypeProp == null) {
-				System.clearProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY);
-			} else {
-				System.setProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY, logTypeProp);
-			}
+			System.clearProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY);
 		}
+	}
+
+	@Test
+	public void testLogFactoryFind() {
+		LoggerFactory.setLogBackendFactory(null);
+		System.clearProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY);
+		// this should work and not throw
+		LoggerFactory.getLogger(getClass());
 	}
 
 	private void checkLog(LogBackendType logType, Class<?> logClass, boolean available) {
