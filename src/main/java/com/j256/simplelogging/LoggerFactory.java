@@ -15,6 +15,7 @@ import com.j256.simplelogging.NullLogBackend.NullLogBackendFactory;
 public class LoggerFactory {
 
 	public static final String LOG_TYPE_SYSTEM_PROPERTY = "com.j256.simplelogger.backend";
+
 	private static LogBackendFactory logBackendFactory;
 
 	/**

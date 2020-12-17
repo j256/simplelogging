@@ -29,11 +29,12 @@ import java.lang.reflect.Array;
  */
 public class Logger {
 
+	private static Level globalLevel;
+
 	private final static String ARG_STRING = "{}";
 	private final static Object UNKNOWN_ARG = new Object();
 	private final static int DEFAULT_FULL_MESSAGE_LENGTH = 128;
 	private final LogBackend backend;
-	private static Level globalLevel;
 
 	public Logger(LogBackend backend) {
 		this.backend = backend;

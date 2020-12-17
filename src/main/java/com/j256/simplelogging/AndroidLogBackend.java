@@ -38,10 +38,11 @@ import android.util.Log;
 public class AndroidLogBackend implements LogBackend {
 
 	private final static String ALL_LOGS_NAME = "simplelogging";
+	// check to see if the android level has changed every so often
 	private final static int REFRESH_LEVEL_CACHE_EVERY = 200;
 
 	private final static int MAX_TAG_LENGTH = 23;
-	private String className;
+	private final String className;
 
 	// we do this because supposedly Log.isLoggable() always does IO
 	private volatile int levelCacheC = 0;
@@ -49,12 +50,13 @@ public class AndroidLogBackend implements LogBackend {
 
 	public AndroidLogBackend(String className) {
 		// get the last part of the class name
-		this.className = LoggerFactory.getSimpleClassName(className);
+		String simpleName = LoggerFactory.getSimpleClassName(className);
 		// make sure that our tag length is not too long
-		int length = this.className.length();
+		int length = simpleName.length();
 		if (length > MAX_TAG_LENGTH) {
-			this.className = this.className.substring(length - MAX_TAG_LENGTH, length);
+			simpleName = this.className.substring(length - MAX_TAG_LENGTH, length);
 		}
+		this.className = simpleName;
 		// find the maximum level value
 		int maxLevel = 0;
 		for (Level level : Level.values()) {
