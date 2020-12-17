@@ -1,9 +1,11 @@
 package com.j256.simplelogging;
 
+import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
+
 import android.util.Log;
 
 /**
- * Log that delegates to the internal Android logger.
+ * Log backend that delegates to the internal Android logger.
  * 
  * <p>
  * To see log messages you will do something like:
@@ -89,9 +91,7 @@ public class AndroidLogBackend implements LogBackend {
 			case DEBUG:
 				Log.d(className, msg);
 				break;
-			case INFO:
-				Log.i(className, msg);
-				break;
+			/* INFO below */
 			case WARNING:
 				Log.w(className, msg);
 				break;
@@ -101,6 +101,7 @@ public class AndroidLogBackend implements LogBackend {
 			case FATAL:
 				Log.e(className, msg);
 				break;
+			case INFO:
 			default:
 				Log.i(className, msg);
 				break;
@@ -116,9 +117,7 @@ public class AndroidLogBackend implements LogBackend {
 			case DEBUG:
 				Log.d(className, msg, t);
 				break;
-			case INFO:
-				Log.i(className, msg, t);
-				break;
+			/* INFO below */
 			case WARNING:
 				Log.w(className, msg, t);
 				break;
@@ -128,6 +127,7 @@ public class AndroidLogBackend implements LogBackend {
 			case FATAL:
 				Log.e(className, msg, t);
 				break;
+			case INFO:
 			default:
 				Log.i(className, msg, t);
 				break;
@@ -154,16 +154,26 @@ public class AndroidLogBackend implements LogBackend {
 				return Log.VERBOSE;
 			case DEBUG:
 				return Log.DEBUG;
-			case INFO:
-				return Log.INFO;
+			/* INFO below */
 			case WARNING:
 				return Log.WARN;
 			case ERROR:
 				return Log.ERROR;
 			case FATAL:
 				return Log.ERROR;
+			case INFO:
 			default:
 				return Log.INFO;
+		}
+	}
+
+	/**
+	 * Factory for generating AndroidLogBackend instances.
+	 */
+	public static class AndroidLogBackendFactory implements LogBackendFactory {
+		@Override
+		public LogBackend createLogBackend(String classLabel) {
+			return new AndroidLogBackend(classLabel);
 		}
 	}
 }

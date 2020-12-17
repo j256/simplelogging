@@ -1,8 +1,10 @@
 package com.j256.simplelogging;
 
+import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
+
 /**
- * Log that writes to java.util.log. This will never be chosen by default because it should always in the classpath, but
- * can be injected if someone really wants it.
+ * Log backend that writes to java.util.log. This will never be chosen by default because it should always in the
+ * classpath, but can be injected if someone really wants it.
  * 
  * @author graywatson
  */
@@ -35,16 +37,26 @@ public class JavaUtilLogBackend implements LogBackend {
 				return java.util.logging.Level.FINER;
 			case DEBUG:
 				return java.util.logging.Level.FINE;
-			case INFO:
-				return java.util.logging.Level.INFO;
+			/* INFO below */
 			case WARNING:
 				return java.util.logging.Level.WARNING;
 			case ERROR:
 				return java.util.logging.Level.SEVERE;
 			case FATAL:
 				return java.util.logging.Level.SEVERE;
+			case INFO:
 			default:
 				return java.util.logging.Level.INFO;
+		}
+	}
+
+	/**
+	 * Factory for generating JavaUtilLogBackend instances.
+	 */
+	public static class JavaUtilLogBackendFactory implements LogBackendFactory {
+		@Override
+		public LogBackend createLogBackend(String classLabel) {
+			return new JavaUtilLogBackend(classLabel);
 		}
 	}
 }

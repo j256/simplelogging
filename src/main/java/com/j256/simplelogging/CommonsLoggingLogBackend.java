@@ -1,7 +1,9 @@
 package com.j256.simplelogging;
 
+import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
+
 /**
- * Log that delegating to the Apache commons logging classes.
+ * Log backend that delegating to the Apache commons logging classes.
  * 
  * @author graywatson
  */
@@ -20,14 +22,14 @@ public class CommonsLoggingLogBackend implements LogBackend {
 				return log.isTraceEnabled();
 			case DEBUG:
 				return log.isDebugEnabled();
-			case INFO:
-				return log.isInfoEnabled();
+			/* INFO below */
 			case WARNING:
 				return log.isWarnEnabled();
 			case ERROR:
 				return log.isErrorEnabled();
 			case FATAL:
 				return log.isFatalEnabled();
+			case INFO:
 			default:
 				return log.isInfoEnabled();
 		}
@@ -42,9 +44,7 @@ public class CommonsLoggingLogBackend implements LogBackend {
 			case DEBUG:
 				log.debug(msg);
 				break;
-			case INFO:
-				log.info(msg);
-				break;
+			/* INFO below */
 			case WARNING:
 				log.warn(msg);
 				break;
@@ -54,6 +54,7 @@ public class CommonsLoggingLogBackend implements LogBackend {
 			case FATAL:
 				log.fatal(msg);
 				break;
+			case INFO:
 			default:
 				log.info(msg);
 				break;
@@ -69,9 +70,7 @@ public class CommonsLoggingLogBackend implements LogBackend {
 			case DEBUG:
 				log.debug(msg, t);
 				break;
-			case INFO:
-				log.info(msg, t);
-				break;
+			/* INFO below */
 			case WARNING:
 				log.warn(msg, t);
 				break;
@@ -81,9 +80,20 @@ public class CommonsLoggingLogBackend implements LogBackend {
 			case FATAL:
 				log.fatal(msg, t);
 				break;
+			case INFO:
 			default:
 				log.info(msg, t);
 				break;
+		}
+	}
+
+	/**
+	 * Factory for generating CommonsLoggingLogBackend instances.
+	 */
+	public static class CommonsLoggingLogBackendFactory implements LogBackendFactory {
+		@Override
+		public LogBackend createLogBackend(String classLabel) {
+			return new CommonsLoggingLogBackend(classLabel);
 		}
 	}
 }

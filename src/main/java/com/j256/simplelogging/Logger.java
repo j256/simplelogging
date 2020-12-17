@@ -646,7 +646,7 @@ public class Logger {
 	/**
 	 * Get the underlying log backend implementation for testing purposes.
 	 */
-	public LogBackend getLog() {
+	public LogBackend getLogBackend() {
 		return backend;
 	}
 

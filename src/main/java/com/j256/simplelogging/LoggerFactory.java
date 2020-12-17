@@ -1,6 +1,7 @@
 package com.j256.simplelogging;
 
-import java.lang.reflect.Constructor;
+import com.j256.simplelogging.LocalLogBackend.LocalLogBackendFactory;
+import com.j256.simplelogging.NullLogBackend.NullLogBackendFactory;
 
 /**
  * Factory that creates {@link Logger} instances. It uses reflection to see what logging backends are available on the
@@ -30,21 +31,28 @@ public class LoggerFactory {
 	}
 
 	/**
-	 * Set the log factory to be a specific instance. This allows you to easily redirect log messages to your own
-	 * {@link LogBackend} implementation.
-	 */
-	public static void setLogFactory(LogBackendFactory logFactory) {
-		LoggerFactory.logBackendFactory = logFactory;
-	}
-
-	/**
 	 * Return a logger associated with a particular class name.
 	 */
 	public static Logger getLogger(String className) {
 		if (logBackendFactory == null) {
-			logBackendFactory = findLogFactory();
+			logBackendFactory = findLogBackendFactory();
 		}
 		return new Logger(logBackendFactory.createLogBackend(className));
+	}
+
+	/**
+	 * Get the currently assigned log factory or null if none.
+	 */
+	public static LogBackendFactory getLogBackendFactory() {
+		return LoggerFactory.logBackendFactory;
+	}
+
+	/**
+	 * Set the log backend factory to be a specific instance. This allows you to easily redirect log messages to your
+	 * own {@link LogBackendFactory} implementation.
+	 */
+	public static void setLogBackendFactory(LogBackendFactory LogBackendFactory) {
+		LoggerFactory.logBackendFactory = LogBackendFactory;
 	}
 
 	/**
@@ -52,18 +60,18 @@ public class LoggerFactory {
 	 */
 	public static String getSimpleClassName(String className) {
 		// get the last part of the class name
-		String[] parts = className.split("\\.");
-		if (parts.length <= 1) {
+		int index = className.lastIndexOf('.');
+		if (index < 0 || index == className.length() - 1) {
 			return className;
 		} else {
-			return parts[parts.length - 1];
+			return className.substring(index + 1);
 		}
 	}
 
 	/**
 	 * Return the most appropriate log backend factory. This should _never_ return null.
 	 */
-	private static LogBackendFactory findLogFactory() {
+	private static LogBackendFactory findLogBackendFactory() {
 
 		// see if the log-type was specified as a system property
 		String logTypeString = System.getProperty(LOG_TYPE_SYSTEM_PROPERTY);
@@ -87,7 +95,7 @@ public class LoggerFactory {
 	}
 
 	/**
-	 * Log backend factory for generating backend instances.
+	 * Factory for generating log backend instances.
 	 */
 	public interface LogBackendFactory {
 		/**
@@ -104,7 +112,7 @@ public class LoggerFactory {
 		/**
 		 * SLF4J. See: http://www.slf4j.org/
 		 */
-		SLF4J("org.slf4j.LoggerFactory", "com.j256.simplelogging.Slf4jLoggingLogBackend"),
+		SLF4J("com.j256.simplelogging.Slf4jLoggingLogBackend$Slf4jLoggingLogBackendFactory"),
 		/**
 		 * Android Log mechanism. See: https://developer.android.com/reference/android/util/Log
 		 * 
@@ -113,19 +121,19 @@ public class LoggerFactory {
 		 * messages are ignored that are sent there. Grrrrr.
 		 * </p>
 		 */
-		ANDROID("android.util.Log", "com.j256.simplelogging.AndroidLogBackend"),
+		ANDROID("com.j256.simplelogging.AndroidLogBackend$AndroidLogBackendFactory"),
 		/**
 		 * Apache commons logging. See https://commons.apache.org/proper/commons-logging/
 		 */
-		COMMONS_LOGGING("org.apache.commons.logging.LogFactory", "com.j256.simplelogging.CommonsLoggingLogBackend"),
+		COMMONS_LOGGING("com.j256.simplelogging.CommonsLoggingLogBackend$CommonsLoggingLogBackendFactory"),
 		/**
 		 * Version 2 of the log4j package. See https://logging.apache.org/log4j/2.x/
 		 */
-		LOG4J2("org.apache.logging.log4j.LogManager", "com.j256.simplelogging.Log4j2LogBackend"),
+		LOG4J2("com.j256.simplelogging.Log4j2LogBackend$Log4j2LogBackendFactory"),
 		/**
 		 * Old version of the log4j package. See https://logging.apache.org/log4j/2.x/
 		 */
-		LOG4J("org.apache.log4j.Logger", "com.j256.simplelogging.Log4jLogBackend"),
+		LOG4J("com.j256.simplelogging.Log4jLogBackend$Log4jLogBackendFactory"),
 		/**
 		 * Local simple log backend that writes to a output file.
 		 * 
@@ -133,61 +141,33 @@ public class LoggerFactory {
 		 * NOTE: this should always be at the end as the fall-back, so it's always available
 		 * </p>
 		 */
-		LOCAL(LocalLogBackend.class.getName(), LocalLogBackend.class.getName()) {
-			@Override
-			public LogBackend createLogBackend(String classLabel) {
-				return new LocalLogBackend(classLabel);
-			}
-
-			@Override
-			public boolean isAvailable() {
-				// always available
-				return true;
-			}
-		},
+		LOCAL(new LocalLogBackendFactory()),
 		/**
 		 * Internal JVM logging implementation almost always available. We put this down here because it's always
 		 * available but we rarely want to use it. See
 		 * https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html.
 		 */
-		JAVA_UTIL("java.util.logging.Logger", "com.j256.simplelogging.JavaUtilLogBackend"),
+		JAVA_UTIL("com.j256.simplelogging.JavaUtilLogBackend$JavaUtilLogBackendFactory"),
 		/**
 		 * Logging backend which ignores all messages. Used to disable all logging. This is never chosen automatically.
 		 */
-		NULL(NullLogBackend.class.getName(), NullLogBackend.class.getName()) {
-			@Override
-			public LogBackend createLogBackend(String classLabel) {
-				return new NullLogBackend(classLabel);
-			}
-
-			@Override
-			public boolean isAvailable() {
-				// never chosen automatically
-				return false;
-			}
-		},
+		NULL(new NullLogBackendFactory()),
 		// end
 		;
 
-		private final String detectClassName;
-		private final String logClassName;
+		private final LogBackendFactory factory;
 
-		private LogBackendType(String detectClassName, String logClassName) {
-			this.detectClassName = detectClassName;
-			this.logClassName = logClassName;
+		private LogBackendType(LogBackendFactory factory) {
+			this.factory = factory;
+		}
+
+		private LogBackendType(String logBackendFactoryClassName) {
+			this.factory = detectFactory(logBackendFactoryClassName);
 		}
 
 		@Override
 		public LogBackend createLogBackend(String classLabel) {
-			try {
-				return createLogFromClassName(classLabel);
-			} catch (Exception e) {
-				// oh well, fall back to the local log
-				LogBackend backend = new LocalLogBackend(classLabel);
-				backend.log(Level.WARNING, "Unable to call constructor with single String argument for class "
-						+ logClassName + ", so had to use local log: " + e.getMessage());
-				return backend;
-			}
+			return factory.createLogBackend(classLabel);
 		}
 
 		/**
@@ -195,39 +175,29 @@ public class LoggerFactory {
 		 * classpath.
 		 */
 		public boolean isAvailable() {
-			if (!isAvailableTestClass()) {
-				return false;
-			}
-			try {
-				// try to actually use the logger which resolves problems with the Android stub
-				LogBackend backend = createLogFromClassName(getClass().getName());
-				backend.isLevelEnabled(Level.INFO);
-				return true;
-			} catch (Exception e) {
-				return false;
-			}
+			/*
+			 * If this is LOCAL then it is always available. NULL is never available. If it is another LogBackendType
+			 * then we might have defaulted to using the local-log backend if it was not available.
+			 */
+			return (this == LOCAL || (this != NULL && !(factory instanceof LocalLogBackendFactory)));
 		}
 
 		/**
-		 * Try to create the log from the class name which may throw.
+		 * Try to detect if the logger class is available and if calling the factory to make a logger works.
 		 */
-		private LogBackend createLogFromClassName(String classLabel) throws Exception {
-			Class<?> clazz = Class.forName(logClassName);
-			@SuppressWarnings("unchecked")
-			Constructor<LogBackend> constructor = (Constructor<LogBackend>) clazz.getConstructor(String.class);
-			return constructor.newInstance(classLabel);
-		}
-
-		/**
-		 * Is this class available meaning that we should use this logger. This is package permissions for testing
-		 * purposes.
-		 */
-		boolean isAvailableTestClass() {
+		private LogBackendFactory detectFactory(String factoryClassName) {
 			try {
-				Class.forName(detectClassName);
-				return true;
-			} catch (Exception e) {
-				return false;
+				// sometimes the constructor works but it's not fully wired
+				LogBackendFactory factory = (LogBackendFactory) Class.forName(factoryClassName).newInstance();
+				// we may really need to use the class before we see issues
+				factory.createLogBackend("test").isLevelEnabled(Level.INFO);
+				return factory;
+			} catch (Throwable th) {
+				// we catch throwable here because we could get linkage errors
+				LogBackend backend = new LocalLogBackend(LogBackendType.class.getSimpleName() + "." + this);
+				backend.log(Level.WARNING, "Unable to get new instance of class " + factoryClassName
+						+ ", so had to use local log: " + th.getMessage());
+				return new LocalLogBackendFactory();
 			}
 		}
 	}

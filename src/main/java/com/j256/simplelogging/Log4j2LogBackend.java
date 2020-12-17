@@ -1,7 +1,9 @@
 package com.j256.simplelogging;
 
+import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
+
 /**
- * Log that delegates to Apache Log4j2.
+ * Log backend that delegates to Apache Log4j2.
  * 
  * @author graywatson
  */
@@ -20,14 +22,14 @@ public class Log4j2LogBackend implements LogBackend {
 				return logger.isTraceEnabled();
 			case DEBUG:
 				return logger.isDebugEnabled();
-			case INFO:
-				return logger.isInfoEnabled();
+			/* INFO below */
 			case WARNING:
 				return logger.isWarnEnabled();
 			case ERROR:
 				return logger.isErrorEnabled();
 			case FATAL:
 				return logger.isFatalEnabled();
+			case INFO:
 			default:
 				return logger.isInfoEnabled();
 		}
@@ -42,9 +44,7 @@ public class Log4j2LogBackend implements LogBackend {
 			case DEBUG:
 				logger.debug(msg);
 				break;
-			case INFO:
-				logger.info(msg);
-				break;
+			/* INFO below */
 			case WARNING:
 				logger.warn(msg);
 				break;
@@ -54,6 +54,7 @@ public class Log4j2LogBackend implements LogBackend {
 			case FATAL:
 				logger.fatal(msg);
 				break;
+			case INFO:
 			default:
 				logger.info(msg);
 				break;
@@ -69,9 +70,7 @@ public class Log4j2LogBackend implements LogBackend {
 			case DEBUG:
 				logger.debug(msg, t);
 				break;
-			case INFO:
-				logger.info(msg, t);
-				break;
+			/* INFO below */
 			case WARNING:
 				logger.warn(msg, t);
 				break;
@@ -81,9 +80,20 @@ public class Log4j2LogBackend implements LogBackend {
 			case FATAL:
 				logger.fatal(msg, t);
 				break;
+			case INFO:
 			default:
 				logger.info(msg, t);
 				break;
+		}
+	}
+
+	/**
+	 * Factory for generating Log4j2LogBackend instances.
+	 */
+	public static class Log4j2LogBackendFactory implements LogBackendFactory {
+		@Override
+		public LogBackend createLogBackend(String classLabel) {
+			return new Log4j2LogBackend(classLabel);
 		}
 	}
 }
