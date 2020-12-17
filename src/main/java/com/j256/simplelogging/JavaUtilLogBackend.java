@@ -41,6 +41,7 @@ public class JavaUtilLogBackend implements LogBackend {
 			case WARNING:
 				return java.util.logging.Level.WARNING;
 			case ERROR:
+				// no ERROR level
 				return java.util.logging.Level.SEVERE;
 			case FATAL:
 				return java.util.logging.Level.SEVERE;

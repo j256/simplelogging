@@ -10,7 +10,7 @@ import com.j256.simplelogging.NullLogBackend.NullLogBackendFactory;
 public class NullLogBackendTest extends BaseLogBackendTest {
 
 	public NullLogBackendTest() {
-		super(new NullLogBackend(null));
+		super(new NullLogBackend());
 	}
 
 	@Test

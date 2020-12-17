@@ -78,6 +78,7 @@ public class Slf4jLoggingLogBackend implements LogBackend {
 				logger.error(msg, t);
 				break;
 			case FATAL:
+				// no level higher than error
 				logger.error(msg, t);
 				break;
 			case INFO:

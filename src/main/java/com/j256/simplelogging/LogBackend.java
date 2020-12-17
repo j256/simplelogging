@@ -1,24 +1,24 @@
 package com.j256.simplelogging;
 
 /**
- * Class which fronts various log code which may or may not be in the classpath.
+ * Class which fronts various log backend implementations which may or may not be in the classpath.
  * 
  * @author graywatson
  */
 public interface LogBackend {
 
 	/**
-	 * Returns true if the log mode is in trace or higher.
+	 * Returns true if the log level argument is enabled meaning that the log messages should be shown.
 	 */
 	public boolean isLevelEnabled(Level level);
 
 	/**
-	 * Log a trace message.
+	 * Log a message.
 	 */
 	public void log(Level level, String message);
 
 	/**
-	 * Log a trace message with a throwable.
+	 * Log a message with a throwable.
 	 */
 	public void log(Level level, String message, Throwable t);
 }

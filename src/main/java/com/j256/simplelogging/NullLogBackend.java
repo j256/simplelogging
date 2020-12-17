@@ -9,15 +9,13 @@ import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
  */
 public class NullLogBackend implements LogBackend {
 
-	/**
-	 * This has an ignored param to match the other log implementations.
-	 */
-	public NullLogBackend(String classLabel) {
+	public NullLogBackend() {
 		// no-op
 	}
 
 	@Override
 	public boolean isLevelEnabled(Level level) {
+		// never enabled
 		return false;
 	}
 
@@ -38,7 +36,7 @@ public class NullLogBackend implements LogBackend {
 	public static class NullLogBackendFactory implements LogBackendFactory {
 		@Override
 		public LogBackend createLogBackend(String classLabel) {
-			return new NullLogBackend(classLabel);
+			return new NullLogBackend();
 		}
 	}
 }
