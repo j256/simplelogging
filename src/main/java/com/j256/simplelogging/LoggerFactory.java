@@ -143,9 +143,12 @@ public class LoggerFactory {
 		 */
 		LOCAL(new LocalLogBackendFactory()),
 		/**
-		 * Internal JVM logging implementation almost always available. We put this down here because it's always
-		 * available but we rarely want to use it. See
+		 * Internal JVM logging implementation almost always available. See
 		 * https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html.
+		 * 
+		 * <p>
+		 * NOTE: We put this below the LOCAL log because it's always available but we don't want to auto-detect it.
+		 * </p>
 		 */
 		JAVA_UTIL("com.j256.simplelogging.JavaUtilLogBackend$JavaUtilLogBackendFactory"),
 		/**
