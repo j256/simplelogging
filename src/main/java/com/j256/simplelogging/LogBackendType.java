@@ -22,6 +22,10 @@ public enum LogBackendType implements LogBackendFactory {
 	 */
 	ANDROID("com.j256.simplelogging.AndroidLogBackend$AndroidLogBackendFactory"),
 	/**
+	 * Logback. See: http://logback.qos.ch/
+	 */
+	LOGBACK("com.j256.simplelogging.LogbackLogBackend$LogbackLogBackendFactory"),
+	/**
 	 * Apache commons logging. See https://commons.apache.org/proper/commons-logging/
 	 */
 	COMMONS_LOGGING("com.j256.simplelogging.CommonsLoggingLogBackend$CommonsLoggingLogBackendFactory"),
