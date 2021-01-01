@@ -1,7 +1,5 @@
 package com.j256.simplelogging;
 
-import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
-
 /**
  * Log backend that writes to java.util.log. This will never be chosen by default because it should always in the
  * classpath, but can be injected if someone really wants it.

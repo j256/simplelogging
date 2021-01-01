@@ -12,9 +12,6 @@ import java.lang.reflect.Constructor;
 
 import org.junit.Test;
 
-import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
-import com.j256.simplelogging.LoggerFactory.LogBackendType;
-
 public class LoggerFactoryTest {
 
 	@Test
@@ -50,7 +47,7 @@ public class LoggerFactoryTest {
 
 	@Test
 	public void testLogTypeKnownLog() {
-		LogBackend backend = LoggerFactory.LogBackendType.LOCAL.createLogBackend(getClass().getName());
+		LogBackend backend = LogBackendType.LOCAL.createLogBackend(getClass().getName());
 		assertTrue(backend instanceof LocalLogBackend);
 	}
 
