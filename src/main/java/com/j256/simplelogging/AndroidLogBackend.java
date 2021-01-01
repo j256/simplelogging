@@ -1,7 +1,5 @@
 package com.j256.simplelogging;
 
-import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
-
 import android.util.Log;
 
 /**

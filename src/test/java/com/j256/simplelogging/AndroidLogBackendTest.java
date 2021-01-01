@@ -4,9 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
-import com.j256.simplelogging.LoggerFactory.LogBackendType;
-
 public class AndroidLogBackendTest {
 
 	@Test

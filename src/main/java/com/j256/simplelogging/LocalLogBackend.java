@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import com.j256.simplelogging.LoggerFactory.LogBackendFactory;
-
 /**
  * Log backend that uses logging classes if they are not available.
  * 
