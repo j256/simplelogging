@@ -1,6 +1,7 @@
 package com.j256.simplelogging;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -101,6 +102,29 @@ public class LocalLogBackendTest extends BaseLogBackendTest {
 		// invalid level
 		stringWriter.write("com\\.foo\\.myclass\\.StatementExecutor = INVALID_LEVEL\n");
 		LocalLogBackend.readLevelResourceFile(new ByteArrayInputStream(stringWriter.toString().getBytes()));
+	}
+
+	@Test
+	public void testValidLevelsFile() {
+		StringWriter stringWriter = new StringWriter();
+		// invalid line
+		stringWriter.write("x\n");
+		// invalid level
+		stringWriter.write("com\\.foo\\.myclass\\.StatementExecutor = INFO\n");
+		LocalLogBackend.readLevelResourceFile(new ByteArrayInputStream(stringWriter.toString().getBytes()));
+	}
+
+	@Test
+	public void testMultipleLineMatches() {
+		/*
+		 * This depends on the contents of the simpleLoggingLocalLog.properties file.
+		 */
+		LocalLogBackend backend = new LocalLogBackend("com.j256.simplelogging.Something");
+		assertTrue(backend.isLevelEnabled(Level.DEBUG));
+		assertFalse(backend.isLevelEnabled(Level.TRACE));
+		backend = new LocalLogBackend("com.j256.simplelogging.LocalLogBackendTest");
+		assertTrue(backend.isLevelEnabled(Level.DEBUG));
+		assertTrue(backend.isLevelEnabled(Level.TRACE));
 	}
 
 	@Test

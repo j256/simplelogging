@@ -22,11 +22,12 @@ The following logging implementations will be discovered on the classpath in thi
 
 1. SLF4J (often paired with logback)
 2. Android native Log
-3. Apache Commons Logging
-4. LOG4J2 (version 2+)
-5. LOG4J (older)
-6. Local log implementation that can write to a simple file.
-7. Java util logging which is usually available in the JRE but never chosen directly. 
+3. Logback directory (using slf4j-api)
+4. Apache Commons Logging
+5. LOG4J2 (version 2+)
+6. LOG4J (older)
+7. Local log implementation that can write to a simple file.
+8. Java util logging which is usually available in the JRE but never chosen directly. 
 
 # Getting Started
 
@@ -54,3 +55,5 @@ logger.error(exception, "http client threw getting URL: {}", url);
 	</dependency>
 </dependencies>
 ```
+
+You may need to include a dependency on the log backend that you want simplelogger to write to.
