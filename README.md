@@ -13,6 +13,9 @@ caller to pass in an object array.
 * The source code be found on the [git repository](https://github.com/j256/simplelogging).  [![CircleCI](https://circleci.com/gh/j256/simplelogging.svg?style=svg)](https://circleci.com/gh/j256/simplelogging) [![CodeCov](https://img.shields.io/codecov/c/github/j256/simplelogging.svg)](https://codecov.io/github/j256/simplelogging/)
 * Maven packages are published via [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/)
 
+Enjoy,
+Gray Watson
+
 # Supported Logging Backends
 
 The following logging implementations will be discovered on the classpath in this order.
@@ -39,5 +42,15 @@ logger.trace("some trace information: {} and {}", arg1, arg2);
 logger.error(exception, "http client threw getting URL: {}", url);
 ```
 
-Enjoy,
-Gray Watson
+# Maven Configuration
+
+``` xml
+<dependencies>
+	<dependency>
+		<groupId>com.j256.simplelogging</groupId>
+		<artifactId>simplelogging</artifactId>
+		<!-- NOTE: change the version to the most recent release version from the repo -->
+		<version>1.1</version>
+	</dependency>
+</dependencies>
+```
