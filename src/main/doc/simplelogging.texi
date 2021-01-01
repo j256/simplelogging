@@ -1,0 +1,229 @@
+\input texinfo @c -*-texinfo-*-
+@c %**start of header
+@setfilename simplelogging.info
+@settitle SimpleLogging Documentation
+@headings double
+@c %**end of header
+
+@c ----------------------------------------------------------------
+@set simplelogging_version 1.16
+@set simplelogging_year 2019
+@set simplelogging_date February @value{simplelogging_year}
+@set package SimpleLogging
+@c ----------------------------------------------------------------
+
+@titlepage
+@headings off
+@title SimpleLogging Package
+@subtitle Version @value{simplelogging_version}
+@subtitle @value{simplelogging_date}
+@author Gray Watson
+
+@page
+This manual is licensed by Gray Watson under the Creative Commons Attribution-Share Alike 3.0 License.
+
+Permission is granted to make and distribute verbatim copies of this manual provided this license notice and this
+permission notice are preserved on all copies.
+@end titlepage
+
+@c ----------------------------------------------------------------
+
+@c In the printed manual, we put the contents at the front.  For the digital manuals it is at the end. 
+@iftex
+@contents
+@end iftex
+
+@c ----------------------------------------------------------------
+@node Top, Quick Start, (dir), (dir)
+@top SimpleLogging
+@everyheading @thischapter @| @thispage @| @today{}
+
+Version @value{simplelogging_version} -- @value{simplelogging_date}
+
+@cindex introduction
+@cindex author
+@cindex simple logging
+I've written this code into a number of different libraries of mine including @uref{https://ormlite.com/,ORMLite} and I
+have decided that it is worth it's own release.  The goal is a small-ish library that backends to a number of standard
+logging packages.  This allows you to write your code and include log messages without having a fixed dependency on any
+one logging package.  I include this code into my libraries and so they can stay agnostic.  I understand that this is
+the goal of commons-logging as well but I really want the slf4j-style @code{@{@}} arguments which aren't supported.
+This logging code allows you to write messages with the @code{@{@}} support and then backend to a number of other
+logging libraries or you can easily implement your own.  It also handles arrays appropriately and supports up to 4
+arguments before forcing the caller to pass in an object array.
+
+To get started quickly using SimpleLogging, @pxref{Quick Start}.
+@ifhtml
+There is also a @uref{http://256stuff.com/sources/simplelogging/docs/simplelogging.pdf, PDF version of this documentation}.
+@end ifhtml
+@iftex
+There is also a @uref{http://256stuff.com/sources/simplelogging/docs/simplelogging.html, HTML version of this documentation}.
+@end iftex
+
+Gray Watson @uref{http://256stuff.com/gray/}
+
+@menu
+* Quick Start::                Start using SimpleLogging quickly.
+* Using::                      How to use SimpleLogging.
+* License::                    Open Source license for the project.
+* Index of Concepts::          Index of concepts in the manual.
+@end menu
+
+@c ----------------------------------------------------------------
+@node Quick Start, Using, Top, Top
+@chapter Start Using Quickly
+
+@cindex getting started
+@cindex how to get started
+@cindex quick start
+@cindex ContentInfoUtil
+To use SimpleLogging in your code is similar to other logging libraries that you are used to.
+
+@example
+// usually a logger will be per-class, getLogger() also can take a String label
+private static final Logger logger = LoggerFactory.getLogger(MyClass.class);
+...
+
+// log trace message with arguments. toString() on the args only called if trace messages enabled
+logger.trace("some trace information: @{@} and @{@}", arg1, arg2);
+...
+
+// NOTE: exception argument comes _before_ the message format to not confuse the arguments
+logger.error(exception, "http client threw getting URL: @{@}", url);
+@end example
+
+For somewhat more extensive instructions, @pxref{Using}.
+
+@c ----------------------------------------------------------------
+@node Using, Downloading, Quick Start, Top
+@chapter Using SimpleLogging
+
+@cindex how to use
+@cindex using SimpleLogging
+@menu
+* Downloading ::                Downloading the SimpleLogging jar.
+* Using in Your Library ::      How to use the code in your library.
+* Backend Discovery ::          How the logging backend is discovered.
+* More Usage Examples ::        More examples on how to use the loggers.
+* Maven ::                      How to use with Maven.
+@end menu
+
+@c ----------------------------------------------------------------
+@node Downloading, Using in Your Library, Using, Using
+@section Downloading Jar
+
+@cindex how to download the jars
+@cindex downloading the jars
+@cindex where to get new jars
+To get started with SimpleLogging, you will need to download the jar file.  The
+@uref{http://256stuff.com/sources/simplelogging/releases/, SimpleLogging release page} is the default repository but the
+jars are also available from the @uref{https://repo1.maven.org/maven2/com/j256/simplelogging/, central maven
+repository}.
+
+The code works with Java 6 or later.
+
+@c ----------------------------------------------------------------
+@node Using in Your Library, Backend Discovery, Downloading, Using
+@section Using SimpleLogging in Your Library
+
+@cindex using in your library
+@cindex log type of backends
+@cindex LoggerFactory
+
+To use the SimpleLogging code in your library, just copy the classes into a logging package in your code and rename the
+package as necessary.
+
+@c ----------------------------------------------------------------
+@node Backend Discovery, More Usage Examples, Downloading, Using
+@section How SimpleLogging Discovers the Logging Backlend
+
+Built into the @code{LoggerFactory} class is a @code{LogBackendType} enumerated type which SimpleLogging uses to try to
+locate what logging packages are on the classpath and therefore should be used.
+
+The following logging implementations will be discovered on the classpath in this order.
+
+@enumerate
+
+@item SLF4J (often paired with logback)
+@item Android native Log
+@item Apache Commons Logging
+@item LOG4J2 (version 2+)
+@item LOG4J (older)
+@item Local log implementation that can write to a simple file.
+@item Java util logging which is usually available in the JRE but never chosen directly.
+
+@end enumerate
+
+If you (or the users of your library) want to force the logging type, they can use the following static method.
+
+@example
+// used to set a specific LoggerFactory.LogBackendType or custom
+LoggerFactory.setLogBackendFactory(...);
+@end example
+
+@c ----------------------------------------------------------------
+@node More Usage Examples, Maven, Using in Your Library, Using
+@section More Usage Examples
+
+The logger 
+
+@example
+// usually a logger will be per-class, getLogger() also can take a String label
+private static final Logger logger = LoggerFactory.getLogger(MyClass.class);
+...
+
+// log trace message with arguments. toString() on the args only called if trace messages enabled
+logger.trace("some trace information: @{@} and @{@}", arg1, arg2);
+...
+
+// NOTE: exception argument comes _before_ the message format to not confuse the arguments
+logger.error(exception, "http client threw getting URL: @{@}", url);
+@end example
+
+@c ----------------------------------------------------------------
+@node Maven, License, More Usage Examples, Using
+@section Using With Maven
+
+@cindex Maven, use with
+@cindex pom.xml dependency
+To use SimpleLogging with maven, include the following dependency in your @file{pom.xml} file:
+
+@example
+<dependency>
+   <groupId>com.j256.simplelogging</groupId>
+   <artifactId>simplelogging</artifactId>
+   <version>@value{simplelogging_version}</version>
+</dependency>
+@end example 
+
+@c ----------------------------------------------------------------
+@node License, Index of Concepts, Maven, Top
+@chapter Open Source License
+
+@cindex license
+@cindex isc license
+@cindex open source license
+This document is part of the SimpleLogging project.
+
+Copyright @value{simplelogging_year}, Gray Watson
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted,
+provided that this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+@c ----------------------------------------------------------------
+@node Index of Concepts,, License, Top
+@unnumbered Index of Concepts
+
+@printindex cp
+
+@ifhtml
+@contents
+@end ifhtml
+
+@bye
