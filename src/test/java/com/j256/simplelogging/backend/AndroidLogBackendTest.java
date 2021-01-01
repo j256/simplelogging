@@ -1,8 +1,13 @@
-package com.j256.simplelogging;
+package com.j256.simplelogging.backend;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import com.j256.simplelogging.LogBackendFactory;
+import com.j256.simplelogging.LogBackendType;
+import com.j256.simplelogging.Logger;
+import com.j256.simplelogging.LoggerFactory;
 
 public class AndroidLogBackendTest {
 

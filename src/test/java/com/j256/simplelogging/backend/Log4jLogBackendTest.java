@@ -1,6 +1,6 @@
-package com.j256.simplelogging;
+package com.j256.simplelogging.backend;
 
-import com.j256.simplelogging.Log4jLogBackend.Log4jLogBackendFactory;
+import com.j256.simplelogging.backend.Log4jLogBackend.Log4jLogBackendFactory;
 
 public class Log4jLogBackendTest extends BaseLogBackendTest {
 
