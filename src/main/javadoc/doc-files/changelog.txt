@@ -1,3 +1,6 @@
+1.3: 1/1/2021
+	* Moved the backends to a subpackage.
+
 1.2: 1/1/2021
 	* Add logback direct handling using logback-classic.
 	* Refactored some of the handling to reduce reflection overhead.

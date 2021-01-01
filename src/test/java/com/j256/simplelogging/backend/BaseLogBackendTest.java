@@ -1,8 +1,12 @@
-package com.j256.simplelogging;
+package com.j256.simplelogging.backend;
 
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import com.j256.simplelogging.Level;
+import com.j256.simplelogging.LogBackend;
+import com.j256.simplelogging.LogBackendFactory;
 
 public abstract class BaseLogBackendTest {
 

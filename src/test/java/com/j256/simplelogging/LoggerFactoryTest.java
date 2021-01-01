@@ -12,6 +12,14 @@ import java.lang.reflect.Constructor;
 
 import org.junit.Test;
 
+import com.j256.simplelogging.backend.CommonsLoggingLogBackend;
+import com.j256.simplelogging.backend.JavaUtilLogBackend;
+import com.j256.simplelogging.backend.LocalLogBackend;
+import com.j256.simplelogging.backend.Log4j2LogBackend;
+import com.j256.simplelogging.backend.Log4jLogBackend;
+import com.j256.simplelogging.backend.NullLogBackend;
+import com.j256.simplelogging.backend.Slf4jLoggingLogBackend;
+
 public class LoggerFactoryTest {
 
 	@Test

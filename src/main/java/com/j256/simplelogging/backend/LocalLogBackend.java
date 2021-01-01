@@ -1,4 +1,4 @@
-package com.j256.simplelogging;
+package com.j256.simplelogging.backend;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +14,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
+
+import com.j256.simplelogging.Level;
+import com.j256.simplelogging.LogBackend;
+import com.j256.simplelogging.LogBackendFactory;
+import com.j256.simplelogging.LoggerFactory;
 
 /**
  * Log backend that uses logging classes if they are not available.

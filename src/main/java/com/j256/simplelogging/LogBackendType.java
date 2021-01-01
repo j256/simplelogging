@@ -1,7 +1,8 @@
 package com.j256.simplelogging;
 
-import com.j256.simplelogging.LocalLogBackend.LocalLogBackendFactory;
-import com.j256.simplelogging.NullLogBackend.NullLogBackendFactory;
+import com.j256.simplelogging.backend.LocalLogBackend;
+import com.j256.simplelogging.backend.LocalLogBackend.LocalLogBackendFactory;
+import com.j256.simplelogging.backend.NullLogBackend.NullLogBackendFactory;
 
 /**
  * Type of logging backends that are supported. The classes are specified as strings so there is not a direct dependency
@@ -11,7 +12,7 @@ public enum LogBackendType implements LogBackendFactory {
 	/**
 	 * SLF4J. See: http://www.slf4j.org/
 	 */
-	SLF4J("com.j256.simplelogging.Slf4jLoggingLogBackend$Slf4jLoggingLogBackendFactory"),
+	SLF4J("com.j256.simplelogging.backend.Slf4jLoggingLogBackend$Slf4jLoggingLogBackendFactory"),
 	/**
 	 * Android Log mechanism. See: https://developer.android.com/reference/android/util/Log
 	 * 
@@ -20,23 +21,23 @@ public enum LogBackendType implements LogBackendFactory {
 	 * are ignored that are sent there. Grrrrr.
 	 * </p>
 	 */
-	ANDROID("com.j256.simplelogging.AndroidLogBackend$AndroidLogBackendFactory"),
+	ANDROID("com.j256.simplelogging.backend.AndroidLogBackend$AndroidLogBackendFactory"),
 	/**
 	 * Logback. See: http://logback.qos.ch/
 	 */
-	LOGBACK("com.j256.simplelogging.LogbackLogBackend$LogbackLogBackendFactory"),
+	LOGBACK("com.j256.simplelogging.backend.LogbackLogBackend$LogbackLogBackendFactory"),
 	/**
 	 * Apache commons logging. See https://commons.apache.org/proper/commons-logging/
 	 */
-	COMMONS_LOGGING("com.j256.simplelogging.CommonsLoggingLogBackend$CommonsLoggingLogBackendFactory"),
+	COMMONS_LOGGING("com.j256.simplelogging.backend.CommonsLoggingLogBackend$CommonsLoggingLogBackendFactory"),
 	/**
 	 * Version 2 of the log4j package. See https://logging.apache.org/log4j/2.x/
 	 */
-	LOG4J2("com.j256.simplelogging.Log4j2LogBackend$Log4j2LogBackendFactory"),
+	LOG4J2("com.j256.simplelogging.backend.Log4j2LogBackend$Log4j2LogBackendFactory"),
 	/**
 	 * Old version of the log4j package. See https://logging.apache.org/log4j/2.x/
 	 */
-	LOG4J("com.j256.simplelogging.Log4jLogBackend$Log4jLogBackendFactory"),
+	LOG4J("com.j256.simplelogging.backend.Log4jLogBackend$Log4jLogBackendFactory"),
 	/**
 	 * Local simple log backend that writes to a output file.
 	 * 
@@ -53,7 +54,7 @@ public enum LogBackendType implements LogBackendFactory {
 	 * NOTE: We put this below the LOCAL log because it's always available but we don't want to auto-detect it.
 	 * </p>
 	 */
-	JAVA_UTIL("com.j256.simplelogging.JavaUtilLogBackend$JavaUtilLogBackendFactory"),
+	JAVA_UTIL("com.j256.simplelogging.backend.JavaUtilLogBackend$JavaUtilLogBackendFactory"),
 	/**
 	 * Logging backend which ignores all messages. Used to disable all logging. This is never chosen automatically.
 	 */
