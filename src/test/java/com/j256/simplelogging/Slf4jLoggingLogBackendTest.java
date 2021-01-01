@@ -5,6 +5,6 @@ import com.j256.simplelogging.Slf4jLoggingLogBackend.Slf4jLoggingLogBackendFacto
 public class Slf4jLoggingLogBackendTest extends BaseLogBackendTest {
 
 	public Slf4jLoggingLogBackendTest() {
-		super(new Slf4jLoggingLogBackendFactory().createLogBackend("Slf4jLoggingLogBackendTest"));
+		super(new Slf4jLoggingLogBackendFactory());
 	}
 }

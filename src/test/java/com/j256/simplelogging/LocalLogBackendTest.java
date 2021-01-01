@@ -11,10 +11,12 @@ import java.io.StringWriter;
 
 import org.junit.Test;
 
+import com.j256.simplelogging.LocalLogBackend.LocalLogBackendFactory;
+
 public class LocalLogBackendTest extends BaseLogBackendTest {
 
 	public LocalLogBackendTest() {
-		super(new LocalLogBackend("CommonsLoggingLogBackendTest"));
+		super(new LocalLogBackendFactory());
 	}
 
 	@Test

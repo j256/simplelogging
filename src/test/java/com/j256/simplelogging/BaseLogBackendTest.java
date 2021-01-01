@@ -8,8 +8,8 @@ public abstract class BaseLogBackendTest {
 
 	private final LogBackend log;
 
-	protected BaseLogBackendTest(LogBackend log) {
-		this.log = log;
+	protected BaseLogBackendTest(LogBackendFactory factory) {
+		this.log = factory.createLogBackend(getClass().getSimpleName());
 	}
 
 	@Test
