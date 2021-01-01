@@ -32,6 +32,7 @@ public class Logger {
 	private static Level globalLevel;
 
 	private final static String ARG_STRING = "{}";
+	private final static int ARG_STRING_LENGTH = ARG_STRING.length();
 	private final static Object UNKNOWN_ARG = new Object();
 	private final static int DEFAULT_FULL_MESSAGE_LENGTH = 128;
 	private final LogBackend backend;
@@ -685,7 +686,7 @@ public class Logger {
 			// add the string before the arg-string
 			sb.append(msg, lastIndex, argIndex);
 			// shift our last-index past the arg-string
-			lastIndex = argIndex + ARG_STRING.length();
+			lastIndex = argIndex + ARG_STRING_LENGTH;
 			// add the argument, if we still have any
 			if (argArray == null) {
 				if (argC == 0) {
