@@ -1,5 +1,7 @@
 package com.j256.simplelogging;
 
+import org.slf4j.ILoggerFactory;
+
 /**
  * Log backend that delegates to slf4j.
  * 
@@ -9,8 +11,8 @@ public class Slf4jLoggingLogBackend implements LogBackend {
 
 	private final org.slf4j.Logger logger;
 
-	public Slf4jLoggingLogBackend(String className) {
-		this.logger = org.slf4j.LoggerFactory.getLogger(className);
+	public Slf4jLoggingLogBackend(org.slf4j.Logger logger) {
+		this.logger = logger;
 	}
 
 	@Override
@@ -90,9 +92,16 @@ public class Slf4jLoggingLogBackend implements LogBackend {
 	 * Factory for generating Slf4jLoggingLogBackend instances.
 	 */
 	public static class Slf4jLoggingLogBackendFactory implements LogBackendFactory {
+
+		private final ILoggerFactory factory;
+
+		public Slf4jLoggingLogBackendFactory() {
+			this.factory = org.slf4j.LoggerFactory.getILoggerFactory();
+		}
+
 		@Override
 		public LogBackend createLogBackend(String classLabel) {
-			return new Slf4jLoggingLogBackend(classLabel);
+			return new Slf4jLoggingLogBackend(factory.getLogger(classLabel));
 		}
 	}
 }
