@@ -51,7 +51,7 @@ logger.error(exception, "http client threw getting URL: {}", url);
 		<groupId>com.j256.simplelogging</groupId>
 		<artifactId>simplelogging</artifactId>
 		<!-- NOTE: change the version to the most recent release version from the repo -->
-		<version>1.2</version>
+		<version>1.3</version>
 	</dependency>
 </dependencies>
 ```
