@@ -22,7 +22,7 @@ The following logging implementations will be discovered on the classpath in thi
 
 1. SLF4J (often paired with logback)
 2. Android native Log
-3. Logback directory (using slf4j-api)
+3. Logback directly (using slf4j-api)
 4. Apache Commons Logging
 5. LOG4J2 (version 2+)
 6. LOG4J (older)
