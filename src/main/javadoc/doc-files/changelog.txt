@@ -1,5 +1,5 @@
 1.3: 1/1/2021
-	* Moved the backends to a subpackage.
+	* Moved the LogBackend implementations that write to the 3rd party loggers to a subpackage.
 
 1.2: 1/1/2021
 	* Add logback direct handling using logback-classic.
