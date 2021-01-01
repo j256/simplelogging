@@ -1,4 +1,8 @@
-package com.j256.simplelogging;
+package com.j256.simplelogging.backend;
+
+import com.j256.simplelogging.Level;
+import com.j256.simplelogging.LogBackend;
+import com.j256.simplelogging.LogBackendFactory;
 
 /**
  * Log backend that writes to java.util.log. This will never be chosen by default because it should always in the

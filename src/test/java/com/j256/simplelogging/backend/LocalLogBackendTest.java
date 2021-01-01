@@ -1,4 +1,4 @@
-package com.j256.simplelogging;
+package com.j256.simplelogging.backend;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,7 +12,10 @@ import java.io.StringWriter;
 
 import org.junit.Test;
 
-import com.j256.simplelogging.LocalLogBackend.LocalLogBackendFactory;
+import com.j256.simplelogging.Level;
+import com.j256.simplelogging.LogBackend;
+import com.j256.simplelogging.backend.LocalLogBackend;
+import com.j256.simplelogging.backend.LocalLogBackend.LocalLogBackendFactory;
 
 public class LocalLogBackendTest extends BaseLogBackendTest {
 

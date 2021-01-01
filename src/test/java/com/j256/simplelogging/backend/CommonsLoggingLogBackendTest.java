@@ -1,6 +1,6 @@
-package com.j256.simplelogging;
+package com.j256.simplelogging.backend;
 
-import com.j256.simplelogging.CommonsLoggingLogBackend.CommonsLoggingLogBackendFactory;
+import com.j256.simplelogging.backend.CommonsLoggingLogBackend.CommonsLoggingLogBackendFactory;
 
 public class CommonsLoggingLogBackendTest extends BaseLogBackendTest {
 
