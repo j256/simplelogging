@@ -77,10 +77,12 @@ public class LoggerTest {
 	public void testToManyArgs() {
 		String start = "yyy ";
 		String arg = "x";
-		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true);
+		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		mockLog.log(Level.TRACE, start + arg);
 		mockLog.log(Level.TRACE, start + arg);
 		replay(mockLog);
-		logger.trace(start + "{}", arg);
+		logger.trace(start + "{}{}{}{}{}", arg);
+		logger.trace(start + "{}{}{}{}{}", new Object[] { arg });
 		verify(mockLog);
 	}
 
@@ -546,20 +548,26 @@ public class LoggerTest {
 		String msg1 = "123";
 		String msg2 = "this should not show up";
 		String msg3 = "this should show up";
+		String msg4 = "this should show up too";
 		reset(mockLog);
 		expect(mockLog.isLevelEnabled(Level.INFO)).andReturn(true);
 		mockLog.log(Level.INFO, msg1);
 		// no msg2
+		expect(mockLog.isLevelEnabled(Level.INFO)).andReturn(true);
+		mockLog.log(Level.INFO, msg3);
 		expect(mockLog.isLevelEnabled(Level.DEBUG)).andReturn(true);
-		mockLog.log(Level.DEBUG, msg3);
+		mockLog.log(Level.DEBUG, msg4);
 		replay(mockLog);
 		logger.info(msg1);
 		Logger.setGlobalLogLevel(Level.OFF);
 		logger.fatal(msg2);
 		Logger.setGlobalLogLevel(Level.INFO);
+		// global log does not match this so it should not be shown
 		logger.debug(msg2);
+		// global log matches info so this should be shown
+		logger.info(msg3);
 		Logger.setGlobalLogLevel(null);
-		logger.debug(msg3);
+		logger.debug(msg4);
 		verify(mockLog);
 	}
 

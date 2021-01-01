@@ -698,12 +698,12 @@ public class Logger {
 				} else if (argC == 3) {
 					appendArg(sb, arg3);
 				} else {
-					// we have too many {} so we just ignore them
+					// we have more than 4 {} so we just ignore them
 				}
 			} else if (argC < argArray.length) {
 				appendArg(sb, argArray[argC]);
 			} else {
-				// we have too many {} so we just ignore them
+				// we have too many {} than in the argArray so we just ignore them
 			}
 			argC++;
 		}

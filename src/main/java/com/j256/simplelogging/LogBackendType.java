@@ -10,7 +10,7 @@ import com.j256.simplelogging.backend.NullLogBackend.NullLogBackendFactory;
  */
 public enum LogBackendType implements LogBackendFactory {
 	/**
-	 * SLF4J. See: http://www.slf4j.org/
+	 * SLF4J which is often paired with logback. See: http://www.slf4j.org/
 	 */
 	SLF4J("com.j256.simplelogging.backend.Slf4jLoggingLogBackend$Slf4jLoggingLogBackendFactory"),
 	/**
@@ -23,7 +23,7 @@ public enum LogBackendType implements LogBackendFactory {
 	 */
 	ANDROID("com.j256.simplelogging.backend.AndroidLogBackend$AndroidLogBackendFactory"),
 	/**
-	 * Logback. See: http://logback.qos.ch/
+	 * Logback direct. See: http://logback.qos.ch/
 	 */
 	LOGBACK("com.j256.simplelogging.backend.LogbackLogBackend$LogbackLogBackendFactory"),
 	/**
@@ -42,17 +42,14 @@ public enum LogBackendType implements LogBackendFactory {
 	 * Local simple log backend that writes to a output file.
 	 * 
 	 * <p>
-	 * NOTE: this should always be at the end as the fall-back, so it's always available
+	 * NOTE: any loggers defined below this will not be auto-detected because this is always available.
 	 * </p>
 	 */
 	LOCAL(new LocalLogBackendFactory()),
 	/**
-	 * Internal JVM logging implementation almost always available. See
-	 * https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html.
-	 * 
-	 * <p>
-	 * NOTE: We put this below the LOCAL log because it's always available but we don't want to auto-detect it.
-	 * </p>
+	 * Internal JVM logging implementation almost always available. See We put this below the LOCAL log because it's
+	 * always available but we don't want to auto-detect it. See:
+	 * https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html
 	 */
 	JAVA_UTIL("com.j256.simplelogging.backend.JavaUtilLogBackend$JavaUtilLogBackendFactory"),
 	/**
