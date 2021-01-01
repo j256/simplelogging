@@ -1,3 +1,8 @@
+1.2: 1/1/2021
+	* Add logback direct handling using logback-classic.
+	* Refactored some of the handling to reduce reflection overhead.
+	* Moved some inner classes up to be full classes.
+
 1.1: 12/16/2020
 	* Brought the code over from ORMLite into it's own repo.
 	* Did some wholesale renaming of stuff to rename the confusing Log to LogBackend.
