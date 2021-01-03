@@ -32,7 +32,6 @@ public class LoggerTest {
 	public void testArgAtStart() {
 		String arg = "x";
 		String end = " yyy";
-		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true);
 		mockLog.log(Level.TRACE, arg + end);
 		replay(mockLog);
 		logger.trace("{}" + end, arg);
