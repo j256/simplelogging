@@ -2,6 +2,9 @@
 
 set -x
 
+env
+printenv
+
 GH_API="https://api.github.com"
 GH_REPO="$GH_API/repos/$REPO_OWNER/$CIRCLE_PR_REPONAME"
 AUTH="Authorization: token $GITHUB_API_TOKEN"
