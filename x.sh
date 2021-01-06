@@ -6,9 +6,9 @@ env
 
 GH_API="https://api.github.com"
 GH_REPO="$GH_API/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
-AUTH="Authorization: token $MY_KEY_CC"
+AUTH="$CIRCLE_PROJECT_USERNAME:$MY_KEY_CC"
 
-curl -o /dev/null -s -H "$AUTH" $GH_REPO || { echo "Error: Invalid repo, token or network issue!";  exit 1; }
+curl -o /dev/null -s -u "$AUTH" $GH_REPO || { echo "Error: Invalid repo, token or network issue!";  exit 1; }
 
 cat >post.json<<EOF
 {
@@ -31,4 +31,4 @@ cat >post.json<<EOF
 }
 EOF
 
-curl -H "$AUTH" -X POST -d @post.json $GH_REPO/check-runs
+curl -u "$AUTH" -X POST -d @post.json $GH_REPO/check-runs
