@@ -1,5 +1,6 @@
 package com.j256.simplelogging;
 
+import com.j256.simplelogging.backend.ConsoleLogBackend.ConsoleLogBackendFactory;
 import com.j256.simplelogging.backend.LocalLogBackend;
 import com.j256.simplelogging.backend.LocalLogBackend.LocalLogBackendFactory;
 import com.j256.simplelogging.backend.NullLogBackend.NullLogBackendFactory;
@@ -39,6 +40,10 @@ public enum LogBackendType implements LogBackendFactory {
 	 */
 	LOG4J("com.j256.simplelogging.backend.Log4jLogBackend$Log4jLogBackendFactory"),
 	/**
+	 * Support for the logger available inside AWS lambda SDK.
+	 */
+	LAMBDA("com.j256.simplelogging.backend.LambdaLoggerLogBackend$LambdaLoggerLogBackendFactory"),
+	/**
 	 * Local simple log backend that writes to a output file.
 	 * 
 	 * <p>
@@ -46,6 +51,10 @@ public enum LogBackendType implements LogBackendFactory {
 	 * </p>
 	 */
 	LOCAL(new LocalLogBackendFactory()),
+	/**
+	 * Simple log backend that writes out to System.out or System.err.
+	 */
+	CONSOLE(new ConsoleLogBackendFactory()),
 	/**
 	 * Internal JVM logging implementation almost always available. See We put this below the LOCAL log because it's
 	 * always available but we don't want to auto-detect it. See:

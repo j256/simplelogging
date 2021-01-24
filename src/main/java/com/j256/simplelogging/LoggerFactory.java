@@ -56,6 +56,21 @@ public class LoggerFactory {
 	}
 
 	/**
+	 * Set the log backend type to be a specific enum type. This will throw an exception if the classes involved with
+	 * the type are not available from the classpath.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the logging type is not available most likely because classes are missing from the classpath.
+	 */
+	public static void setLogBackendType(LogBackendType type) {
+		if (type.isAvailable()) {
+			LoggerFactory.logBackendFactory = type;
+		} else {
+			throw new IllegalArgumentException("Logging backend type " + type + " is not available on the classpath");
+		}
+	}
+
+	/**
 	 * Return the single class name from a class-name string.
 	 */
 	public static String getSimpleClassName(String className) {
