@@ -18,7 +18,7 @@ public interface LogBackend {
 	public void log(Level level, String message);
 
 	/**
-	 * Log a message with a throwable.
+	 * Log a message with a throwable which is guaranteed to not be null.
 	 */
-	public void log(Level level, String message, Throwable t);
+	public void log(Level level, String message, Throwable throwable);
 }

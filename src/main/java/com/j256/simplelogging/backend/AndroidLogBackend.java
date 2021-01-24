@@ -131,6 +131,7 @@ public class AndroidLogBackend implements LogBackend {
 				Log.e(className, msg, t);
 				break;
 			case FATAL:
+				// no level higher than e
 				Log.e(className, msg, t);
 				break;
 			case INFO:

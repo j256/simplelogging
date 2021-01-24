@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import com.j256.simplelogging.Level;
 import com.j256.simplelogging.LogBackend;
-import com.j256.simplelogging.backend.LocalLogBackend;
 import com.j256.simplelogging.backend.LocalLogBackend.LocalLogBackendFactory;
 
 public class LocalLogBackendTest extends BaseLogBackendTest {

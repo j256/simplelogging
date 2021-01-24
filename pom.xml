@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.j256.simplelogging</groupId>
 	<artifactId>simplelogging</artifactId>
@@ -28,6 +29,7 @@
 		<slf4j-version>1.7.2</slf4j-version>
 		<android-version>4.1.1.4</android-version>
 		<logback.version>1.0.11</logback.version>
+		<aws-lambda-java-core-version>1.1.0</aws-lambda-java-core-version>
 		<!-- yes we know this is an issue but it is here for backwards compatibility -->
 		<log4j-version>1.2.17</log4j-version>
 		<log4j2-version>2.0-beta4</log4j2-version>
@@ -278,6 +280,13 @@
 			<artifactId>android</artifactId>
 			<scope>provided</scope>
 			<version>${android-version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-lambda-java-core</artifactId>
+			<version>${aws-lambda-java-core-version}</version>
+			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
 
