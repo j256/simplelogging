@@ -26,8 +26,10 @@ The following logging implementations will be discovered on the classpath in thi
 4. Apache Commons Logging
 5. LOG4J2 (version 2+)
 6. LOG4J (older)
-7. Local log implementation that can write to a simple file.
-8. Java util logging which is usually available in the JRE but never chosen directly. 
+7. AWS lambda logging.
+8. Local log implementation that can write to a simple file.
+9. Simple console output.
+10. Java util logging which is usually available in the JRE but never chosen directly. 
 
 # Getting Started
 
