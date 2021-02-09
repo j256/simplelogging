@@ -21,7 +21,7 @@ public enum Level {
 	// end
 	;
 
-	private int value;
+	private final int value;
 
 	private Level(int value) {
 		this.value = value;
