@@ -24,7 +24,7 @@
 	<properties>
 		<!-- external test package versions -->
 		<easymock-version>3.4</easymock-version>
-		<junit-version>4.13.1</junit-version>
+		<junit-version>4.13.2</junit-version>
 		<commons-logging-version>1.1.1</commons-logging-version>
 		<slf4j-version>1.7.2</slf4j-version>
 		<android-version>4.1.1.4</android-version>
@@ -196,7 +196,7 @@
 			<plugin>
 				<groupId>com.j256.testcheckpublisher</groupId>
 				<artifactId>test-check-publisher-maven-plugin</artifactId>
-				<version>0.9</version>
+				<version>1.2</version>
 			</plugin>
 		</plugins>
 		<pluginManagement>
