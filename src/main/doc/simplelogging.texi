@@ -76,7 +76,7 @@ Gray Watson @uref{http://256stuff.com/gray/}
 @cindex getting started
 @cindex how to get started
 @cindex quick start
-@cindex ContentInfoUtil
+@cindex Logger
 To use SimpleLogging in your code is similar to other logging libraries that you are used to.
 
 @example
