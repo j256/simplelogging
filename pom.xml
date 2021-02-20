@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.j256.simplelogging</groupId>
 	<artifactId>simplelogging</artifactId>
-	<version>1.4</version>
+	<version>1.5-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Simple Logging</name>
 	<url>https://256stuff.com/sources/simplelogging/</url>
