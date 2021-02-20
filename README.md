@@ -47,15 +47,14 @@ logger.error(exception, "http client threw getting URL: {}", url);
 
 # Maven Configuration
 
+* Maven packages are published via [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/)
+
 ``` xml
-<dependencies>
-	<dependency>
-		<groupId>com.j256.simplelogging</groupId>
-		<artifactId>simplelogging</artifactId>
-		<!-- NOTE: change the version to the most recent release version from the repo -->
-		<version>1.3</version>
-	</dependency>
-</dependencies>
+<dependency>
+	<groupId>com.j256.simplelogging</groupId>
+	<artifactId>simplelogging</artifactId>
+	<version>1.4</version>
+</dependency>
 ```
 
 You may need to include a dependency on the log backend that you want simplelogger to write to.
