@@ -74,9 +74,9 @@ fi
 if [ -r "src/main/doc/$LIBRARY.texi" ]; then
     ver=$(grep "^@set ${LIBRARY}_version" src/main/doc/$LIBRARY.texi | cut -f3 -d' ')
     if [ "$release" != "$ver" ]; then
-	/bin/echo "$LIBRARY.texi version seems wrong:"
-	grep "^@set ${LIBRARY}_version" src/main/doc/$LIBRARY.texi
-	bad=1
+		/bin/echo "$LIBRARY.texi version seems wrong:"
+		grep "^@set ${LIBRARY}_version" src/main/doc/$LIBRARY.texi
+		bad=1
     fi
 fi
 

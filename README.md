@@ -13,7 +13,7 @@ caller to pass in an object array.
 * The source code be found on the [git repository](https://github.com/j256/simplelogging).  [![CircleCI](https://circleci.com/gh/j256/simplelogging.svg?style=svg)](https://circleci.com/gh/j256/simplelogging) [![CodeCov](https://img.shields.io/codecov/c/github/j256/simplelogging.svg)](https://codecov.io/github/j256/simplelogging/)
 * Maven packages are published via [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/) [![javadoc](https://javadoc.io/badge2/com.j256.simplelogging/simplelogging/javadoc.svg)](https://javadoc.io/doc/com.j256.simplelogging/simplelogging)
 
-Enjoy,
+Enjoy,  
 Gray Watson
 
 # Supported Logging Backends
@@ -53,8 +53,11 @@ logger.error(exception, "http client threw getting URL: {}", url);
 <dependency>
 	<groupId>com.j256.simplelogging</groupId>
 	<artifactId>simplelogging</artifactId>
-	<version>1.4</version>
+	<version>1.5</version>
 </dependency>
 ```
 
-You may need to include a dependency on the log backend that you want simplelogger to write to.
+# Dependencies
+
+Simplelogging has no direct dependencies.  It has a number of optional dependencies that will only be referenced if
+they are already in your application's classpath.

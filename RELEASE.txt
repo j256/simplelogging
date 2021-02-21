@@ -2,17 +2,11 @@
 
 The following set of tasks should be performed when the library gets released.
 
-1) Update the ChangeLog file with the release date.
-2) Update the version numbers in the following files:
-	changelog.txt
-	README.md
-	pom.xml (maybe)
-3) Consider updating the copyright heads in LICENSE.txt
-4) Check in all files.
-5) mvn test
-6) Run release.sh script.  It will publish to sonos.
-7) Close and release sonos package.
-8) create release on github for X.X.X from that tag
+1) Maybe update the version numbers in the pom.xml
+2) Consider updating the copyright heads in LICENSE.txt
+3) Run release.sh script.  It will publish to sonos.
+4) Close and release sonos package.
+5) create release on github for X.X.X from that tag
     https://github.com/j256/simplelogging/tags
 
 -------------------------------------------------------------------------------
