@@ -1,7 +1,6 @@
 package com.j256.simplelogging;
 
 import com.j256.simplelogging.backend.ConsoleLogBackend.ConsoleLogBackendFactory;
-import com.j256.simplelogging.backend.LocalLogBackend;
 import com.j256.simplelogging.backend.LocalLogBackend.LocalLogBackendFactory;
 import com.j256.simplelogging.backend.NullLogBackend.NullLogBackendFactory;
 
@@ -106,11 +105,14 @@ public enum LogBackendType implements LogBackendFactory {
 			factory.createLogBackend("test").isLevelEnabled(Level.INFO);
 			return factory;
 		} catch (Throwable th) {
-			// we catch throwable here because we could get linkage errors
-			LogBackend backend = new LocalLogBackend(LogBackendType.class.getSimpleName() + "." + this);
-			backend.log(Level.WARNING, "Unable to get new instance of class " + factoryClassName
-					+ ", so had to use local log: " + th.getMessage());
-			return new LocalLogBackendFactory();
+			/*
+			 * We catch throwable here because we could get linkage errors. We don't immediately report on this issue
+			 * because this log factory will most likely never be used. If it is, the first thing that the factory will
+			 * so is use the first LogBackend generated to log this warning.
+			 */
+			String queuedWarning = "Unable to create instance of class " + factoryClassName + " for log type " + this
+					+ ", using local log: " + th.getMessage();
+			return new LocalLogBackendFactory(queuedWarning);
 		}
 	}
 }
