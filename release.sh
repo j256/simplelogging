@@ -39,7 +39,7 @@ fi
 grep sonatype-nexus-snapshots $HOME/.m2/settings.xml > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     /bin/echo "Can't find sonatype info in the maven settings.xml file"
-    exit 1
+    bad=1
 fi
 
 #############################################################
@@ -74,13 +74,23 @@ fi
 if [ -r "src/main/doc/$LIBRARY.texi" ]; then
     ver=$(grep "^@set ${LIBRARY}_version" src/main/doc/$LIBRARY.texi | cut -f3 -d' ')
     if [ "$release" != "$ver" ]; then
-		/bin/echo "$LIBRARY.texi version seems wrong:"
-		grep "^@set ${LIBRARY}_version" src/main/doc/$LIBRARY.texi
-		bad=1
+	/bin/echo "$LIBRARY.texi version seems wrong:"
+	grep "^@set ${LIBRARY}_version" src/main/doc/$LIBRARY.texi
+	bad=1
+    fi
+fi
+
+if [ -r "src/main/javadoc/doc-files/$LIBRARY.html" ]; then
+    grep "Version $release" src/main/javadoc/doc-files/$LIBRARY.html > /dev/null
+    if [ $? -ne 0 ]; then
+	/bin/echo "javadoc doc-files $LIBRARY.html version seems wrong:"
+	grep "Version " src/main/javadoc/doc-files/$LIBRARY.html
+	bad=1
     fi
 fi
 
 if [ $bad -ne 0 ]; then
+    echo "Please fix the previous error and re-run"
     exit 1
 fi
 
