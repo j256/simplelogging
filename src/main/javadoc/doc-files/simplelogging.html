@@ -1,0 +1,637 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on June 22, 2021 by texi2html 1.82
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>SimpleLogging Documentation</title>
+
+<meta name="description" content="SimpleLogging Documentation">
+<meta name="keywords" content="SimpleLogging Documentation">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.82">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.roman {font-family:serif; font-weight:normal;}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Top"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="SimpleLogging"></a>
+<h1 class="settitle">SimpleLogging</h1>
+
+<p>Version 1.6 &ndash; June 2021
+</p>
+<a name="index-introduction"></a>
+<a name="index-author"></a>
+<a name="index-simple-logging"></a>
+<p>I&rsquo;ve written this code into a number of different libraries of mine including <a href="https://ormlite.com/">ORMLite</a> and I
+have decided that it is worth it&rsquo;s own release.  The goal is a small-ish library that backends to a number of standard
+logging packages.  This allows you to write your code and include log messages without having a fixed dependency on any
+one logging package.  I include this code into my libraries and so they can stay agnostic.  I understand that this is
+the goal of commons-logging as well but I really want the slf4j-style <code>{}</code> arguments which aren&rsquo;t supported.
+This logging code allows you to write messages with the <code>{}</code> support and then backend to a number of other
+logging libraries or you can easily implement your own.  It also handles arrays appropriately and supports up to 4
+arguments before forcing the caller to pass in an object array.
+</p>
+<p>To get started quickly using SimpleLogging, see section <a href="#Quick-Start">Start Using Quickly</a>.
+There is also a <a href="http://256stuff.com/sources/simplelogging/docs/simplelogging.pdf">PDF version of this documentation</a>.
+</p>
+<p>Gray Watson <a href="http://256stuff.com/gray/">http://256stuff.com/gray/</a>
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Quick-Start">1. Start Using Quickly</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">                Start using SimpleLogging quickly.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Using">2. Using SimpleLogging</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">                      How to use SimpleLogging.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#License">3. Open Source License</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">                    Open Source license for the project.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Index-of-Concepts">Index of Concepts</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">          Index of concepts in the manual.
+</td></tr>
+</table>
+
+<hr size="1">
+<a name="Quick-Start"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Top" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#Using" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Start-Using-Quickly"></a>
+<h1 class="chapter">1. Start Using Quickly</h1>
+
+<a name="index-getting-started"></a>
+<a name="index-how-to-get-started"></a>
+<a name="index-quick-start"></a>
+<a name="index-Logger"></a>
+<p>To use SimpleLogging in your code is similar to other logging libraries that you are used to.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">// usually a logger will be per-class, getLogger() also can take a String label
+private static final Logger logger = LoggerFactory.getLogger(MyClass.class);
+...
+
+// log trace message with arguments. toString() on the args only called if trace messages enabled
+logger.trace(&quot;some trace information: {} and {}&quot;, arg1, arg2);
+...
+
+// NOTE: exception argument comes _before_ the message format to not confuse the arguments
+logger.error(exception, &quot;http client threw getting URL: {}&quot;, url);
+</pre></td></tr></table>
+
+<p>For somewhat more extensive instructions, see section <a href="#Using">Using SimpleLogging</a>.
+</p>
+<hr size="6">
+<a name="Using"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Quick-Start" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Downloading" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Quick-Start" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#License" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Using-SimpleLogging"></a>
+<h1 class="chapter">2. Using SimpleLogging</h1>
+
+<a name="index-how-to-use"></a>
+<a name="index-using-SimpleLogging"></a>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Downloading">2.1 Downloading Jar</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">                Downloading the SimpleLogging jar.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Using-in-Your-Library">2.2 Using SimpleLogging in Your Library</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">      How to use the code in your library.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Backend-Discovery">2.3 How SimpleLogging Discovers the Logging Backlend</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">          How the logging backend is discovered.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#More-Usage-Examples">2.4 More Usage Examples</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">        More examples on how to use the loggers.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Maven">2.5 Using With Maven</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">                      How to use with Maven.
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="Downloading"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Using" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using-in-Your-Library" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Using" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#License" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Downloading-Jar"></a>
+<h2 class="section">2.1 Downloading Jar</h2>
+
+<a name="index-how-to-download-the-jars"></a>
+<a name="index-downloading-the-jars"></a>
+<a name="index-where-to-get-new-jars"></a>
+<p>To get started with SimpleLogging, you will need to download the jar file.  The
+<a href="http://256stuff.com/sources/simplelogging/releases/">SimpleLogging release page</a> is the default repository but the
+jars are also available from the <a href="https://repo1.maven.org/maven2/com/j256/simplelogging/">central maven repository</a>.
+</p>
+<p>The code works with Java 6 or later.
+</p>
+<hr size="6">
+<a name="Using-in-Your-Library"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Downloading" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Backend-Discovery" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Using" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#License" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Using-SimpleLogging-in-Your-Library"></a>
+<h2 class="section">2.2 Using SimpleLogging in Your Library</h2>
+
+<a name="index-using-in-your-library"></a>
+<a name="index-log-type-of-backends"></a>
+<a name="index-LoggerFactory"></a>
+
+<p>To use the SimpleLogging code in your library, just copy the classes into a logging package in your code and rename the
+package as necessary.
+</p>
+<hr size="6">
+<a name="Backend-Discovery"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Using-in-Your-Library" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#More-Usage-Examples" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Using" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#License" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="How-SimpleLogging-Discovers-the-Logging-Backlend"></a>
+<h2 class="section">2.3 How SimpleLogging Discovers the Logging Backlend</h2>
+
+<p>Built into the <code>LoggerFactory</code> class is a <code>LogBackendType</code> enumerated type which SimpleLogging uses to try to
+locate what logging packages are on the classpath and therefore should be used.
+</p>
+<p>The following logging implementations will be discovered on the classpath in this order.
+</p>
+<ol>
+<li> SLF4J (often paired with logback)
+</li><li> Android native Log
+</li><li> Apache Commons Logging
+</li><li> LOG4J2 (version 2+)
+</li><li> LOG4J (older)
+</li><li> Local log implementation that can write to a simple file.
+</li><li> Java util logging which is usually available in the JRE but never chosen directly.
+
+</li></ol>
+
+<p>If you (or the users of your library) want to force the logging type, they can use the following static method.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">// used to set a specific LoggerFactory.LogBackendType or custom
+LoggerFactory.setLogBackendFactory(...);
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="More-Usage-Examples"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Backend-Discovery" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Maven" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Using" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#License" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="More-Usage-Examples-1"></a>
+<h2 class="section">2.4 More Usage Examples</h2>
+
+<p>The logger 
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">// usually a logger will be per-class, getLogger() also can take a String label
+private static final Logger logger = LoggerFactory.getLogger(MyClass.class);
+...
+
+// log trace message with arguments. toString() on the args only called if trace messages enabled
+logger.trace(&quot;some trace information: {} and {}&quot;, arg1, arg2);
+...
+
+// NOTE: exception argument comes _before_ the message format to not confuse the arguments
+logger.error(exception, &quot;http client threw getting URL: {}&quot;, url);
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="Maven"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#More-Usage-Examples" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#License" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Using" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#License" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Using-With-Maven"></a>
+<h2 class="section">2.5 Using With Maven</h2>
+
+<a name="index-Maven_002c-use-with"></a>
+<a name="index-pom_002exml-dependency"></a>
+<p>To use SimpleLogging with maven, include the following dependency in your &lsquo;<tt>pom.xml</tt>&rsquo; file:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;dependency&gt;
+   &lt;groupId&gt;com.j256.simplelogging&lt;/groupId&gt;
+   &lt;artifactId&gt;simplelogging&lt;/artifactId&gt;
+   &lt;version&gt;1.6&lt;/version&gt;
+&lt;/dependency&gt;
+</pre></td></tr></table>
+
+
+<hr size="6">
+<a name="License"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Maven" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Using" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Open-Source-License"></a>
+<h1 class="chapter">3. Open Source License</h1>
+
+<a name="index-license"></a>
+<a name="index-isc-license"></a>
+<a name="index-open-source-license"></a>
+<p>This document is part of the SimpleLogging project.
+</p>
+<p>Copyright 2021, Gray Watson
+</p>
+<p>Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted,
+provided that this permission notice appear in all copies.
+</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+</p>
+<hr size="6">
+<a name="Index-of-Concepts"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#License" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[ &gt; ]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#License" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[ &gt;&gt; ]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Index-of-Concepts-1"></a>
+<h1 class="unnumbered">Index of Concepts</h1>
+
+<table><tr><th valign="top">Jump to: &nbsp; </th><td><a href="#Index-of-Concepts-1_cp_letter-A" class="summary-letter"><b>A</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-D" class="summary-letter"><b>D</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-G" class="summary-letter"><b>G</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-H" class="summary-letter"><b>H</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-I" class="summary-letter"><b>I</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-L" class="summary-letter"><b>L</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-M" class="summary-letter"><b>M</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-O" class="summary-letter"><b>O</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-P" class="summary-letter"><b>P</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-Q" class="summary-letter"><b>Q</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-S" class="summary-letter"><b>S</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-U" class="summary-letter"><b>U</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-W" class="summary-letter"><b>W</b></a>
+ &nbsp; 
+</td></tr></table>
+<table border="0" class="index-cp">
+<tr><td></td><th align="left">Index Entry</th><th align="left"> Section</th></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-A">A</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-author">author</a></td><td valign="top"><a href="#Top">SimpleLogging</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-D">D</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-downloading-the-jars">downloading the jars</a></td><td valign="top"><a href="#Downloading">2.1 Downloading Jar</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-G">G</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-getting-started">getting started</a></td><td valign="top"><a href="#Quick-Start">1. Start Using Quickly</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-H">H</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-how-to-download-the-jars">how to download the jars</a></td><td valign="top"><a href="#Downloading">2.1 Downloading Jar</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-how-to-get-started">how to get started</a></td><td valign="top"><a href="#Quick-Start">1. Start Using Quickly</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-how-to-use">how to use</a></td><td valign="top"><a href="#Using">2. Using SimpleLogging</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-I">I</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-introduction">introduction</a></td><td valign="top"><a href="#Top">SimpleLogging</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-isc-license">isc license</a></td><td valign="top"><a href="#License">3. Open Source License</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-L">L</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-license">license</a></td><td valign="top"><a href="#License">3. Open Source License</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-log-type-of-backends">log type of backends</a></td><td valign="top"><a href="#Using-in-Your-Library">2.2 Using SimpleLogging in Your Library</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-Logger">Logger</a></td><td valign="top"><a href="#Quick-Start">1. Start Using Quickly</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-LoggerFactory">LoggerFactory</a></td><td valign="top"><a href="#Using-in-Your-Library">2.2 Using SimpleLogging in Your Library</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-M">M</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-Maven_002c-use-with">Maven, use with</a></td><td valign="top"><a href="#Maven">2.5 Using With Maven</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-O">O</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-open-source-license">open source license</a></td><td valign="top"><a href="#License">3. Open Source License</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-P">P</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-pom_002exml-dependency">pom.xml dependency</a></td><td valign="top"><a href="#Maven">2.5 Using With Maven</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-Q">Q</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-quick-start">quick start</a></td><td valign="top"><a href="#Quick-Start">1. Start Using Quickly</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-S">S</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-simple-logging">simple logging</a></td><td valign="top"><a href="#Top">SimpleLogging</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-U">U</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-using-in-your-library">using in your library</a></td><td valign="top"><a href="#Using-in-Your-Library">2.2 Using SimpleLogging in Your Library</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-using-SimpleLogging">using SimpleLogging</a></td><td valign="top"><a href="#Using">2. Using SimpleLogging</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-W">W</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-where-to-get-new-jars">where to get new jars</a></td><td valign="top"><a href="#Downloading">2.1 Downloading Jar</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+</table>
+<table><tr><th valign="top">Jump to: &nbsp; </th><td><a href="#Index-of-Concepts-1_cp_letter-A" class="summary-letter"><b>A</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-D" class="summary-letter"><b>D</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-G" class="summary-letter"><b>G</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-H" class="summary-letter"><b>H</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-I" class="summary-letter"><b>I</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-L" class="summary-letter"><b>L</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-M" class="summary-letter"><b>M</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-O" class="summary-letter"><b>O</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-P" class="summary-letter"><b>P</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-Q" class="summary-letter"><b>Q</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-S" class="summary-letter"><b>S</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-U" class="summary-letter"><b>U</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-W" class="summary-letter"><b>W</b></a>
+ &nbsp; 
+</td></tr></table>
+
+
+<hr size="6">
+<a name="SEC_Contents"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h1>Table of Contents</h1>
+<div class="contents">
+
+<ul class="toc">
+  <li><a name="toc-Start-Using-Quickly" href="#Quick-Start">1. Start Using Quickly</a></li>
+  <li><a name="toc-Using-SimpleLogging" href="#Using">2. Using SimpleLogging</a>
+  <ul class="toc">
+    <li><a name="toc-Downloading-Jar" href="#Downloading">2.1 Downloading Jar</a></li>
+    <li><a name="toc-Using-SimpleLogging-in-Your-Library" href="#Using-in-Your-Library">2.2 Using SimpleLogging in Your Library</a></li>
+    <li><a name="toc-How-SimpleLogging-Discovers-the-Logging-Backlend" href="#Backend-Discovery">2.3 How SimpleLogging Discovers the Logging Backlend</a></li>
+    <li><a name="toc-More-Usage-Examples-1" href="#More-Usage-Examples">2.4 More Usage Examples</a></li>
+    <li><a name="toc-Using-With-Maven" href="#Maven">2.5 Using With Maven</a></li>
+  </ul></li>
+  <li><a name="toc-Open-Source-License" href="#License">3. Open Source License</a></li>
+  <li><a name="toc-Index-of-Concepts-1" href="#Index-of-Concepts">Index of Concepts</a></li>
+</ul>
+</div>
+<hr size="1">
+<a name="SEC_About"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h1>About This Document</h1>
+<p>
+  This document was generated by <em>Gray Watson</em> on <em>June 22, 2021</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+</p>
+<p>
+  The buttons in the navigation panels have the following meaning:
+</p>
+<table border="1">
+  <tr>
+    <th> Button </th>
+    <th> Name </th>
+    <th> Go to </th>
+    <th> From 1.2.3 go to</th>
+  </tr>
+  <tr>
+    <td align="center"> [ &lt; ] </td>
+    <td align="center">Back</td>
+    <td>Previous section in reading order</td>
+    <td>1.2.2</td>
+  </tr>
+  <tr>
+    <td align="center"> [ &gt; ] </td>
+    <td align="center">Forward</td>
+    <td>Next section in reading order</td>
+    <td>1.2.4</td>
+  </tr>
+  <tr>
+    <td align="center"> [ &lt;&lt; ] </td>
+    <td align="center">FastBack</td>
+    <td>Beginning of this chapter or previous chapter</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td align="center"> [ Up ] </td>
+    <td align="center">Up</td>
+    <td>Up section</td>
+    <td>1.2</td>
+  </tr>
+  <tr>
+    <td align="center"> [ &gt;&gt; ] </td>
+    <td align="center">FastForward</td>
+    <td>Next chapter</td>
+    <td>2</td>
+  </tr>
+  <tr>
+    <td align="center"> [Top] </td>
+    <td align="center">Top</td>
+    <td>Cover (top) of document</td>
+    <td> &nbsp; </td>
+  </tr>
+  <tr>
+    <td align="center"> [Contents] </td>
+    <td align="center">Contents</td>
+    <td>Table of contents</td>
+    <td> &nbsp; </td>
+  </tr>
+  <tr>
+    <td align="center"> [Index] </td>
+    <td align="center">Index</td>
+    <td>Index</td>
+    <td> &nbsp; </td>
+  </tr>
+  <tr>
+    <td align="center"> [ ? ] </td>
+    <td align="center">About</td>
+    <td>About (help)</td>
+    <td> &nbsp; </td>
+  </tr>
+</table>
+
+<p>
+  where the <strong> Example </strong> assumes that the current position is at <strong> Subsubsection One-Two-Three </strong> of a document of the following structure:
+</p>
+
+<ul>
+  <li> 1. Section One
+    <ul>
+      <li>1.1 Subsection One-One
+        <ul>
+          <li>...</li>
+        </ul>
+      </li>
+      <li>1.2 Subsection One-Two
+        <ul>
+          <li>1.2.1 Subsubsection One-Two-One</li>
+          <li>1.2.2 Subsubsection One-Two-Two</li>
+          <li>1.2.3 Subsubsection One-Two-Three &nbsp; &nbsp;
+            <strong>&lt;== Current Position </strong></li>
+          <li>1.2.4 Subsubsection One-Two-Four</li>
+        </ul>
+      </li>
+      <li>1.3 Subsection One-Three
+        <ul>
+          <li>...</li>
+        </ul>
+      </li>
+      <li>1.4 Subsection One-Four</li>
+    </ul>
+  </li>
+</ul>
+
+<hr size="1">
+<p>
+ <font size="-1">
+  This document was generated by <em>Gray Watson</em> on <em>June 22, 2021</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
