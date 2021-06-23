@@ -55,8 +55,8 @@ public enum LogBackendType implements LogBackendFactory {
 	 */
 	CONSOLE(new ConsoleLogBackendFactory()),
 	/**
-	 * Internal JVM logging implementation almost always available. See We put this below the LOCAL log because it's
-	 * always available but we don't want to auto-detect it. See:
+	 * Internal JVM logging implementation almost always available. We put this below the LOCAL log because it's always
+	 * available but we don't want to auto-detect it. See:
 	 * https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html
 	 */
 	JAVA_UTIL("com.j256.simplelogging.backend.JavaUtilLogBackend$JavaUtilLogBackendFactory"),
@@ -88,10 +88,11 @@ public enum LogBackendType implements LogBackendFactory {
 	 */
 	public boolean isAvailable() {
 		/*
-		 * If this is LOCAL then it is always available. NULL is never available. If it is another LogBackendType then
-		 * we might have defaulted to using the local-log backend if it was not available.
+		 * If this is LogBackendType.LOCAL then it is always available. LogBackendType.NULL is never available. If it is
+		 * another LogBackendType then we might have defaulted to using the local-log backend if it was not available.
 		 */
-		return (this == LOCAL || (this != NULL && !(factory instanceof LocalLogBackendFactory)));
+		return (this == LogBackendType.LOCAL
+				|| (this != LogBackendType.NULL && !(factory instanceof LocalLogBackendFactory)));
 	}
 
 	/**
