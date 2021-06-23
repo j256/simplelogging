@@ -60,3 +60,7 @@ logger.error(exception, "http client threw getting URL: {}", url);
 
 Simplelogging has no direct dependencies.  It has a number of optional dependencies that will only be referenced if
 they are already in your application's classpath.
+
+# ChangeLog Release Notes
+
+See the [ChangeLog.txt file](src/main/javadoc/doc-files/changelog.txt).
