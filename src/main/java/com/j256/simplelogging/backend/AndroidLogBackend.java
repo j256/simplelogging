@@ -10,6 +10,8 @@ import android.util.Log;
 /**
  * Log backend that delegates to the internal Android logger.
  * 
+ * From SimpleLogging: https://github.com/j256/simplelogging
+ *
  * <p>
  * To see log messages you will do something like:
  * </p>

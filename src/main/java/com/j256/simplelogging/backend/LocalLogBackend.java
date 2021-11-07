@@ -24,6 +24,8 @@ import com.j256.simplelogging.LoggerFactory;
 /**
  * Log backend that uses logging classes if they are not available.
  * 
+ * From SimpleLogging: https://github.com/j256/simplelogging
+ *
  * <p>
  * You can set the log level by setting the System.setProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY, "trace").
  * Acceptable values are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. You can also redirect the log to a file by setting
@@ -36,10 +38,10 @@ import com.j256.simplelogging.LoggerFactory;
  * 
  * <pre>
  * # regex-pattern = Level
- * log4j\.logger\.com\.foo\.yourclass.*=DEBUG
- * log4j\.logger\.com\.foo\.yourclass\.BaseMappedStatement=TRACE
- * log4j\.logger\.com\.foo\.yourclass\.MappedCreate=TRACE
- * log4j\.logger\.com\.foo\.yourclass\.StatementExecutor=TRACE
+ * com\.foo\.yourclass.*=DEBUG
+ * com\.foo\.yourclass\.BaseMappedStatement=TRACE
+ * com\.foo\.yourclass\.MappedCreate=TRACE
+ * com\.foo\.yourclass\.StatementExecutor=TRACE
  * </pre>
  * 
  * @author graywatson

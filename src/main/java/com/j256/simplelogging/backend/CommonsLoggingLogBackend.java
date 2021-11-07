@@ -7,6 +7,8 @@ import com.j256.simplelogging.LogBackendFactory;
 /**
  * Log backend that delegating to the Apache commons logging classes.
  * 
+ * From SimpleLogging: https://github.com/j256/simplelogging
+ *
  * @author graywatson
  */
 public class CommonsLoggingLogBackend implements LogBackend {

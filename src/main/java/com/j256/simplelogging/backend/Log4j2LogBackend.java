@@ -7,6 +7,8 @@ import com.j256.simplelogging.LogBackendFactory;
 /**
  * Log backend that delegates to Apache Log4j2.
  * 
+ * From SimpleLogging: https://github.com/j256/simplelogging
+ *
  * @author graywatson
  */
 public class Log4j2LogBackend implements LogBackend {

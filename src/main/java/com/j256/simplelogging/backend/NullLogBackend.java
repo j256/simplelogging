@@ -8,6 +8,8 @@ import com.j256.simplelogging.LoggerFactory;
 /**
  * Log backend that ignores all log requests.
  * 
+ * From SimpleLogging: https://github.com/j256/simplelogging
+ *
  * @author graywatson
  */
 public class NullLogBackend implements LogBackend {

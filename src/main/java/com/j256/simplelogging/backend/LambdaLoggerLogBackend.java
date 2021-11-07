@@ -9,6 +9,8 @@ import com.j256.simplelogging.LogBackendFactory;
 /**
  * Backend for AWS lambda logger.
  * 
+ * From SimpleLogging: https://github.com/j256/simplelogging
+ *
  * @author graywatson
  */
 public class LambdaLoggerLogBackend implements LogBackend {
