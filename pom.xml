@@ -32,7 +32,7 @@
 		<maven-plugin-api-version>3.6.3</maven-plugin-api-version>
 		<!-- yes we know this is an issue but it is here for backwards compatibility -->
 		<log4j-version>1.2.17</log4j-version>
-		<log4j2-version>2.0-beta4</log4j2-version>
+		<log4j2-version>2.17.0</log4j2-version>
 	</properties>
 	<scm>
 		<url>https://github.com/j256/simplelogging</url>
@@ -243,7 +243,7 @@
 		</pluginManagement>
 	</build>
 	<dependencies>
-		<!-- provided dependencies for optional features -->
+		<!-- optional dependencies that will only be used if you provide the dependencies yourself -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -278,7 +278,6 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
 			<version>${log4j2-version}</version>
-			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
