@@ -1,3 +1,6 @@
+1.7: 12/20/2021
+	* Bumped the version of the _optional_ dependency on log4j2 to version 2.17.0.
+
 1.6: 6/22/2021
 	* Fixed bug in the AndroidLogBackend around the logger class name.
 
