@@ -33,6 +33,7 @@ The following logging implementations will be discovered on the classpath in thi
 # Getting Started
 
 To get started you instantiate a `Logger` using the `LoggerFactory`:
+
 ```java
 // usually a logger will be per-class, getLogger() also can take a String label
 private static final Logger logger = LoggerFactory.getLogger(MyClass.class);
