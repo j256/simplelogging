@@ -16,7 +16,7 @@ public enum LogBackendType implements LogBackendFactory {
 	/**
 	 * SLF4J which is often paired with logback. See: http://www.slf4j.org/
 	 */
-	SLF4J("com.j256.simplelogging.backend.Slf4jLoggingLogBackend$Slf4jLoggingLogBackendFactory"),
+	SLF4J("Slf4jLoggingLogBackend$Slf4jLoggingLogBackendFactory"),
 	/**
 	 * Android Log mechanism. See: https://developer.android.com/reference/android/util/Log
 	 * 
@@ -25,27 +25,27 @@ public enum LogBackendType implements LogBackendFactory {
 	 * are ignored that are sent there. Grrrrr.
 	 * </p>
 	 */
-	ANDROID("com.j256.simplelogging.backend.AndroidLogBackend$AndroidLogBackendFactory"),
+	ANDROID("AndroidLogBackend$AndroidLogBackendFactory"),
 	/**
 	 * Logback direct. See: http://logback.qos.ch/
 	 */
-	LOGBACK("com.j256.simplelogging.backend.LogbackLogBackend$LogbackLogBackendFactory"),
+	LOGBACK("LogbackLogBackend$LogbackLogBackendFactory"),
 	/**
 	 * Apache commons logging. See https://commons.apache.org/proper/commons-logging/
 	 */
-	COMMONS_LOGGING("com.j256.simplelogging.backend.CommonsLoggingLogBackend$CommonsLoggingLogBackendFactory"),
+	COMMONS_LOGGING("CommonsLoggingLogBackend$CommonsLoggingLogBackendFactory"),
 	/**
 	 * Version 2 of the log4j package. See https://logging.apache.org/log4j/2.x/
 	 */
-	LOG4J2("com.j256.simplelogging.backend.Log4j2LogBackend$Log4j2LogBackendFactory"),
+	LOG4J2("Log4j2LogBackend$Log4j2LogBackendFactory"),
 	/**
 	 * Old version of the log4j package. See https://logging.apache.org/log4j/2.x/
 	 */
-	LOG4J("com.j256.simplelogging.backend.Log4jLogBackend$Log4jLogBackendFactory"),
+	LOG4J("Log4jLogBackend$Log4jLogBackendFactory"),
 	/**
 	 * Support for the logger available inside AWS lambda SDK.
 	 */
-	LAMBDA("com.j256.simplelogging.backend.LambdaLoggerLogBackend$LambdaLoggerLogBackendFactory"),
+	LAMBDA("LambdaLoggerLogBackend$LambdaLoggerLogBackendFactory"),
 	/**
 	 * Local simple log backend that writes to a output file.
 	 * 
@@ -63,7 +63,7 @@ public enum LogBackendType implements LogBackendFactory {
 	 * available but we don't want to auto-detect it. See:
 	 * https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html
 	 */
-	JAVA_UTIL("com.j256.simplelogging.backend.JavaUtilLogBackend$JavaUtilLogBackendFactory"),
+	JAVA_UTIL("JavaUtilLogBackend$JavaUtilLogBackendFactory"),
 	/**
 	 * Logging backend which ignores all messages. Used to disable all logging. This is never chosen automatically.
 	 */
@@ -77,8 +77,9 @@ public enum LogBackendType implements LogBackendFactory {
 		this.factory = factory;
 	}
 
-	private LogBackendType(String logBackendFactoryClassName) {
-		this.factory = detectFactory(logBackendFactoryClassName);
+	private LogBackendType(String factoryClassNameSuffix) {
+		this.factory =
+				detectFactory(LocalLogBackendFactory.class.getPackage().getName() + '.' + factoryClassNameSuffix);
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public enum LogBackendType implements LogBackendFactory {
 			 * so is use the first LogBackend generated to log this warning.
 			 */
 			String queuedWarning = "Unable to create instance of class " + factoryClassName + " for log type " + this
-					+ ", using local log: " + th.getMessage();
+					+ ", using local log: " + th;
 			return new LocalLogBackendFactory(queuedWarning);
 		}
 	}
