@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -26,6 +27,7 @@ public class LoggerTest {
 	public void before() {
 		mockLog = createMock(LogBackend.class);
 		logger = new Logger(mockLog);
+		assertSame(mockLog, logger.getLogBackend());
 	}
 
 	@Test
@@ -377,6 +379,53 @@ public class LoggerTest {
 			mockLog.log(level, result, throwable);
 			replay(mockLog);
 			logger.log(level, throwable, pattern, argArray);
+			verify(mockLog);
+		}
+	}
+
+	@Test
+	public void testMessageVarargs() throws Exception {
+		String msg = "123 ";
+		Object arg0 = "wow";
+		Object arg1 = "zebra";
+		Object arg2 = "wanker";
+		Object arg3 = "avatar";
+		Object[] argArray = new Object[] { arg0, arg1, arg2, arg3 };
+		String result = msg + "0" + arg0 + "01" + arg1 + "12" + arg2 + "23" + arg3 + "3";
+		String pattern = msg + "0{}01{}12{}23{}3";
+		for (Level level : Level.values()) {
+			if (level == Level.OFF) {
+				continue;
+			}
+			Method method = Logger.class.getMethod(getNameFromLevel(level) + "Args", String.class, Object[].class);
+			reset(mockLog);
+			expect(mockLog.isLevelEnabled(level)).andReturn(true);
+			mockLog.log(level, result);
+			replay(mockLog);
+			method.invoke(logger, pattern, argArray);
+			verify(mockLog);
+
+			method = Logger.class.getMethod(getNameFromLevel(level) + "Args", Throwable.class, String.class,
+					Object[].class);
+			reset(mockLog);
+			expect(mockLog.isLevelEnabled(level)).andReturn(true);
+			mockLog.log(level, result, throwable);
+			replay(mockLog);
+			method.invoke(logger, throwable, pattern, argArray);
+			verify(mockLog);
+
+			reset(mockLog);
+			expect(mockLog.isLevelEnabled(level)).andReturn(true);
+			mockLog.log(level, result);
+			replay(mockLog);
+			logger.logArgs(level, pattern, argArray);
+			verify(mockLog);
+
+			reset(mockLog);
+			expect(mockLog.isLevelEnabled(level)).andReturn(true);
+			mockLog.log(level, result, throwable);
+			replay(mockLog);
+			logger.logArgs(level, throwable, pattern, argArray);
 			verify(mockLog);
 		}
 	}

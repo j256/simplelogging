@@ -100,6 +100,13 @@ public class Logger {
 	}
 
 	/**
+	 * Log a trace message with a variable number of arguments.
+	 */
+	public void traceArgs(String msg, Object... argArray) {
+		logIfEnabled(Level.TRACE, null, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
 	 * Log a trace message with a throwable.
 	 */
 	public void trace(Throwable throwable, String msg) {
@@ -138,6 +145,13 @@ public class Logger {
 	 * Log a trace message with a throwable.
 	 */
 	public void trace(Throwable throwable, String msg, Object[] argArray) {
+		logIfEnabled(Level.TRACE, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
+	 * Log a trace message with a throwable and a variable number of arguments.
+	 */
+	public void traceArgs(Throwable throwable, String msg, Object... argArray) {
 		logIfEnabled(Level.TRACE, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
 	}
 
@@ -184,6 +198,13 @@ public class Logger {
 	}
 
 	/**
+	 * Log a debug message with a variable number of arguments.
+	 */
+	public void debugArgs(String msg, Object... argArray) {
+		logIfEnabled(Level.DEBUG, null, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
 	 * Log a debug message with a throwable.
 	 */
 	public void debug(Throwable throwable, String msg) {
@@ -222,6 +243,13 @@ public class Logger {
 	 * Log a debug message with a throwable.
 	 */
 	public void debug(Throwable throwable, String msg, Object[] argArray) {
+		logIfEnabled(Level.DEBUG, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
+	 * Log a debug message with a throwable and a variable number of arguments.
+	 */
+	public void debugArgs(Throwable throwable, String msg, Object... argArray) {
 		logIfEnabled(Level.DEBUG, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
 	}
 
@@ -268,6 +296,13 @@ public class Logger {
 	}
 
 	/**
+	 * Log a info message with a variable number of arguments.
+	 */
+	public void infoArgs(String msg, Object... argArray) {
+		logIfEnabled(Level.INFO, null, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
 	 * Log a info message with a throwable.
 	 */
 	public void info(Throwable throwable, String msg) {
@@ -306,6 +341,13 @@ public class Logger {
 	 * Log a info message with a throwable.
 	 */
 	public void info(Throwable throwable, String msg, Object[] argArray) {
+		logIfEnabled(Level.INFO, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
+	 * Log a info message with a throwable and a variable number of arguments.
+	 */
+	public void infoArgs(Throwable throwable, String msg, Object... argArray) {
 		logIfEnabled(Level.INFO, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
 	}
 
@@ -352,6 +394,13 @@ public class Logger {
 	}
 
 	/**
+	 * Log a warning message with a variable number of arguments.
+	 */
+	public void warnArgs(String msg, Object... argArray) {
+		logIfEnabled(Level.WARNING, null, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
 	 * Log a warning message with a throwable.
 	 */
 	public void warn(Throwable throwable, String msg) {
@@ -390,6 +439,13 @@ public class Logger {
 	 * Log a warning message with a throwable.
 	 */
 	public void warn(Throwable throwable, String msg, Object[] argArray) {
+		logIfEnabled(Level.WARNING, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
+	 * Log a warning message with a throwable and a variable number of arguments.
+	 */
+	public void warnArgs(Throwable throwable, String msg, Object... argArray) {
 		logIfEnabled(Level.WARNING, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
 	}
 
@@ -436,6 +492,13 @@ public class Logger {
 	}
 
 	/**
+	 * Log a error message with a variable number of arguments.
+	 */
+	public void errorArgs(String msg, Object... argArray) {
+		logIfEnabled(Level.ERROR, null, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+	
+	/**
 	 * Log a error message with a throwable.
 	 */
 	public void error(Throwable throwable, String msg) {
@@ -474,6 +537,13 @@ public class Logger {
 	 * Log a error message with a throwable.
 	 */
 	public void error(Throwable throwable, String msg, Object[] argArray) {
+		logIfEnabled(Level.ERROR, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
+	 * Log a error message with a throwable and a variable number of arguments.
+	 */
+	public void errorArgs(Throwable throwable, String msg, Object... argArray) {
 		logIfEnabled(Level.ERROR, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
 	}
 
@@ -520,6 +590,13 @@ public class Logger {
 	}
 
 	/**
+	 * Log a fatal message with a variable number of arguments.
+	 */
+	public void fatalArgs(String msg, Object... argArray) {
+		logIfEnabled(Level.FATAL, null, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
 	 * Log a fatal message with a throwable.
 	 */
 	public void fatal(Throwable throwable, String msg) {
@@ -558,6 +635,13 @@ public class Logger {
 	 * Log a fatal message with a throwable.
 	 */
 	public void fatal(Throwable throwable, String msg, Object[] argArray) {
+		logIfEnabled(Level.FATAL, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
+	 * Log a fatal message with a throwable and a variable number of arguments.
+	 */
+	public void fatalArgs(Throwable throwable, String msg, Object... argArray) {
 		logIfEnabled(Level.FATAL, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
 	}
 
@@ -604,6 +688,13 @@ public class Logger {
 	}
 
 	/**
+	 * Log a message at the provided level with a variable number of arguments.
+	 */
+	public void logArgs(Level level, String msg, Object... argArray) {
+		logIfEnabled(level, null, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
 	 * Log a message with a throwable at the provided level.
 	 */
 	public void log(Level level, Throwable throwable, String msg) {
@@ -639,9 +730,16 @@ public class Logger {
 	}
 
 	/**
-	 * Log a message with a throwable at the provided level.
+	 * Log a message with a throwable at the provided level and a variable number of arguments.
 	 */
 	public void log(Level level, Throwable throwable, String msg, Object[] argArray) {
+		logIfEnabled(level, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	}
+
+	/**
+	 * Log a message with a throwable at the provided level and a variable number of arguments.
+	 */
+	public void logArgs(Level level, Throwable throwable, String msg, Object... argArray) {
 		logIfEnabled(level, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
 	}
 
