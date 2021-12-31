@@ -53,7 +53,7 @@ logger.error(exception, "http client threw getting URL: {}", url);
 <dependency>
 	<groupId>com.j256.simplelogging</groupId>
 	<artifactId>simplelogging</artifactId>
-	<version>1.7</version>
+	<version>1.8</version>
 </dependency>
 ```
 
