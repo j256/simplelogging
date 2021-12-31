@@ -1,3 +1,7 @@
+1.8: ?/?/2022
+	* Changed the backend class discovery to be relative to LocalLogBackend.  Makes copying to other projects easier.
+	* Update some of the optional dependency versions. 
+
 1.7: 12/20/2021
 	* Bumped the version of the _optional_ dependency on log4j2 to version 2.17.0.
 
