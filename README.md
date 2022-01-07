@@ -3,11 +3,14 @@ Java Simple Logging
 
 The goal of this library is a small-ish library that backends to a number of standard logging packages.  This allows you
 to write your code and include log messages without having a fixed dependency on any one logging package.  I include
-this code into my libraries and so they can stay agnostic.  I understand that this is the goal of commons-logging as
-well but I really want the slf4j-style {} arguments which aren't supported.  This logging code allows you to write
-messages with the {} support and then backend to a number of other logging libraries or you can easily implement your
+this code into my libraries and so they can stay agnostic.  This logging code allows you to write messages with the
+slf4j-style {} argument support and then backend to a number of other logging libraries or you can easily implement your
 own.  It also handles arrays appropriately and supports up to 4 arguments before forcing the caller to pass in an object
-array or calling a different `logArgs(...)` methods for variable arguments.
+array or calling a different `logArgs(...)` method for variable arguments.
+
+I understand that this is the goal of other logging APIs as well but I don't like the requirement on classpath order to
+satisfy the logging connection.  SimpleLogging includes calls directly to specific backends which can be chosen through
+code or configuration.  
 
 * The source code be found on the [git repository](https://github.com/j256/simplelogging).  [![CircleCI](https://circleci.com/gh/j256/simplelogging.svg?style=svg)](https://circleci.com/gh/j256/simplelogging) [![CodeCov](https://img.shields.io/codecov/c/github/j256/simplelogging.svg)](https://codecov.io/github/j256/simplelogging/)
 * Maven packages are published via [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/) [![javadoc](https://javadoc.io/badge2/com.j256.simplelogging/simplelogging/javadoc.svg)](https://javadoc.io/doc/com.j256.simplelogging/simplelogging)

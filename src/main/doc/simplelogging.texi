@@ -45,11 +45,14 @@ Version @value{simplelogging_version} -- @value{simplelogging_date}
 @cindex simple logging
 The goal is a small-ish library that backends to a number of standard logging packages.  This allows you to write your
 code and include log messages without having a fixed dependency on any one logging package.  I include this code into my
-libraries and so they can stay agnostic.  I understand that this is the goal of commons-logging as well but I really
-want the slf4j-style @code{@{@}} arguments which aren't supported.  This logging code allows you to write messages with
-the @code{@{@}} support and then backend to a number of other logging libraries or you can easily implement your own. 
-It also handles arrays appropriately and supports up to 4 arguments before forcing the caller to pass in an object
-array or calling a different @code{logArgs(...)} method for variable arguments.
+libraries and so they can stay agnostic.  This logging code allows you to write messages with the @code{@{@}} support
+and then backend to a number of other logging libraries or you can easily implement your own.  It also handles arrays
+appropriately and supports up to 4 arguments before forcing the caller to pass in an object array or calling a different
+@code{logArgs(...)} method for variable arguments.
+
+I understand that this is the goal of other logging APIs as well but I don't like the requirement on classpath order to
+satisfy the logging connection.  SimpleLogging includes calls directly to specific backends which can be chosen through
+code or configuration.  
 
 To get started quickly using SimpleLogging, @pxref{Quick Start}.
 @ifhtml
@@ -200,9 +203,10 @@ values in the above list.  For example: @code{java -Dcom.j256.simplelogger.backe
 @cindex setting log level
 
 By default the choice of whether or not to log, for example, a trace log message is up to the specific
-log backend.  Your LOG4J settings determine whether or not trace logging is enabled for a particular
-package.  However there are some ways that you can impact which messages will get logged with calls to
-the SimpleLogging methods.
+log backend.  For example. if you are using LOG4J, your LOG4J properties file determines whether or not
+trace logging is enabled for a particular package.  That said, there are some ways that you can impact
+in code which messages will get logged with calls to the SimpleLogging methods regardless of the log
+backend.
 
 @example
 // have all INFO or above messages to be logged
@@ -211,12 +215,13 @@ Logger.setGlobalLogLevel(Level.INFO);
 @end example
 
 @cindex disable all messages
-@cindex disable all messages
-You can also disable all log messages by using the NULL level:
+@cindex turn off all messages
+@cindex remove all messages
+You can also disable all log messages by using the @code{OFF} level:
 
 @example
 // force all messages to be disabled
-Logger.setGlobalLogLevel(Level.NULL);
+Logger.setGlobalLogLevel(Level.OFF);
 @end example
 
 Another way to not have any log messages show would be use use the @code{NULL} log backend.
