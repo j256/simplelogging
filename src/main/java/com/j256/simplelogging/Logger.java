@@ -497,7 +497,7 @@ public class Logger {
 	public void errorArgs(String msg, Object... argArray) {
 		logIfEnabled(Level.ERROR, null, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
 	}
-	
+
 	/**
 	 * Log a error message with a throwable.
 	 */
@@ -755,7 +755,13 @@ public class Logger {
 		if (globalLevel != null && !globalLevel.isEnabled(level)) {
 			// don't log the message if the global-level is set and not enabled
 		} else if (backend.isLevelEnabled(level)) {
-			String fullMsg = buildFullMessage(msg, arg0, arg1, arg2, arg3, argArray);
+			String fullMsg;
+			if (arg0 == UNKNOWN_ARG && argArray == null) {
+				// this will just output the message without parsing so including the {}
+				fullMsg = msg;
+			} else {
+				fullMsg = buildFullMessage(msg, arg0, arg1, arg2, arg3, argArray);
+			}
 			if (throwable == null) {
 				backend.log(level, fullMsg);
 			} else {
@@ -782,7 +788,9 @@ public class Logger {
 				sb = new StringBuilder(DEFAULT_FULL_MESSAGE_LENGTH);
 			}
 			// add the string before the arg-string
-			sb.append(msg, lastIndex, argIndex);
+			if (lastIndex < argIndex) {
+				sb.append(msg, lastIndex, argIndex);
+			}
 			// shift our last-index past the arg-string
 			lastIndex = argIndex + ARG_STRING_LENGTH;
 			// add the argument, if we still have any
@@ -806,11 +814,13 @@ public class Logger {
 			argC++;
 		}
 		if (sb == null) {
-			// if we have yet to create a StringBuilder then just append the msg which has no {}
+			// if we have yet to create a StringBuilder then just return the msg which has no {}
 			return msg;
 		} else {
 			// spit out the end of the msg
-			sb.append(msg, lastIndex, msg.length());
+			if (lastIndex < msg.length()) {
+				sb.append(msg, lastIndex, msg.length());
+			}
 			return sb.toString();
 		}
 	}
@@ -829,7 +839,7 @@ public class Logger {
 				if (i > 0) {
 					sb.append(", ");
 				}
-				// goes recursive in case we have an array of arrays
+				// may go recursive in case we have an array of arrays
 				appendArg(sb, Array.get(arg, i));
 			}
 			sb.append(']');
