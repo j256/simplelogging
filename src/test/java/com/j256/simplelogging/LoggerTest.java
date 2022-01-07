@@ -89,12 +89,26 @@ public class LoggerTest {
 	}
 
 	@Test
+	public void testNoArgs() {
+		String start = "yyy {}";
+		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true);
+		// should get back the {} because no args specified
+		mockLog.log(Level.TRACE, start);
+		replay(mockLog);
+		logger.trace(start);
+		verify(mockLog);
+	}
+
+	@Test
 	public void testNotEnoughArgs() {
 		String start = "yyy ";
 		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true);
-		mockLog.log(Level.TRACE, start);
+		// should get back the {} because no args specified
+		String arg = "hello";
+		mockLog.log(Level.TRACE, start + arg);
 		replay(mockLog);
-		logger.trace(start + "{}");
+		// we have 2 {} but only one arg
+		logger.trace(start + "{}{}", arg);
 		verify(mockLog);
 	}
 
