@@ -113,6 +113,19 @@ public class LoggerTest {
 	}
 
 	@Test
+	public void testNoCurliesButArgs() {
+		String start = "yyy ";
+		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true);
+		// should get back the {} because no args specified
+		String arg = "hello";
+		mockLog.log(Level.TRACE, start);
+		replay(mockLog);
+		// we have 2 {} but only one arg
+		logger.trace(start, arg);
+		verify(mockLog);
+	}
+
+	@Test
 	public void testObjectToString() {
 		Foo arg = new Foo();
 		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true);

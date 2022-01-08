@@ -109,6 +109,7 @@ For somewhat more extensive instructions, @pxref{Using}.
 @menu
 * Downloading ::                Downloading the SimpleLogging jar.
 * Using in Your Library ::      How to use the code in your library.
+* Logging Arguments ::          Logging messages with @{@} arguments.
 * Backend Discovery ::          How the logging backend is discovered.
 * Setting Log Level ::          Setting the log level or disabling logging.
 * More Usage Examples ::        More examples on how to use the loggers.
@@ -130,7 +131,7 @@ repository}.
 The code works with Java 6 or later.
 
 @c ----------------------------------------------------------------
-@node Using in Your Library, Backend Discovery, Downloading, Using
+@node Using in Your Library, Logging Arguments, Downloading, Using
 @section Using SimpleLogging in Your Library
 
 @cindex using in your library
@@ -142,8 +143,86 @@ package as necessary.  You may want to tune the order of discovery in the @code{
 remove support for certain loggers that your library doesn't need support for.
 
 @c ----------------------------------------------------------------
-@node Backend Discovery, Setting Log Level, Downloading, Using
-@section How SimpleLogging Discovers the Logging Backlend
+@node Logging Arguments, Backend Discovery, Using in Your Library, Using
+@section Logging Messages with @{@} Arguments
+
+@cindex message arguments
+@cindex arguments in the message
+@cindex @{@} arguments
+SimpleLogging supports "slf4j" type of arguments.  Whenever the @code{@{@}} characters appear in your logging message,
+the library will look for arguments to substitute into the @code{@{@}}.  For example:
+
+@example
+String host = "localhost";
+...
+logger.info("connected to host @{@}", host);
+@end example
+
+If info messages are being displayed then the logging message will display:
+
+@example
+connection to host localhost failed
+@end example
+
+This can be accomplished with a simple @code{StringBuilder} but the big difference is that no unnecessary objects will
+be created @emph{unless} the log message is to be written.  If the logger is limited to warning messages and above, no
+@code{StringBuilder} will be created and the @code{toString()} method for the two arguments will never be called.
+
+Here's how the arguments are expanded:
+
+@cindex null argument logging
+@cindex LogMessageCreator
+@cindex toString, don't use
+@cindex array argument logging
+@enumerate
+@item if you pass no arguments to the logger call, then any @code{@{@}} patterns will be displayed with no substitution
+@item if you have more @code{@{@}} patterns in the message than arguments, then any extra will output the empty string
+@item if you have more arguments than you have @code{@{@}} patterns in the message then they will be ignored
+@item @code{null} values will output the string @code{null}
+@item arrays will be displayed as @code{[ele1, ele2, ...]} with each element going through the same logic here
+@item if the argument implements @code{LogArgumentCreator} then it will display the results of @code{arg.createArg()}
+@item by default @code{arg.toString()} will be called
+@end enumerate
+
+Here are examples of these rules.
+
+@example
+// no arguments outputs: connected to host '@{@}'
+logger.info("connected to host '@{@}'");
+
+// missing port argument is empty: connected to host 'host1' port
+String host = "host1";
+logger.info("connected to host '@{@}' port @{@}", host);
+
+// extra argument is ignored: connected to host 'host1'
+String host = "host1";
+int port = 443;
+logger.info("connected to host '@{@}' port @{@}", host, port);
+
+// null argument outputs: connected to host 'null'
+String host = null;
+logger.info("connected to host '@{@}' failed", host);
+
+// array arguments output: connected to hosts [srv1, srv2]
+String[] hosts = new String[] @{ "srv1", "srv2" @};
+logger.info("connected to hosts @{@} failed", hosts);
+
+// logging of host which implements LogArgumentCreator where
+// host.createArg() returns string: host4
+// this outputs the log message: connected to host 'host4'
+Host host = new Host();
+logger.info("connected to host '@{@}'", host);
+
+// logging of server where server.toString() returns: srv3
+// this outputs the log message: connected to host 'srv3'
+Server server = new Server();
+logger.info("connected to host '@{@}'", server);
+
+@end example
+
+@c ----------------------------------------------------------------
+@node Backend Discovery, Setting Log Level, Logging Arguments, Using
+@section How SimpleLogging Discovers the Logging Backend
 
 @cindex discovering backend
 @cindex log backend discovery

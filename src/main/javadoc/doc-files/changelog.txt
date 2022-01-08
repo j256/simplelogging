@@ -1,6 +1,7 @@
 1.9: 12/31/2022
-	* Changed the behavior of messages with {} but no arguments.  The {} will be shown.  Matches other logging impls.
- 
+	* Changed the behavior of messages with {} but no arguments.  The {} will be shown.  Matches other logging code.
+	* Add LogArgumentCreator for not having to use toString() to expand an argument.
+
 1.8: 12/31/2021
 	* Changed the backend class discovery to be relative to LocalLogBackend.  Makes copying to other projects easier.
 	* Update some of the optional dependency versions.

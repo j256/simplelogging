@@ -843,6 +843,10 @@ public class Logger {
 				appendArg(sb, Array.get(arg, i));
 			}
 			sb.append(']');
+		} else if (arg instanceof LogArgumentCreator) {
+			// call the argument at runtime
+			String str = ((LogArgumentCreator) arg).createArg();
+			sb.append(str);
 		} else {
 			// might as well do the toString here because we know it isn't null
 			sb.append(arg.toString());
