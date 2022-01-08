@@ -1,12 +1,13 @@
 Java Simple Logging
 ===================
 
-The goal of this library is a small-ish library that backends to a number of standard logging packages.  This allows you
-to write your code and include log messages without having a fixed dependency on any one logging package.  I include
-this code into my libraries and so they can stay agnostic.  This logging code allows you to write messages with the
-slf4j-style {} argument support and then backend to a number of other logging libraries or you can easily implement your
-own.  It also handles arrays appropriately and supports up to 4 arguments before forcing the caller to pass in an object
-array or calling a different `logArgs(...)` method for variable arguments.
+The goal of this library is to be a small logging facade that backends to a number of standard logging packages and that
+can be copied into another project.  This allows you to write your code and include log messages without having a fixed
+dependency on any one logging package.  I include this code into my libraries and so they can stay agnostic.  This
+ogging code allows you to write messages with the slf4j-style `{}` argument support and then backend to a number
+of other logging libraries or you can easily implement your own.  It also handles arrays appropriately and supports up
+to 4 arguments before forcing the caller to pass in an object array or calling a different `logArgs(...)` method
+for variable arguments.
 
 I understand that this facade seems similar to other logging systems which separate their API from the implementation.
 What I don't like the requirement on classpath order to satisfy the connection between the API and the backend.
