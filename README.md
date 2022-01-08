@@ -1,5 +1,5 @@
-Java Simple Logging
-===================
+Java Simple Logging Facade
+==========================
 
 The goal of this library is to be a small logging facade that backends to a number of standard logging packages and that
 can be copied into another project.  This allows you to write your code and include log messages without having a fixed
