@@ -844,7 +844,7 @@ public class Logger {
 			}
 			sb.append(']');
 		} else if (arg instanceof LogArgumentCreator) {
-			// call the argument at runtime
+			// call the method to get the argument which can be null
 			String str = ((LogArgumentCreator) arg).createArg();
 			sb.append(str);
 		} else {
