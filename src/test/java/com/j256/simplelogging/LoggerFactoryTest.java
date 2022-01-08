@@ -15,6 +15,7 @@ import org.junit.Test;
 import com.j256.simplelogging.backend.CommonsLoggingLogBackend;
 import com.j256.simplelogging.backend.JavaUtilLogBackend;
 import com.j256.simplelogging.backend.LocalLogBackend;
+import com.j256.simplelogging.backend.Log4j2LogBackend;
 import com.j256.simplelogging.backend.Log4jLogBackend;
 import com.j256.simplelogging.backend.NullLogBackend;
 import com.j256.simplelogging.backend.Slf4jLoggingLogBackend;
@@ -45,8 +46,7 @@ public class LoggerFactoryTest {
 		checkLog(LogBackendType.SLF4J, Slf4jLoggingLogBackend.class, true);
 		checkLog(LogBackendType.ANDROID, LocalLogBackend.class, false);
 		checkLog(LogBackendType.COMMONS_LOGGING, CommonsLoggingLogBackend.class, true);
-		// have to not check log4j2 because it will work under java 8 but not < 8
-		//checkLog(LogBackendType.LOG4J2, Log4j2LogBackend.class, true);
+		checkLog(LogBackendType.LOG4J2, Log4j2LogBackend.class, true);
 		checkLog(LogBackendType.LOG4J, Log4jLogBackend.class, true);
 		checkLog(LogBackendType.LOCAL, LocalLogBackend.class, true);
 		checkLog(LogBackendType.JAVA_UTIL, JavaUtilLogBackend.class, true);
@@ -119,6 +119,20 @@ public class LoggerFactoryTest {
 		System.clearProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY);
 		// this should work and not throw
 		LoggerFactory.getLogger(getClass());
+	}
+
+	@Test
+	public void testSetLoggerBackend() {
+		try {
+			LoggerFactory.setLogBackendType(LogBackendType.LOCAL);
+			try {
+				LoggerFactory.setLogBackendType(LogBackendType.ANDROID);
+			} catch (Exception e) {
+				// expected
+			}
+		} finally {
+			LoggerFactory.setLogBackendFactory(null);
+		}
 	}
 
 	private void checkLog(LogBackendType logType, Class<?> logClass, boolean available) {
