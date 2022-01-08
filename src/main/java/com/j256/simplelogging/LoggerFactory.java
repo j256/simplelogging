@@ -9,11 +9,11 @@ import com.j256.simplelogging.backend.LocalLogBackend;
  * From SimpleLogging: https://github.com/j256/simplelogging
  *
  * <p>
- * To set the logger to a particular type, set the system property ("com.j256.simplelogger.backend") contained in
- * {@link #LOG_TYPE_SYSTEM_PROPERTY} to be name of one of the enumerated types in {@link LogBackendType}. You can also
- * call {@link LoggerFactory#setLogBackendType(LogBackendType)} or
- * {@link LoggerFactory#setLogBackendFactory(LogBackendFactory)}.
- * 
+ * To set the logger to a particular type, set the system property ("com.j256.simplelogger.backend") contained in to be
+ * name of one of the enumerated types in {@link LogBackendType}. You can also call
+ * {@link LoggerFactory#setLogBackendType(LogBackendType)} or
+ * {@link LoggerFactory#setLogBackendFactory(LogBackendFactory)} if you want to set it to a particular class which can
+ * be a custom backend.
  * </p>
  */
 public class LoggerFactory {

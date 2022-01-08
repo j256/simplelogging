@@ -6,9 +6,9 @@
 @c %**end of header
 
 @c ----------------------------------------------------------------
-@set simplelogging_version 1.8
-@set simplelogging_year 2021
-@set simplelogging_date December @value{simplelogging_year}
+@set simplelogging_version 1.9
+@set simplelogging_year 2022
+@set simplelogging_date January @value{simplelogging_year}
 @set package SimpleLogging
 @c ----------------------------------------------------------------
 
@@ -47,15 +47,20 @@ Version @value{simplelogging_version} -- @value{simplelogging_date}
 The goal of this library is to be a small logging facade that backends to a number of standard logging packages and that
 can be copied into another project.  This allows you to write your code and include log messages without having a fixed
 dependency on any one logging package.  I include this code into my libraries and so they can stay agnostic.  This
-ogging code allows you to write messages with the slf4j-style @code{@{@}} argument support and then backend to a number
+logging code allows you to write messages with the slf4j-style @code{@{@}} argument support and then backend to a number
 of other logging libraries or you can easily implement your own.  It also handles arrays appropriately and supports up
 to 4 arguments before forcing the caller to pass in an object array or calling a different @code{logArgs(...)} method
 for variable arguments.
 
-I understand that this facade seems similar to other logging systems which separate their API from the implementation.
-What I don't like the requirement on classpath order to satisfy the connection between the API and the backend.
-SimpleLogging includes calls directly to specific backend APIs which can be chosen through code or configuration.
-This direct calling allows for more control over the backend selection and possibly fewer dependencies.
+I understand that this facade is similar to other logging systems which separate their API from the implementation.
+I think SimpleLogging is better than the others because it doesn't use the classpath order to satisfy the connection
+between the API and the backend.  SimpleLogging includes calls directly to specific backend APIs which can be chosen
+through code or configuration. This direct calling allows for more control over the backend selection and possibly fewer
+dependencies.
+
+SimpleLogging is also designed to be copied into your open source project so you don't have to add a maven dependency.
+Just copy the java files from @code{src/main/java} into your source tree and rename the packages as necessary.  Please
+also copy the @code{SIMPLELOGGING_LICENSE.txt} file which is the very permissive ISC license.
 
 To get started quickly using SimpleLogging, @pxref{Quick Start}.
 @ifhtml
@@ -101,7 +106,7 @@ logger.trace("some trace information: @{@} and @{@}", arg1, arg2);
 logger.error(exception, "http client threw getting URL: @{@}", url);
 @end example
 
-For somewhat more extensive instructions, @pxref{Using}.
+For more extensive instructions, @pxref{Using}.
 
 @c ----------------------------------------------------------------
 @node Using, Downloading, Quick Start, Top
@@ -110,17 +115,17 @@ For somewhat more extensive instructions, @pxref{Using}.
 @cindex how to use
 @cindex using SimpleLogging
 @menu
-* Downloading ::                Downloading the SimpleLogging jar.
-* Using in Your Library ::      How to use the code in your library.
-* Logging Arguments ::          Logging messages with @{@} arguments.
-* Backend Discovery ::          How the logging backend is discovered.
-* Setting Log Level ::          Setting the log level or disabling logging.
-* More Usage Examples ::        More examples on how to use the loggers.
-* Maven ::                      How to use with Maven.
+* Downloading ::                 Downloading the SimpleLogging jar.
+* Depending on SimpleLogging ::  How to depend on the library.
+* Logging Arguments ::           Logging messages with @{@} arguments.
+* Backend Discovery ::           How the logging backend is discovered.
+* Setting Log Level ::           Setting the log level or disabling logging.
+* More Usage Examples ::         More examples on how to use the loggers.
+* Maven ::                       How to use with Maven.
 @end menu
 
 @c ----------------------------------------------------------------
-@node Downloading, Using in Your Library, Using, Using
+@node Downloading, Depending on SimpleLogging, Using, Using
 @section Downloading Jar
 
 @cindex how to download the jars
@@ -128,14 +133,14 @@ For somewhat more extensive instructions, @pxref{Using}.
 @cindex where to get new jars
 To get started with SimpleLogging, you will need to download the jar file.  The
 @uref{http://256stuff.com/sources/simplelogging/releases/, SimpleLogging release page} is the default repository but the
-jars are also available from the @uref{https://repo1.maven.org/maven2/com/j256/simplelogging/, central maven
-repository}.
+jars are also available from the @uref{https://repo1.maven.org/maven2/com/j256/simplelogging/simplelogging/, central
+maven repository}.
 
 The code works with Java 6 or later.
 
 @c ----------------------------------------------------------------
-@node Using in Your Library, Logging Arguments, Downloading, Using
-@section Using SimpleLogging in Your Library
+@node Depending on SimpleLogging, Logging Arguments, Downloading, Using
+@section Depending on SimpleLogging in Your Library
 
 @cindex using in your library
 @cindex log type of backends
@@ -145,8 +150,12 @@ To use the SimpleLogging code in your library, you can either depend on the jar 
 package in your code and rename the package as necessary.  You may want to tune the order of discovery in the
 @code{LogBackendType} enumerated class or remove support for certain loggers that your library doesn't need to support.
 
+SimpleLogging is designed to be copied into your open source project so you don't have to add a dependency.  Just copy
+the java files from @code{src/main/java} into your source tree and rename the packages as necessary.  Please also copy
+the @code{SIMPLELOGGING_LICENSE.txt} file which is the very permissive ISC license.
+
 @c ----------------------------------------------------------------
-@node Logging Arguments, Backend Discovery, Using in Your Library, Using
+@node Logging Arguments, Setting Log Level, Depending on SimpleLogging, Using
 @section Logging Messages with @{@} Arguments
 
 @cindex message arguments
@@ -156,22 +165,42 @@ SimpleLogging supports "slf4j" type of arguments.  Whenever the @code{@{@}} char
 the library will look for arguments to substitute into the @code{@{@}}.  For example:
 
 @example
-String host = "localhost";
+String host = "server1";
 ...
 logger.info("connected to host @{@}", host);
 @end example
 
-If info messages are being displayed then the logging message will display:
+If info messages are being displayed then the following message will be logged:
 
 @example
-connection to host localhost failed
+connection to host server1 failed
 @end example
 
 This can be accomplished with a simple @code{StringBuilder} but the big difference is that no unnecessary objects will
 be created @emph{unless} the log message is to be written.  If the logger is limited to warning messages and above, no
-@code{StringBuilder} will be created and the @code{toString()} method for the two arguments will never be called.
+@code{StringBuilder} will be created and the @code{toString()} method for the arguments will never be called if the
+above info log call is made.
 
-Here's how the arguments are expanded:
+By default the various log methods (@code{logger.trace(...)}, @code{logger.debug(...)}, ...) take 0 to 4 arguments with
+no objects being created (aside from some possible auto-boxing of numbers).  If you need more arguments you can use the
+argument-array with a explicit @code{new Object[] @{ ... @}} pattern or use variable arguments with a call to
+@code{logger.traceArgs(...)}, @code{logger.debugArgs(...)}, etc..  The variable arguments also creates an @code{Object[]}
+regardless of whether or not the log message will be logged so SimpleLogging wants you to be explicit about creating it.
+It is recommended that you test for the log level with an @code{if} statement when you are logging with the
+@code{Object[]} or variable arguments.
+ 
+@example
+if (logger.isLevelEnabled(Level.TRACE)) @{
+   // here's with an explicit object array
+   logger.trace("Method args: @{@}, @{@}, @{@}, @{@}, @{@}",
+       new Object[] @{ schema, host, port, path, query @});
+   // here's with a variable arguments with traceArgs()
+   logger.traceArgs("Method args: @{@}, @{@}, @{@}, @{@}, @{@}",
+       schema, host, port, path, query);
+@}
+@end example
+
+Here's how the arguments are turned into strings in the log message:
 
 @cindex null argument logging
 @cindex LogMessageCreator
@@ -179,106 +208,57 @@ Here's how the arguments are expanded:
 @cindex array argument logging
 @enumerate
 @item if you pass no arguments to the logger call, then any @code{@{@}} patterns will be displayed with no substitution
-@item if you have more @code{@{@}} patterns in the message than arguments, then any extra will output the empty string
+@item if you have more @code{@{@}} patterns in the message than arguments, then any extras will output the empty string
 @item if you have more arguments than you have @code{@{@}} patterns in the message then they will be ignored
 @item @code{null} values will output the string @code{null}
 @item arrays will be displayed as @code{[ele1, ele2, ...]} with each element going through the same logic here
-@item if the argument implements @code{LogArgumentCreator} then it will display the results of @code{arg.createArg()}
-@item by default @code{arg.toString()} will be called
+@item if the argument implements @code{LogArgumentCreator} then the results of @code{arg.createArg()} will be displayed
+@item by default @code{arg.toString()} will be displayed
 @end enumerate
 
 Here are examples of these rules.
 
 @example
-// no arguments outputs: connected to host '@{@}'
+// no arguments but a @{@} pattern
 logger.info("connected to host '@{@}'");
+// outputs: connected to host '@{@}'
 
-// missing port argument is empty: connected to host 'host1' port
+// missing port argument is empty
 String host = "host1";
 logger.info("connected to host '@{@}' port @{@}", host);
+// outputs: connected to host 'host1' port
 
-// extra argument is ignored: connected to host 'host1'
+// extra port argument is ignored
 String host = "host1";
 int port = 443;
 logger.info("connected to host '@{@}' port @{@}", host, port);
+// outputs: connected to host 'host1'
 
-// null argument outputs: connected to host 'null'
+// null argument
 String host = null;
 logger.info("connected to host '@{@}' failed", host);
+// outputs: connected to host 'null'
 
-// array arguments output: connected to hosts [srv1, srv2]
+// arguments that are arrays
 String[] hosts = new String[] @{ "srv1", "srv2" @};
 logger.info("connected to hosts @{@} failed", hosts);
+// outputs: connected to hosts [srv1, srv2]
 
 // logging of host which implements LogArgumentCreator where
-// host.createArg() returns string: host4
-// this outputs the log message: connected to host 'host4'
+// host.createArg() returns the string: host4
 Host host = new Host();
 logger.info("connected to host '@{@}'", host);
+// outputs: connected to host 'host4'
 
 // logging of server where server.toString() returns: srv3
-// this outputs the log message: connected to host 'srv3'
 Server server = new Server();
 logger.info("connected to host '@{@}'", server);
+// outputs: connected to host 'srv3'
 
 @end example
 
 @c ----------------------------------------------------------------
-@node Backend Discovery, Setting Log Level, Logging Arguments, Using
-@section How SimpleLogging Discovers the Logging Backend
-
-@cindex discovering backend
-@cindex log backend discovery
-Built into the @code{LoggerFactory} class is a @code{LogBackendType} enumerated type which SimpleLogging uses to try to
-locate what logging packages are on the classpath and therefore should be used.
-
-The following logging implementations will be discovered on the classpath in this order.
-
-@cindex slf4j, use with
-@cindex android logging, use with
-@cindex logback direct, use with
-@cindex commons logging, use with
-@cindex log4j2, use with
-@cindex log4j, use with
-@cindex lambda logging, use with
-@cindex aws lambda logging, use with
-@cindex java util logging, use with
-
-@enumerate
-
-@item SLF4J -- (often paired with logback)
-@item ANDROID -- Android native Log
-@item LOGBACK -- Logback direct without SLF4J
-@item COMMONS_LOGGING -- Apache Commons Logging
-@item LOG4J2 -- version 2+
-@item LOG4J -- older
-@item LAMBDA -- AWS Lambda systems logging
-@item LOCAL -- log implementation that can write to a simple file
-@item CONSOLE -- log writing to @code{System.out} or @code{System.err}
-@item JAVA_UTIL -- Java util logging which is usually available in the JRE but never chosen directly
-@item NULL -- null logger to log no messages
-
-@end enumerate
-
-If you (or the users of your library) want to force the logging type, they can use the following static methods.
-
-@example
-// used to set a specific LoggerFactory.LogBackendType
-LoggerFactory.setLogBackendType(LogBackendType.LOGBACK);
-@end example
-
-Or to specify a specifically factory class including custom ones:
-
-@example
-// used to set a specific LoggerFactory or custom
-LoggerFactory.setLogBackendFactory(new LogbackLogBackendFactory());
-@end example
-
-You can also set the @code{com.j256.simplelogger.backend} Java property to one of the @code{LogBackendType}
-values in the above list.  For example: @code{java -Dcom.j256.simplelogger.backend=LOGBACK}
-
-@c ----------------------------------------------------------------
-@node Setting Log Level, More Usage Examples, Backend Discovery, Using
+@node Setting Log Level, Backend Discovery, Logging Arguments, Using
 @section Setting Log Level or Disabling Logging
 
 @cindex log level, setting
@@ -314,6 +294,60 @@ LoggerFactory.setLogBackendType(LogBackendType.NULL);
 @end example
 
 @c ----------------------------------------------------------------
+@node Backend Discovery, More Usage Examples, Setting Log Level, Using
+@section How SimpleLogging Discovers the Logging Backend
+
+@cindex discovering backend
+@cindex log backend discovery
+Built into the @code{LoggerFactory} class is a @code{LogBackendType} enumerated type which SimpleLogging uses to try to
+locate what logging packages are on the classpath and therefore should be used.
+
+The following logging implementations will be discovered on the classpath in this order.
+
+@cindex slf4j, use with
+@cindex android logging, use with
+@cindex logback direct, use with
+@cindex commons logging, use with
+@cindex log4j2, use with
+@cindex log4j, use with
+@cindex lambda logging, use with
+@cindex aws lambda logging, use with
+@cindex java util logging, use with
+
+@enumerate
+
+@item SLF4J -- (often paired with logback)
+@item ANDROID -- Android native Log
+@item LOGBACK -- Logback direct without SLF4J
+@item COMMONS_LOGGING -- Apache Commons Logging
+@item LOG4J2 -- version 2+
+@item LOG4J -- older
+@item LAMBDA -- AWS Lambda systems logging
+@item LOCAL -- log implementation that can write to a simple file
+@item CONSOLE -- log writing to @code{System.out} or @code{System.err}
+@item JAVA_UTIL -- Java util logging which is usually available in the JRE but never chosen directly
+@item NULL -- null logger to log no messages
+
+@end enumerate
+
+If you need to force the logging type, you can use the following static methods.
+
+@example
+// used to set a specific LoggerFactory.LogBackendType
+LoggerFactory.setLogBackendType(LogBackendType.LOGBACK);
+@end example
+
+Or to specify a specifically factory class including custom ones:
+
+@example
+// used to set a specific LoggerFactory or custom
+LoggerFactory.setLogBackendFactory(new LogbackLogBackendFactory());
+@end example
+
+You can also set the @code{com.j256.simplelogger.backend} Java property to one of the @code{LogBackendType}
+values in the above list.  For example: @code{java -Dcom.j256.simplelogger.backend=LOGBACK}
+
+@c ----------------------------------------------------------------
 @node More Usage Examples, Maven, Setting Log Level, Using
 @section More Usage Examples
 
@@ -336,13 +370,13 @@ logger.error("connect failed to host '@{@}', port @{@}", host, port);
 logger.fatal(exception, "host '@{@}' threw exception", host);
 @end example
 
-If you want to use more than 3 arguments, you will either need to pass in an @code{Object[]} or
+If you want to use more than 4 arguments, you will either need to pass in an @code{Object[]} or
 call the methods with the @code{Args} suffix.  This is a specific design decision because in
 either case, an @code{Object[]} is created even if the message is never logged.
 
 @example
-logger.debug("scheme '@{@}', host '@{@}', port @{@}, path: @{@}",
-     new Object[] @{ schema, host, port, path @});
+logger.debug("schema '@{@}', host '@{@}', port @{@}, path @{@}, query @{@}",
+     new Object[] @{ schema, host, port, path, query @});
 @end example
 
 @cindex varargs, use with

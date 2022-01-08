@@ -11,14 +11,15 @@ import java.lang.reflect.Array;
  * <p>
  * <b>NOTE:</b> We do the (msg, arg0), (msg, arg0, arg1), (msg, arg0, arg1, arg2), (msg, arg0, arg1, arg2, arg3), and
  * (msg, argArray) patterns because if we do ... for everything, we will get a new Object[] each log call which we don't
- * want -- even if the message is never logged because of the log level. Also, we don't use ... at all because we want
- * to know <i>when</i> we are creating a new Object[] so we can make sure it is what we want. I thought ... was so much
- * better than slf4j but it turns out they were spot on. Sigh.
+ * want -- even if the message is never logged because of the log level. If you must use variable arguments then you
+ * need to call the explicit traceArgs(...), infoArgs(...), etc. we want to know <i>when</i> we are creating a new
+ * Object[] so we can make sure it is what you want.
  * </p>
  * 
  * <p>
- * <b>NOTE:</b> When you are using the argArray methods, you should consider wrapping the call in an {@code if} so the
- * {@code Object[]} won't be created unnecessarily.
+ * <b>NOTE:</b> When you are using the argArray methods or the traceArgs() pattern, you should consider wrapping the
+ * call in an {@code if} testing the [@link {@link #isLevelEnabled(Level)}} so the {@code Object[]} won't be created
+ * unnecessarily. For example:
  * </p>
  * 
  * <pre>
@@ -29,12 +30,13 @@ import java.lang.reflect.Array;
  */
 public class Logger {
 
-	private static Level globalLevel;
-
 	private final static String ARG_STRING = "{}";
 	private final static int ARG_STRING_LENGTH = ARG_STRING.length();
 	private final static Object UNKNOWN_ARG = new Object();
 	private final static int DEFAULT_FULL_MESSAGE_LENGTH = 128;
+
+	private static Level globalLevel;
+
 	private final LogBackend backend;
 
 	public Logger(LogBackend backend) {
@@ -757,7 +759,7 @@ public class Logger {
 		} else if (backend.isLevelEnabled(level)) {
 			String fullMsg;
 			if (arg0 == UNKNOWN_ARG && argArray == null) {
-				// this will just output the message without parsing so including the {}
+				// this will just output the message without parsing which will not parse any extraneous {}
 				fullMsg = msg;
 			} else {
 				fullMsg = buildFullMessage(msg, arg0, arg1, arg2, arg3, argArray);

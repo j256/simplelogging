@@ -10,7 +10,7 @@ package com.j256.simplelogging;
 public interface LogBackend {
 
 	/**
-	 * Returns true if the log level argument is enabled meaning that the log messages should be shown.
+	 * Returns true if the log level argument is enabled meaning that the log messages should be assembled and shown.
 	 */
 	public boolean isLevelEnabled(Level level);
 
