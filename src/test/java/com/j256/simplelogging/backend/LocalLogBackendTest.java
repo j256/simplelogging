@@ -111,6 +111,8 @@ public class LocalLogBackendTest extends BaseLogBackendTest {
 		StringWriter stringWriter = new StringWriter();
 		// invalid line
 		stringWriter.write("x\n");
+		// blank line
+		stringWriter.write("\n");
 		// invalid level
 		stringWriter.write("com\\.foo\\.myclass\\.StatementExecutor = INFO\n");
 		LocalLogBackend.readLevelResourceFile(new ByteArrayInputStream(stringWriter.toString().getBytes()));
@@ -149,5 +151,4 @@ public class LocalLogBackendTest extends BaseLogBackendTest {
 	public void testInputStreamNull() {
 		LocalLogBackend.readLevelResourceFile(null);
 	}
-
 }

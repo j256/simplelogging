@@ -23,4 +23,9 @@ public class AndroidLogBackendTest {
 			LoggerFactory.setLogBackendFactory(factory);
 		}
 	}
+
+	@Test(expected = UnsatisfiedLinkError.class)
+	public void testCoverage() {
+		new AndroidLogBackend("classnametoolong01234567890123456789");
+	}
 }

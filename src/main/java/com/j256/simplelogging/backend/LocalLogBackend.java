@@ -63,7 +63,16 @@ public class LocalLogBackend implements LogBackend {
 
 	static {
 		InputStream stream = LocalLogBackend.class.getResourceAsStream(LOCAL_LOG_PROPERTIES_FILE);
-		List<PatternLevel> levels = readLevelResourceFile(stream);
+		List<PatternLevel> levels;
+		try {
+			levels = readLevelResourceFile(stream);
+		} finally {
+			try {
+				stream.close();
+			} catch (IOException e) {
+				// ignored
+			}
+		}
 		classLevels = levels;
 
 		/*
@@ -155,24 +164,17 @@ public class LocalLogBackend implements LogBackend {
 	 * Read in our levels from our configuration file.
 	 */
 	static List<PatternLevel> readLevelResourceFile(InputStream stream) {
-		List<PatternLevel> levels = null;
-		if (stream != null) {
-			try {
-				levels = configureClassLevels(stream);
-			} catch (IOException e) {
-				System.err.println(
-						"IO exception reading the log properties file '" + LOCAL_LOG_PROPERTIES_FILE + "': " + e);
-			} finally {
-				if (stream != null) {
-					try {
-						stream.close();
-					} catch (IOException e) {
-						// ignored
-					}
-				}
-			}
+		if (stream == null) {
+			return null;
 		}
-		return levels;
+		try {
+			return configureClassLevels(stream);
+		} catch (IOException e) {
+			System.err
+					.println("IO exception reading the log properties file '" + LOCAL_LOG_PROPERTIES_FILE + "': " + e);
+			return null;
+		}
+
 	}
 
 	private static List<PatternLevel> configureClassLevels(InputStream stream) throws IOException {
