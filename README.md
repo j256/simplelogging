@@ -1,5 +1,5 @@
-Java Simple Logging Facade
-==========================
+Java Simple Logging Package
+===========================
 
 The goal of this library is to be a small logging facade that backends to a number of standard logging packages and that
 can be copied into another project.  This allows you to write your code and include log messages without having a fixed
@@ -8,7 +8,7 @@ logging code allows you to write messages with the slf4j-style `{}` argument sup
 supports up to 4 arguments before forcing the caller to pass in an object array or calling a different `logArgs(...)`
 method for variable arguments.
 
-I understand that this facade is similar to other logging systems which separate their API from the implementation.
+I understand that this library is similar to other logging systems which separate their API from the implementation.
 I think SimpleLogging is better than the others because it doesn't use the classpath order to satisfy the connection
 between the API and the backend.  SimpleLogging includes calls directly to specific backend APIs which can be chosen
 through code or configuration. This direct calling allows for more control over the backend selection and usually fewer
