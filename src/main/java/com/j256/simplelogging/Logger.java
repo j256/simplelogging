@@ -3,8 +3,8 @@ package com.j256.simplelogging;
 import java.lang.reflect.Array;
 
 /**
- * Class which wraps our {@link LogBackend} interface and provides {} argument features like slf4j. It allows us to plug
- * in additional log backends if necessary.
+ * Class which is called when you want to log messages via the {@link LogBackend} interface. It provides {} argument
+ * features like slf4j.
  * 
  * From SimpleLogging: https://github.com/j256/simplelogging
  *
@@ -30,7 +30,7 @@ import java.lang.reflect.Array;
  */
 public class Logger {
 
-	private final static String ARG_STRING = "{}";
+	final static String ARG_STRING = "{}";
 	private final static int ARG_STRING_LENGTH = ARG_STRING.length();
 	private final static Object UNKNOWN_ARG = new Object();
 	private final static int DEFAULT_FULL_MESSAGE_LENGTH = 128;
@@ -53,7 +53,7 @@ public class Logger {
 	}
 
 	/**
-	 * Return if logging level is enabled.
+	 * Return true if logging level is enabled else false.
 	 */
 	public boolean isLevelEnabled(Level level) {
 		return backend.isLevelEnabled(level);

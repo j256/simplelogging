@@ -257,7 +257,7 @@ logger.info("connected to host '@{@}'", server);
 @end example
 
 @c ----------------------------------------------------------------
-@node Setting Log Level, Backend Discovery, Logging Arguments, Using
+@node Setting Log Level, Fluent Logging, Logging Arguments, Using
 @section Setting Log Level or Disabling Logging
 
 @cindex log level, setting
@@ -290,6 +290,33 @@ Another way to not have any log messages show would be use use the @code{NULL} l
 @example
 // set the backend type to be the null logger
 LoggerFactory.setLogBackendType(LogBackendType.NULL);
+@end example
+
+@c ----------------------------------------------------------------
+@node Fluent Logging, Backend Discovery, Setting Log Level, Using
+@section Using "Fluent" Logging Method Chaining
+
+@cindex fluent logging
+@cindex method chaining
+
+Another pattern supported by SimpleLogging is the "fluent" logging which uses method chaining
+to build up a log message.  The benefit of this method means that there is no objects created
+by the log call unless the log level is enabled.  Typically, primitives are auto-boxed into
+their object equivalents in a standard SimpleLogging logger before it can check to see if the
+log level is enabled.
+
+For example:
+
+@example
+// create a fluent logger instead of a logger
+private static final FluentLogger fluentLogger =
+   LoggerFactory.getFluentLogger(MyClass.class);
+...
+// this generates no additional objects even due to auto-boxing
+// unless trace logging is enabled
+fluentLogger.atLevel(Level.TRACE)
+    .msg("connected to host '{}' port '{}'")
+    .arg(host).arg(port).log();
 @end example
 
 @c ----------------------------------------------------------------

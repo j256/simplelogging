@@ -96,6 +96,20 @@ logger.info("connected to host '{}'", server);
 // outputs: connected to host 'srv3'
 ```
 
+# "Fluent" Logging with Method Chaining Supported
+
+SimpleLogging also supports "fluent" logging where you can chain log methods together to build your
+log message which will generate no objects if the log level is not enabled.  See the following
+examples:
+
+```java
+// this generates no additional objects even due to auto-boxing
+// unless trace logging is enabled
+fluentLogger.atLevel(Level.TRACE)
+    .msg("connected to host '{}' port '{}'")
+    .arg(host).arg(port).log();
+```
+
 # Maven Configuration
 
 * Maven packages are published via [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/)

@@ -46,6 +46,23 @@ public class LoggerFactory {
 	}
 
 	/**
+	 * Return a logger associated with a particular class.
+	 */
+	public static FluentLogger getFluentLogger(Class<?> clazz) {
+		return getFluentLogger(clazz.getName());
+	}
+
+	/**
+	 * Return a logger associated with a particular class name.
+	 */
+	public static FluentLogger getFluentLogger(String className) {
+		if (logBackendFactory == null) {
+			logBackendFactory = findLogBackendFactory();
+		}
+		return new FluentLogger(new Logger(logBackendFactory.createLogBackend(className)));
+	}
+
+	/**
 	 * Get the currently assigned log factory or null if none.
 	 */
 	public static LogBackendFactory getLogBackendFactory() {
