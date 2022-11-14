@@ -33,6 +33,17 @@ public class LoggerFactoryTest {
 	}
 
 	@Test
+	public void testGetFluentLoggerClass() {
+		LoggerFactory.setLogBackendFactory(null);
+		assertNotNull(LoggerFactory.getFluentLogger(getClass()));
+	}
+
+	@Test
+	public void testGetFluentLoggerString() {
+		assertNotNull(LoggerFactory.getFluentLogger(getClass().getName()));
+	}
+
+	@Test
 	public void testConstructor() throws Exception {
 		@SuppressWarnings("rawtypes")
 		Constructor[] constructors = LoggerFactory.class.getDeclaredConstructors();

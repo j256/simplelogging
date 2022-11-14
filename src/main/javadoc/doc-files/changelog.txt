@@ -1,3 +1,6 @@
+1.10: 11/?/2022
+	* Added fluent-logging pattern where you build a log message with chaining instead of tons o' method calls.
+
 1.9: 1/8/2022
 	* Changed the behavior of messages with {} but no arguments.  The {} will be shown.  Matches other logging backends.
 	* Add LogArgumentCreator for not having to use toString() to expand an argument.
