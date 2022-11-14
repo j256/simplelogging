@@ -24,11 +24,6 @@ public interface FluentContext {
 	public FluentContext arg(Object arg);
 
 	/**
-	 * Add an array of arguments to the log message.
-	 */
-	public FluentContext args(Object[] args);
-
-	/**
 	 * Add argument to the log message.
 	 */
 	public FluentContext arg(boolean arg);
@@ -69,7 +64,12 @@ public interface FluentContext {
 	public FluentContext arg(double arg);
 
 	/**
-	 * Log the message to output.
+	 * Add an array of arguments to the log message.
+	 */
+	public FluentContext args(Object[] args);
+
+	/**
+	 * Log the message to output if the level is enabled.
 	 */
 	public void log();
 }

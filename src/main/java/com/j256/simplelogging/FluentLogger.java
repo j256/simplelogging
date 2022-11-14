@@ -43,7 +43,7 @@ public class FluentLogger {
 
 	/**
 	 * Start of the chaining that sets the level of the message. If this level is not enabled then this method returns a
-	 * mute context and is in effect a no-op.
+	 * mute context and all calls to it are no-ops.
 	 */
 	public FluentContext atLevel(Level level) {
 		if (isLevelEnabled(level)) {

@@ -100,11 +100,10 @@ logger.info("connected to host '{}'", server);
 
 SimpleLogging also supports "fluent" logging where you can chain log methods together to build your
 log message which will generate no objects if the log level is not enabled.  See the following
-examples:
+example:
 
 ```java
-// this generates no additional objects even due to auto-boxing
-// unless trace logging is enabled
+// this generates no objects even due to auto-boxing unless trace is enabled
 fluentLogger.atLevel(Level.TRACE)
     .msg("connected to host '{}' port '{}'")
     .arg(host).arg(port).log();
