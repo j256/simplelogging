@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class FluentLogger {
 
 	private final static int DEFAULT_NUM_ARGS = 3;
-	final static String JUST_THROWABLE_MESSAGE = "got throwable";
+	final static String JUST_THROWABLE_MESSAGE = "throwable";
 	private final static MuteContext MUTE_CONTEXT = new MuteContext();
 
 	private final Logger logger;
@@ -175,24 +175,24 @@ public class FluentLogger {
 		@Override
 		public void log() {
 			if (msg == null) {
+				// if we have no message but we do have arguments then build a message like: '{}', '{}', ... 
 				if (argCount > 0) {
-					StringBuilder sb = new StringBuilder(argCount * 4 + (argCount - 1) * 2);
+					StringBuilder sb = new StringBuilder(Logger.DEFAULT_FULL_MESSAGE_LENGTH);
 					for (int i = 0; i < argCount; i++) {
 						if (i > 0) {
 							sb.append(", ");
 						}
 						sb.append('\'').append(args[i]).append('\'');
 					}
-					msg = sb.toString();
-				}
-			}
-			if (msg == null) {
-				if (throwable == null) {
+					logger.log(level, throwable, sb.toString());
+				} else if (throwable == null) {
 					// ignore message if no message, args, or throwable
 				} else {
+					// just log a throwable with a minimal message
 					logger.log(level, throwable, JUST_THROWABLE_MESSAGE);
 				}
 			} else if (argCount == 0) {
+				// no arguments
 				logger.log(level, throwable, msg);
 			} else {
 				if (argCount != args.length) {
