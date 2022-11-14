@@ -170,12 +170,24 @@ public class FluentLogger {
 		@Override
 		public void log() {
 			if (message == null) {
+				if (argCount > 0) {
+					StringBuilder sb = new StringBuilder(argCount * 4 + (argCount - 1) * 2);
+					for (int i = 0; i < argCount; i++) {
+						if (i > 0) {
+							sb.append(", ");
+						}
+						sb.append('\'').append(args[i]).append('\'');
+					}
+					message = sb.toString();
+				}
+			}
+			if (message == null) {
 				if (throwable == null) {
-					// ignore the log line
+					// ignore message if no message, args, or throwable
 				} else {
 					logger.log(level, throwable, JUST_THROWABLE_MESSAGE);
 				}
-			} else if (argCount == 0 || args == null) {
+			} else if (argCount == 0) {
 				logger.log(level, throwable, message);
 			} else {
 				if (argCount != args.length) {

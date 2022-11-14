@@ -107,7 +107,7 @@ public class FluentLoggerTest {
 				.log();
 		fluentLogger.atLevel(Level.TRACE)
 				.msg("hello {}")
-				.numArgs(100)
+				.numArgs(3)
 				.arg(arg1)
 				.arg((byte) 1)
 				.arg('x')
@@ -153,10 +153,21 @@ public class FluentLoggerTest {
 	}
 
 	@Test
-	public void testNoMessage() {
-		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(1);
+	public void testJustArgs() {
+		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		String arg1 = "ewpjfwfwe";
+		long arg2 = 1343134;
+		mockLog.log(Level.TRACE, "'" + arg1 + "', '" + arg2 + "'");
 		replay(mockLog);
-		fluentLogger.atLevel(Level.TRACE).arg("ignored").log();
+		fluentLogger.atLevel(Level.TRACE).arg(arg1).arg(arg2).log();
+		verify(mockLog);
+	}
+
+	@Test
+	public void testNoMessage() {
+		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true);
+		replay(mockLog);
+		fluentLogger.atLevel(Level.TRACE).log();
 		verify(mockLog);
 	}
 }
