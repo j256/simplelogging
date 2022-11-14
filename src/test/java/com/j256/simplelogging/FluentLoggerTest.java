@@ -144,9 +144,17 @@ public class FluentLoggerTest {
 	}
 
 	@Test
-	public void testNoMessage() {
+	public void testJustThrowable() {
 		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
-		mockLog.log(Level.TRACE, FluentLogger.EMPTY_MESSAGE);
+		mockLog.log(Level.TRACE, FluentLogger.JUST_THROWABLE_MESSAGE, throwable);
+		replay(mockLog);
+		fluentLogger.atLevel(Level.TRACE).throwable(throwable).log();
+		verify(mockLog);
+	}
+
+	@Test
+	public void testNoMessage() {
+		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(1);
 		replay(mockLog);
 		fluentLogger.atLevel(Level.TRACE).arg("ignored").log();
 		verify(mockLog);
