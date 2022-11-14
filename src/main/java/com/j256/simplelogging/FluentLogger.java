@@ -60,7 +60,7 @@ public class FluentLogger {
 
 		private final Logger logger;
 		private final Level level;
-		private String message;
+		private String msg;
 		private Throwable throwable;
 		private Object[] args;
 		private int argCount;
@@ -71,28 +71,29 @@ public class FluentLogger {
 		}
 
 		@Override
-		public FluentContext msg(String message) {
-			this.message = message;
+		public FluentContext msg(String msg) {
+			this.msg = msg;
+			int count = 0;
+			int index = 0;
+			while (true) {
+				int found = msg.indexOf(Logger.ARG_STRING, index);
+				if (found < 0) {
+					break;
+				}
+				count++;
+				index = found + Logger.ARG_STRING.length();
+			}
+			if (args == null) {
+				args = new Object[count];
+			} else if (args.length < count) {
+				args = Arrays.copyOf(args, count);
+			}
 			return this;
 		}
 
 		@Override
 		public FluentContext throwable(Throwable throwable) {
 			this.throwable = throwable;
-			return this;
-		}
-
-		@Override
-		public FluentContext numArgs(int numArgs) {
-			if (numArgs <= 0) {
-				// ignore
-			} else if (args == null) {
-				args = new Object[numArgs];
-			} else if (numArgs > args.length) {
-				args = Arrays.copyOf(args, numArgs);
-			} else {
-				// not much point for us to adjust the args down now
-			}
 			return this;
 		}
 
@@ -169,7 +170,7 @@ public class FluentLogger {
 
 		@Override
 		public void log() {
-			if (message == null) {
+			if (msg == null) {
 				if (argCount > 0) {
 					StringBuilder sb = new StringBuilder(argCount * 4 + (argCount - 1) * 2);
 					for (int i = 0; i < argCount; i++) {
@@ -178,23 +179,23 @@ public class FluentLogger {
 						}
 						sb.append('\'').append(args[i]).append('\'');
 					}
-					message = sb.toString();
+					msg = sb.toString();
 				}
 			}
-			if (message == null) {
+			if (msg == null) {
 				if (throwable == null) {
 					// ignore message if no message, args, or throwable
 				} else {
 					logger.log(level, throwable, JUST_THROWABLE_MESSAGE);
 				}
 			} else if (argCount == 0) {
-				logger.log(level, throwable, message);
+				logger.log(level, throwable, msg);
 			} else {
 				if (argCount != args.length) {
 					// make the array smaller otherwise we may get null args in the message
 					args = Arrays.copyOf(args, argCount);
 				}
-				logger.log(level, throwable, message, args);
+				logger.log(level, throwable, msg, args);
 			}
 		}
 
@@ -220,11 +221,6 @@ public class FluentLogger {
 
 		@Override
 		public FluentContext throwable(Throwable th) {
-			return this;
-		}
-
-		@Override
-		public FluentContext numArgs(int numArgs) {
 			return this;
 		}
 

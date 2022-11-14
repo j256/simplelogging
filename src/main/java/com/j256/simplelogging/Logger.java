@@ -30,7 +30,7 @@ import java.lang.reflect.Array;
  */
 public class Logger {
 
-	private final static String ARG_STRING = "{}";
+	final static String ARG_STRING = "{}";
 	private final static int ARG_STRING_LENGTH = ARG_STRING.length();
 	private final static Object UNKNOWN_ARG = new Object();
 	private final static int DEFAULT_FULL_MESSAGE_LENGTH = 128;

@@ -79,7 +79,10 @@ public class FluentLoggerTest {
 		double arg1 = 1.0;
 		mockLog.log(Level.TRACE, "hello " + arg1);
 		replay(mockLog);
-		fluentLogger.atLevel(Level.TRACE).msg("hello {}").args(new Object[] { arg1 }).log();
+		fluentLogger.atLevel(Level.TRACE) //
+				.msg("hello {}")
+				.args(new Object[] { arg1 })
+				.log();
 		verify(mockLog);
 	}
 
@@ -90,9 +93,8 @@ public class FluentLoggerTest {
 		boolean arg1 = true;
 		mockLog.log(Level.TRACE, "hello " + arg1, throwable);
 		replay(mockLog);
-		fluentLogger.atLevel(Level.TRACE)
+		fluentLogger.atLevel(Level.TRACE) //
 				.msg("hello {}")
-				.numArgs(100)
 				.arg(arg1)
 				.arg((byte) 1)
 				.arg('x')
@@ -105,9 +107,8 @@ public class FluentLoggerTest {
 				.args(new Object[0])
 				.throwable(throwable)
 				.log();
-		fluentLogger.atLevel(Level.TRACE)
+		fluentLogger.atLevel(Level.TRACE) //
 				.msg("hello {}")
-				.numArgs(3)
 				.arg(arg1)
 				.arg((byte) 1)
 				.arg('x')
@@ -124,21 +125,30 @@ public class FluentLoggerTest {
 	}
 
 	@Test
-	public void testNumArgs() {
+	public void testStringIncreasesNumArgs() {
 		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
 		char arg1 = 'b';
 		short arg2 = 2344;
 		mockLog.log(Level.TRACE, "hello " + arg1 + " " + arg2);
 		replay(mockLog);
-		fluentLogger.atLevel(Level.TRACE)
+		fluentLogger.atLevel(Level.TRACE) //
+				.args(new Object[] { arg1 })
 				.msg("hello {} {}")
-				.numArgs(-1)
-				.numArgs(-1)
-				.numArgs(3)
-				.arg(arg1)
 				.arg(arg2)
-				.numArgs(4)
-				.numArgs(1)
+				.log();
+		verify(mockLog);
+	}
+
+	@Test
+	public void testStringDoesntIncreaseNumArgs() {
+		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		float arg1 = 99.0F;
+		double arg2 = 2344.0;
+		mockLog.log(Level.TRACE, "hello " + arg1 + " " + arg2);
+		replay(mockLog);
+		fluentLogger.atLevel(Level.TRACE) //
+				.args(new Object[] { arg1, arg2 })
+				.msg("hello {} {}")
 				.log();
 		verify(mockLog);
 	}
@@ -148,7 +158,9 @@ public class FluentLoggerTest {
 		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
 		mockLog.log(Level.TRACE, FluentLogger.JUST_THROWABLE_MESSAGE, throwable);
 		replay(mockLog);
-		fluentLogger.atLevel(Level.TRACE).throwable(throwable).log();
+		fluentLogger.atLevel(Level.TRACE)//
+				.throwable(throwable)
+				.log();
 		verify(mockLog);
 	}
 

@@ -19,12 +19,6 @@ public interface FluentContext {
 	public FluentContext throwable(Throwable th);
 
 	/**
-	 * Set the number of arguments so that the context doesn't have to guess. This can be wrong and won't cause an error
-	 * if it is incorrect but it may save some array reallocations and copies if it is correct.
-	 */
-	public FluentContext numArgs(int numArgs);
-
-	/**
 	 * Add argument to the log message.
 	 */
 	public FluentContext arg(Object arg);
