@@ -14,6 +14,7 @@ import java.util.Arrays;
 public class FluentLogger {
 
 	private final static int DEFAULT_NUM_ARGS = 3;
+	final static String EMPTY_MESSAGE = "no message";
 	private final static MuteContext MUTE_CONTEXT = new MuteContext();
 
 	private final Logger logger;
@@ -59,7 +60,7 @@ public class FluentLogger {
 
 		private final Logger logger;
 		private final Level level;
-		private String message;
+		private String message = EMPTY_MESSAGE;
 		private Throwable throwable;
 		private Object[] args;
 		private int argCount;
@@ -168,11 +169,11 @@ public class FluentLogger {
 
 		@Override
 		public void log() {
-			if (argCount == 0) {
+			if (argCount == 0 || args == null) {
 				logger.log(level, throwable, message);
 			} else {
 				if (argCount != args.length) {
-					// make the array smaller
+					// make the array smaller otherwise we may get null args in the message
 					args = Arrays.copyOf(args, argCount);
 				}
 				logger.log(level, throwable, message, args);

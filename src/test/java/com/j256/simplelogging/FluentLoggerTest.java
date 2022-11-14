@@ -142,4 +142,13 @@ public class FluentLoggerTest {
 				.log();
 		verify(mockLog);
 	}
+
+	@Test
+	public void testNoMessage() {
+		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		mockLog.log(Level.TRACE, FluentLogger.EMPTY_MESSAGE);
+		replay(mockLog);
+		fluentLogger.atLevel(Level.TRACE).arg("ignored").log();
+		verify(mockLog);
+	}
 }
