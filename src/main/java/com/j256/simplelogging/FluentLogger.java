@@ -73,6 +73,8 @@ public class FluentLogger {
 		@Override
 		public FluentContext msg(String msg) {
 			this.msg = msg;
+
+			// now we count the number of arguments to initialize our arguments array
 			int count = 0;
 			int index = 0;
 			while (true) {
@@ -83,10 +85,12 @@ public class FluentLogger {
 				count++;
 				index = found + Logger.ARG_STRING.length();
 			}
-			if (args == null) {
-				args = new Object[count];
-			} else if (args.length < count) {
-				args = Arrays.copyOf(args, count);
+			if (count > 0) {
+				if (args == null) {
+					args = new Object[count];
+				} else if (args.length < count) {
+					args = Arrays.copyOf(args, count);
+				}
 			}
 			return this;
 		}
@@ -100,23 +104,6 @@ public class FluentLogger {
 		@Override
 		public FluentContext arg(Object arg) {
 			addArg(arg);
-			return this;
-		}
-
-		@Override
-		public FluentContext args(Object[] addArgs) {
-			if (this.args == null) {
-				args = addArgs;
-				argCount = addArgs.length;
-			} else {
-				// extend the array if necessary
-				if (args.length - argCount < addArgs.length) {
-					this.args = Arrays.copyOf(args, argCount + addArgs.length);
-				}
-				for (int i = 0; i < addArgs.length; i++) {
-					args[argCount++] = addArgs[i];
-				}
-			}
 			return this;
 		}
 
@@ -165,6 +152,23 @@ public class FluentLogger {
 		@Override
 		public FluentContext arg(double arg) {
 			addArg(arg);
+			return this;
+		}
+
+		@Override
+		public FluentContext args(Object[] addArgs) {
+			if (this.args == null) {
+				args = addArgs;
+				argCount = addArgs.length;
+			} else {
+				// extend the array if necessary
+				if (args.length - argCount < addArgs.length) {
+					this.args = Arrays.copyOf(args, argCount + addArgs.length);
+				}
+				for (int i = 0; i < addArgs.length; i++) {
+					args[argCount++] = addArgs[i];
+				}
+			}
 			return this;
 		}
 

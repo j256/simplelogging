@@ -74,6 +74,15 @@ public class FluentLoggerTest {
 	}
 
 	@Test
+	public void testNoArgStrings() {
+		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		mockLog.log(Level.TRACE, "hello");
+		replay(mockLog);
+		fluentLogger.atLevel(Level.TRACE).msg("hello").log();
+		verify(mockLog);
+	}
+
+	@Test
 	public void testArgsFromMethod() {
 		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
 		double arg1 = 1.0;
