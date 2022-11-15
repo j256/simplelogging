@@ -165,7 +165,7 @@ public class FluentLoggerTest {
 	@Test
 	public void testJustThrowable() {
 		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
-		mockLog.log(Level.TRACE, FluentLogger.JUST_THROWABLE_MESSAGE, throwable);
+		mockLog.log(Level.TRACE, FluentContextImpl.JUST_THROWABLE_MESSAGE, throwable);
 		replay(mockLog);
 		fluentLogger.atLevel(Level.TRACE)//
 				.throwable(throwable)
@@ -189,6 +189,17 @@ public class FluentLoggerTest {
 		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true);
 		replay(mockLog);
 		fluentLogger.atLevel(Level.TRACE).log();
+		verify(mockLog);
+	}
+
+	@Test
+	public void testTwoMessages() {
+		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		String msg1 = "ewpjfwfwe";
+		String msg2 = "fjpefewpjfewjpo";
+		mockLog.log(Level.TRACE, msg1);
+		replay(mockLog);
+		fluentLogger.atLevel(Level.TRACE).msg(msg1).msg(msg2).log();
 		verify(mockLog);
 	}
 }
