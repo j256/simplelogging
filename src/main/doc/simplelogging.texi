@@ -305,7 +305,8 @@ by the log call unless the log level is enabled.  Typically, primitives are auto
 their object equivalents in a standard SimpleLogging logger before it can check to see if the
 log level is enabled.
 
-For example:
+For example, even with port being an @code{int} primitive below, there are no objects generated
+by thus call unless @code{TRACE} log level is enabled.
 
 @example
 // create a fluent logger instead of a logger
