@@ -3,9 +3,11 @@ package com.j256.simplelogging;
 import java.util.Arrays;
 
 /**
- * Context implementation that records the message and associated arguments and calls through to
- * {@link Logger#log(Level, Throwable, String)} or other methods when the {@link #log()} method is called.
+ * Fluent-context implementation that records the message, throwable, and/or associated arguments and calls through to
+ * {@link Logger#log(Level, Throwable, String)} to write out the message when the {@link #log()} method is called.
  * 
+ * From SimpleLogging: https://github.com/j256/simplelogging
+ *
  * @author graywatson
  */
 public class FluentContextImpl implements FluentContext {
@@ -172,6 +174,7 @@ public class FluentContextImpl implements FluentContext {
 		if (args == null) {
 			args = new Object[DEFAULT_NUM_ARGS];
 		} else if (argCount >= args.length) {
+			// whenever we grow the array we double it
 			args = Arrays.copyOf(args, args.length * 2);
 		}
 		args[argCount++] = arg;

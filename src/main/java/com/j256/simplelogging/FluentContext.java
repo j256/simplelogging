@@ -2,9 +2,11 @@ package com.j256.simplelogging;
 
 /**
  * Context for our fluent logger calls that is returned by a call to {@link FluentLogger#atLevel(Level)}. The
- * {@link #msg(String)} method should be called to set the message format for the log output. To end the chain and write
- * out the message you should call the {@link #log()} method.
+ * {@link #msg(String)} method should be called once to set the message format for the log output. To end the chain and
+ * write out the message you should call the {@link #log()} method.
  * 
+ * From SimpleLogging: https://github.com/j256/simplelogging
+ *
  * @author graywatson
  */
 public interface FluentContext {
