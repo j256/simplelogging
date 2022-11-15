@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 public class FluentContextImpl implements FluentContext {
 
-	private final static int DEFAULT_NUM_ARGS = 3;
+	private final static int DEFAULT_NUM_ARGS = 4;
 	final static String JUST_THROWABLE_MESSAGE = "throwable";
 
 	private final Logger logger;
@@ -35,17 +35,8 @@ public class FluentContextImpl implements FluentContext {
 		}
 		this.msg = msg;
 
-		// now we count the number of arguments to initialize our arguments array
-		int count = 0;
-		int index = 0;
-		while (true) {
-			int found = msg.indexOf(Logger.ARG_STRING, index);
-			if (found < 0) {
-				break;
-			}
-			count++;
-			index = found + Logger.ARG_STRING.length();
-		}
+		// get the number of {} arguments to initialize our arguments array
+		int count = Logger.countArgStrings(msg);
 		if (count > 0) {
 			if (args == null) {
 				args = new Object[count];
@@ -138,15 +129,11 @@ public class FluentContextImpl implements FluentContext {
 		if (msg == null) {
 			// if we have no message but we do have arguments then build a message like: '{}', '{}', ...
 			if (argCount > 0) {
-				StringBuilder sb = new StringBuilder(Logger.DEFAULT_FULL_MESSAGE_LENGTH);
-				for (int i = 0; i < argCount; i++) {
-					if (i > 0) {
-						sb.append(", ");
-					}
-					// might as well expand the entire string here
-					sb.append('\'').append(args[i]).append('\'');
+				if (argCount != args.length) {
+					// make the array smaller otherwise we may get null args in the message
+					args = Arrays.copyOf(args, argCount);
 				}
-				logger.log(level, throwable, sb.toString());
+				logger.log(level, throwable, null, args);
 			} else if (throwable == null) {
 				// ignore log line if no message, args, or throwable
 			} else {
@@ -163,11 +150,7 @@ public class FluentContextImpl implements FluentContext {
 			}
 			logger.log(level, throwable, msg, args);
 		}
-		// null the fields to help the gc
-		msg = null;
-		throwable = null;
-		args = null;
-		argCount = 0;
+		// chances are we are done with the object after this
 	}
 
 	private void addArg(Object arg) {
