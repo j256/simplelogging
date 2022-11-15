@@ -118,7 +118,7 @@ fluentLogger.atLevel(Level.TRACE)
 <dependency>
 	<groupId>com.j256.simplelogging</groupId>
 	<artifactId>simplelogging</artifactId>
-	<version>1.9</version>
+	<version>1.10</version>
 </dependency>
 ```
 
