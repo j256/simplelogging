@@ -647,6 +647,25 @@ public class LoggerTest {
 		verify(mockLog);
 	}
 
+	@Test
+	public void testNoMessage() {
+		String arg1 = "wefewf";
+		int arg2 = 123;
+		reset(mockLog);
+		expect(mockLog.isLevelEnabled(Level.INFO)).andReturn(true);
+		mockLog.log(Level.INFO, "'" + arg1 + "', '" + arg2 + "'");
+		replay(mockLog);
+		logger.info((String) null, arg1, arg2);
+		verify(mockLog);
+
+		reset(mockLog);
+		expect(mockLog.isLevelEnabled(Level.INFO)).andReturn(true);
+		mockLog.log(Level.INFO, Logger.NO_MESSAGE_MESSAGE);
+		replay(mockLog);
+		logger.info((String) null);
+		verify(mockLog);
+	}
+
 	private static class Foo {
 		final static String TO_STRING = "foo to string";
 

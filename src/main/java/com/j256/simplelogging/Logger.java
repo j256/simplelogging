@@ -30,10 +30,11 @@ import java.lang.reflect.Array;
  */
 public class Logger {
 
-	final static String ARG_STRING = "{}";
+	private final static String ARG_STRING = "{}";
 	private final static int ARG_STRING_LENGTH = ARG_STRING.length();
 	private final static Object UNKNOWN_ARG = new Object();
-	final static int DEFAULT_FULL_MESSAGE_LENGTH = 128;
+	private final static int DEFAULT_FULL_MESSAGE_LENGTH = 128;
+	final static String NO_MESSAGE_MESSAGE = "no log message";
 
 	private static Level globalLevel;
 
@@ -764,6 +765,9 @@ public class Logger {
 			} else {
 				fullMsg = buildFullMessage(msg, arg0, arg1, arg2, arg3, argArray);
 			}
+			if (fullMsg == null) {
+				fullMsg = NO_MESSAGE_MESSAGE;
+			}
 			if (throwable == null) {
 				backend.log(level, fullMsg);
 			} else {
@@ -773,12 +777,32 @@ public class Logger {
 	}
 
 	/**
+	 * Return the count of the number of arg strings in the message.
+	 */
+	static int countArgStrings(String msg) {
+		int count = 0;
+		int index = 0;
+		while (true) {
+			int found = msg.indexOf(Logger.ARG_STRING, index);
+			if (found < 0) {
+				return count;
+			}
+			count++;
+			index = found + Logger.ARG_STRING_LENGTH;
+		}
+	}
+
+	/**
 	 * Return a combined single message from the msg (with possible {}) and optional arguments.
 	 */
 	private String buildFullMessage(String msg, Object arg0, Object arg1, Object arg2, Object arg3, Object[] argArray) {
+		if (msg == null) {
+			// if msg is null then just spit out the arguments
+			return argMessage(arg0, arg1, arg2, arg3, argArray);
+		}
 		StringBuilder sb = null;
 		int lastIndex = 0;
-		int argC = 0;
+		int argCount = 0;
 		while (true) {
 			int argIndex = msg.indexOf(ARG_STRING, lastIndex);
 			// no more {} arguments?
@@ -796,24 +820,7 @@ public class Logger {
 			// shift our last-index past the arg-string
 			lastIndex = argIndex + ARG_STRING_LENGTH;
 			// add the argument, if we still have any
-			if (argArray == null) {
-				if (argC == 0) {
-					appendArg(sb, arg0);
-				} else if (argC == 1) {
-					appendArg(sb, arg1);
-				} else if (argC == 2) {
-					appendArg(sb, arg2);
-				} else if (argC == 3) {
-					appendArg(sb, arg3);
-				} else {
-					// we have more than 4 {} so we just ignore them
-				}
-			} else if (argC < argArray.length) {
-				appendArg(sb, argArray[argC]);
-			} else {
-				// we have too many {} than in the argArray so we just ignore them
-			}
-			argC++;
+			appendArg(sb, argCount++, arg0, arg1, arg2, arg3, argArray);
 		}
 		if (sb == null) {
 			// if we have yet to create a StringBuilder then just return the msg which has no {}
@@ -827,9 +834,65 @@ public class Logger {
 		}
 	}
 
-	private void appendArg(StringBuilder sb, Object arg) {
+	/**
+	 * Build a message from a collection of objects.
+	 */
+	private String argMessage(Object arg0, Object arg1, Object arg2, Object arg3, Object[] argArray) {
+		StringBuilder sb = new StringBuilder(DEFAULT_FULL_MESSAGE_LENGTH);
+		boolean first = true;
+		int argCount = 0;
+		sb.append('\'');
+		while (true) {
+			if (first) {
+				first = false;
+			} else {
+				sb.append("', '");
+			}
+			if (!appendArg(sb, argCount++, arg0, arg1, arg2, arg3, argArray)) {
+				break;
+			}
+		}
+		if (argCount == 0) {
+			return null;
+		}
+		if (argCount > 0) {
+			// we take off the ", '" at the end
+			sb.setLength(sb.length() - 3);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Append an argument from the individual arguments or the array.
+	 */
+	private boolean appendArg(StringBuilder sb, int argCount, Object arg0, Object arg1, Object arg2, Object arg3,
+			Object[] argArray) {
+		if (argArray == null) {
+			switch (argCount) {
+				case 0:
+					return appendArg(sb, arg0);
+				case 1:
+					return appendArg(sb, arg1);
+				case 2:
+					return appendArg(sb, arg2);
+				case 3:
+					return appendArg(sb, arg3);
+				default:
+					// we have too many {} so we just ignore them
+					return false;
+			}
+		} else if (argCount < argArray.length) {
+			return appendArg(sb, argArray[argCount]);
+		} else {
+			// we have too many {} so we just ignore them
+			return false;
+		}
+	}
+
+	private boolean appendArg(StringBuilder sb, Object arg) {
 		if (arg == UNKNOWN_ARG) {
 			// ignore it
+			return false;
 		} else if (arg == null) {
 			// this is what sb.append(null) does
 			sb.append("null");
@@ -853,5 +916,6 @@ public class Logger {
 			// might as well do the toString here because we know it isn't null
 			sb.append(arg.toString());
 		}
+		return true;
 	}
 }
