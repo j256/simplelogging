@@ -1,4 +1,4 @@
-1.10: 11/?/2022
+1.10: 11/15/2022
 	* Added fluent-logging pattern where you can build a log message with chaining instead of tons o' method calls.
 
 1.9: 1/8/2022
