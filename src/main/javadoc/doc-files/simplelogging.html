@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
 <html>
-<!-- Created on January 8, 2022 by texi2html 1.82
+<!-- Created on November 15, 2022 by texi2html 1.82
 texi2html was written by: 
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
@@ -51,7 +51,7 @@ ul.toc {list-style: none}
 <a name="SimpleLogging"></a>
 <h1 class="settitle">SimpleLogging</h1>
 
-<p>Version 1.9 &ndash; January 2022
+<p>Version 1.10 &ndash; November 2022
 </p>
 <a name="index-introduction"></a>
 <a name="index-author"></a>
@@ -60,15 +60,14 @@ ul.toc {list-style: none}
 <p>The goal of this library is to be a small logging facade that backends to a number of standard logging packages and that
 can be copied into another project.  This allows you to write your code and include log messages without having a fixed
 dependency on any one logging package.  I include this code into my libraries and so they can stay agnostic.  This
-logging code allows you to write messages with the slf4j-style <code>{}</code> argument support and then backend to a number
-of other logging libraries or you can easily implement your own.  It also handles arrays appropriately and supports up
-to 4 arguments before forcing the caller to pass in an object array or calling a different <code>logArgs(...)</code> method
-for variable arguments.
+logging code allows you to write messages with the slf4j-style <code>{}</code> argument support, handles arrays
+appropriately and supports up to 4 arguments before forcing the caller to pass in an object array or calling a different
+<code>logArgs(...)</code> method for variable arguments.
 </p>
 <p>I understand that this facade is similar to other logging systems which separate their API from the implementation.
 I think SimpleLogging is better than the others because it doesn&rsquo;t use the classpath order to satisfy the connection
 between the API and the backend.  SimpleLogging includes calls directly to specific backend APIs which can be chosen
-through code or configuration. This direct calling allows for more control over the backend selection and possibly fewer
+through code or configuration. This direct calling allows for more control over the backend selection and usually fewer
 dependencies.
 </p>
 <p>SimpleLogging is also designed to be copied into your open source project so you don&rsquo;t have to add a maven dependency.
@@ -166,13 +165,15 @@ logger.error(exception, &quot;http client threw getting URL: {}&quot;, url);
 </td></tr>
 <tr><td align="left" valign="top"><a href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">           Logging messages with {} arguments.
 </td></tr>
-<tr><td align="left" valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">           How the logging backend is discovered.
+<tr><td align="left" valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">           How the logging backend is discovered.
 </td></tr>
 <tr><td align="left" valign="top"><a href="#Setting-Log-Level">2.4 Setting Log Level or Disabling Logging</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">           Setting the log level or disabling logging.
 </td></tr>
-<tr><td align="left" valign="top"><a href="#More-Usage-Examples">2.6 More Usage Examples</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">         More examples on how to use the loggers.
+<tr><td align="left" valign="top"><a href="#Fluent-Logging">2.5 Using &quot;Fluent&quot; Logging Method Chaining</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">              How to use &quot;fluent&quot; logging with method chaining.
 </td></tr>
-<tr><td align="left" valign="top"><a href="#Maven">2.7 Using With Maven</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">                       How to use with Maven.
+<tr><td align="left" valign="top"><a href="#More-Usage-Examples">2.7 More Usage Examples</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">         More examples on how to use the loggers.
+</td></tr>
+<tr><td align="left" valign="top"><a href="#Maven">2.8 Using With Maven</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">                       How to use with Maven.
 </td></tr>
 </table>
 
@@ -321,15 +322,15 @@ It is recommended that you test for the log level with an <code>if</code> statem
 logger.info(&quot;connected to host '{}'&quot;);
 // outputs: connected to host '{}'
 
-// missing port argument is empty
+// missing argument to second {} displays as empty string
 String host = &quot;host1&quot;;
-logger.info(&quot;connected to host '{}' port {}&quot;, host);
-// outputs: connected to host 'host1' port
+logger.info(&quot;connected to host '{}' port '{}'&quot;, host);
+// outputs: connected to host 'host1' port ''
 
-// extra port argument is ignored
+// extra argument (port) is ignored
 String host = &quot;host1&quot;;
 int port = 443;
-logger.info(&quot;connected to host '{}' port {}&quot;, host, port);
+logger.info(&quot;connected to host '{}'&quot;, host, port);
 // outputs: connected to host 'host1'
 
 // null argument
@@ -342,13 +343,13 @@ String[] hosts = new String[] { &quot;srv1&quot;, &quot;srv2&quot; };
 logger.info(&quot;connected to hosts {} failed&quot;, hosts);
 // outputs: connected to hosts [srv1, srv2]
 
-// logging of host which implements LogArgumentCreator where
-// host.createArg() returns the string: host4
+// logging of Host which implements LogArgumentCreator where
+// host.createArg() method returns the string: host4
 Host host = new Host();
 logger.info(&quot;connected to host '{}'&quot;, host);
 // outputs: connected to host 'host4'
 
-// logging of server where server.toString() returns: srv3
+// logging of Server where server.toString() returns: srv3
 Server server = new Server();
 logger.info(&quot;connected to host '{}'&quot;, server);
 // outputs: connected to host 'srv3'
@@ -359,7 +360,7 @@ logger.info(&quot;connected to host '{}'&quot;, server);
 <a name="Setting-Log-Level"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="#Logging-Arguments" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="#Backend-Discovery" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Fluent-Logging" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="#Using" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="#Using" title="Up section"> Up </a>]</td>
@@ -406,9 +407,56 @@ LoggerFactory.setLogBackendType(LogBackendType.NULL);
 </pre></td></tr></table>
 
 <hr size="6">
-<a name="Backend-Discovery"></a>
+<a name="Fluent-Logging"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="#Setting-Log-Level" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Backend-Discovery" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Using" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Using" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#License" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#Index-of-Concepts" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Using-_0022Fluent_0022-Logging-Method-Chaining"></a>
+<h2 class="section">2.5 Using &quot;Fluent&quot; Logging Method Chaining</h2>
+
+<a name="index-fluent-logging"></a>
+<a name="index-method-chaining"></a>
+<a name="index-chaining-methods"></a>
+<a name="index-objects_002c-avoiding"></a>
+
+<p>Another pattern supported by SimpleLogging is the &quot;fluent&quot; logging which uses method chaining to build up a log message.
+The benefit of this method are that no objects are created by the log call unless the log level is enabled.  Typically,
+primitives are auto-boxed into their object equivalents in a standard SimpleLogging logger before it can check to see if
+the log level is enabled.
+</p>
+<p>For example, even with port being an <code>int</code> primitive below, there are no objects generated by thus call unless
+<code>TRACE</code> log level is enabled.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">// create a fluent logger instead of a logger
+private static final FluentLogger fluentLogger =
+   LoggerFactory.getFluentLogger(MyClass.class);
+...
+// this generates no additional objects even due to auto-boxing
+// unless trace logging is enabled
+fluentLogger.atLevel(Level.TRACE)
+    .msg(&quot;connected to host '{}' port '{}'&quot;)
+    .arg(host)
+    .arg(port)
+    .log();
+</pre></td></tr></table>
+
+<hr size="6">
+<a name="Backend-Discovery"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Fluent-Logging" title="Previous section in reading order"> &lt; </a>]</td>
 <td valign="middle" align="left">[<a href="#More-Usage-Examples" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="#Using" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
@@ -424,7 +472,7 @@ LoggerFactory.setLogBackendType(LogBackendType.NULL);
 <td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
 <a name="How-SimpleLogging-Discovers-the-Logging-Backend"></a>
-<h2 class="section">2.5 How SimpleLogging Discovers the Logging Backend</h2>
+<h2 class="section">2.6 How SimpleLogging Discovers the Logging Backend</h2>
 
 <a name="index-discovering-backend"></a>
 <a name="index-log-backend-discovery"></a>
@@ -492,7 +540,7 @@ values in the above list.  For example: <code>java -Dcom.j256.simplelogger.backe
 <td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
 <a name="More-Usage-Examples-1"></a>
-<h2 class="section">2.6 More Usage Examples</h2>
+<h2 class="section">2.7 More Usage Examples</h2>
 
 <p>Usually the logger is defined per-class as a <code>static</code> field.
 </p>
@@ -546,7 +594,7 @@ either case, an <code>Object[]</code> is created even if the message is never lo
 <td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
 <a name="Using-With-Maven"></a>
-<h2 class="section">2.7 Using With Maven</h2>
+<h2 class="section">2.8 Using With Maven</h2>
 
 <a name="index-Maven_002c-use-with"></a>
 <a name="index-pom_002exml-dependency"></a>
@@ -555,7 +603,7 @@ either case, an <code>Object[]</code> is created even if the message is never lo
 <table><tr><td>&nbsp;</td><td><pre class="example">&lt;dependency&gt;
    &lt;groupId&gt;com.j256.simplelogging&lt;/groupId&gt;
    &lt;artifactId&gt;simplelogging&lt;/artifactId&gt;
-   &lt;version&gt;1.9&lt;/version&gt;
+   &lt;version&gt;1.10&lt;/version&gt;
 &lt;/dependency&gt;
 </pre></td></tr></table>
 
@@ -627,6 +675,8 @@ THIS SOFTWARE.
  &nbsp; 
 <a href="#Index-of-Concepts-1_cp_letter-D" class="summary-letter"><b>D</b></a>
  &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-F" class="summary-letter"><b>F</b></a>
+ &nbsp; 
 <a href="#Index-of-Concepts-1_cp_letter-G" class="summary-letter"><b>G</b></a>
  &nbsp; 
 <a href="#Index-of-Concepts-1_cp_letter-H" class="summary-letter"><b>H</b></a>
@@ -667,20 +717,24 @@ THIS SOFTWARE.
 <tr><td></td><td valign="top"><a href="#index-_007b_007d-arguments">{} arguments</a></td><td valign="top"><a href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-A">A</a></th><td></td><td></td></tr>
-<tr><td></td><td valign="top"><a href="#index-android-logging_002c-use-with">android logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-android-logging_002c-use-with">android logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-arguments-in-the-message">arguments in the message</a></td><td valign="top"><a href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-array-argument-logging">array argument logging</a></td><td valign="top"><a href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-author">author</a></td><td valign="top"><a href="#Top">SimpleLogging</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-aws-lambda-logging_002c-use-with">aws lambda logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-aws-lambda-logging_002c-use-with">aws lambda logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-C">C</a></th><td></td><td></td></tr>
-<tr><td></td><td valign="top"><a href="#index-commons-logging_002c-use-with">commons logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-chaining-methods">chaining methods</a></td><td valign="top"><a href="#Fluent-Logging">2.5 Using &quot;Fluent&quot; Logging Method Chaining</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-commons-logging_002c-use-with">commons logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-copying-code">copying code</a></td><td valign="top"><a href="#Depending-on-SimpleLogging">2.2 Depending on SimpleLogging in Your Library</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-D">D</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-disable-all-messages">disable all messages</a></td><td valign="top"><a href="#Setting-Log-Level">2.4 Setting Log Level or Disabling Logging</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-discovering-backend">discovering backend</a></td><td valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-discovering-backend">discovering backend</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-downloading-the-jars">downloading the jars</a></td><td valign="top"><a href="#Downloading">2.1 Downloading Jar</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-F">F</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-fluent-logging">fluent logging</a></td><td valign="top"><a href="#Fluent-Logging">2.5 Using &quot;Fluent&quot; Logging Method Chaining</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-G">G</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-getting-started">getting started</a></td><td valign="top"><a href="#Quick-Start">1. Start Using Quickly</a></td></tr>
@@ -695,33 +749,35 @@ THIS SOFTWARE.
 <tr><td></td><td valign="top"><a href="#index-isc-license">isc license</a></td><td valign="top"><a href="#License">3. Open Source License</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-J">J</a></th><td></td><td></td></tr>
-<tr><td></td><td valign="top"><a href="#index-java-util-logging_002c-use-with">java util logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-java-util-logging_002c-use-with">java util logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-L">L</a></th><td></td><td></td></tr>
-<tr><td></td><td valign="top"><a href="#index-lambda-logging_002c-use-with">lambda logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-lambda-logging_002c-use-with">lambda logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-license">license</a></td><td valign="top"><a href="#License">3. Open Source License</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-log-backend-discovery">log backend discovery</a></td><td valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-log-backend-discovery">log backend discovery</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-log-level_002c-setting">log level, setting</a></td><td valign="top"><a href="#Setting-Log-Level">2.4 Setting Log Level or Disabling Logging</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-log-type-of-backends">log type of backends</a></td><td valign="top"><a href="#Depending-on-SimpleLogging">2.2 Depending on SimpleLogging in Your Library</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-log4j_002c-use-with">log4j, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-log4j2_002c-use-with">log4j2, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-logback-direct_002c-use-with">logback direct, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-log4j_002c-use-with">log4j, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-log4j2_002c-use-with">log4j2, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-logback-direct_002c-use-with">logback direct, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-Logger">Logger</a></td><td valign="top"><a href="#Quick-Start">1. Start Using Quickly</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-logging-facade">logging facade</a></td><td valign="top"><a href="#Top">SimpleLogging</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-LogMessageCreator">LogMessageCreator</a></td><td valign="top"><a href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-M">M</a></th><td></td><td></td></tr>
-<tr><td></td><td valign="top"><a href="#index-Maven_002c-use-with">Maven, use with</a></td><td valign="top"><a href="#Maven">2.7 Using With Maven</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-Maven_002c-use-with">Maven, use with</a></td><td valign="top"><a href="#Maven">2.8 Using With Maven</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-message-arguments">message arguments</a></td><td valign="top"><a href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-method-chaining">method chaining</a></td><td valign="top"><a href="#Fluent-Logging">2.5 Using &quot;Fluent&quot; Logging Method Chaining</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-N">N</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-null-argument-logging">null argument logging</a></td><td valign="top"><a href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-O">O</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-objects_002c-avoiding">objects, avoiding</a></td><td valign="top"><a href="#Fluent-Logging">2.5 Using &quot;Fluent&quot; Logging Method Chaining</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-open-source-license">open source license</a></td><td valign="top"><a href="#License">3. Open Source License</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-P">P</a></th><td></td><td></td></tr>
-<tr><td></td><td valign="top"><a href="#index-pom_002exml-dependency">pom.xml dependency</a></td><td valign="top"><a href="#Maven">2.7 Using With Maven</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-pom_002exml-dependency">pom.xml dependency</a></td><td valign="top"><a href="#Maven">2.8 Using With Maven</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-Q">Q</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-quick-start">quick start</a></td><td valign="top"><a href="#Quick-Start">1. Start Using Quickly</a></td></tr>
@@ -732,7 +788,7 @@ THIS SOFTWARE.
 <tr><th><a name="Index-of-Concepts-1_cp_letter-S">S</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-setting-log-level">setting log level</a></td><td valign="top"><a href="#Setting-Log-Level">2.4 Setting Log Level or Disabling Logging</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-simple-logging">simple logging</a></td><td valign="top"><a href="#Top">SimpleLogging</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-slf4j_002c-use-with">slf4j, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-slf4j_002c-use-with">slf4j, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-T">T</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-toString_002c-don_0027t-use">toString, don&rsquo;t use</a></td><td valign="top"><a href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></td></tr>
@@ -743,8 +799,8 @@ THIS SOFTWARE.
 <tr><td></td><td valign="top"><a href="#index-using-SimpleLogging">using SimpleLogging</a></td><td valign="top"><a href="#Using">2. Using SimpleLogging</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-V">V</a></th><td></td><td></td></tr>
-<tr><td></td><td valign="top"><a href="#index-varargs_002c-use-with">varargs, use with</a></td><td valign="top"><a href="#More-Usage-Examples">2.6 More Usage Examples</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-variable-arguments_002c-use-with">variable arguments, use with</a></td><td valign="top"><a href="#More-Usage-Examples">2.6 More Usage Examples</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-varargs_002c-use-with">varargs, use with</a></td><td valign="top"><a href="#More-Usage-Examples">2.7 More Usage Examples</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-variable-arguments_002c-use-with">variable arguments, use with</a></td><td valign="top"><a href="#More-Usage-Examples">2.7 More Usage Examples</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-W">W</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-where-to-get-new-jars">where to get new jars</a></td><td valign="top"><a href="#Downloading">2.1 Downloading Jar</a></td></tr>
@@ -758,6 +814,8 @@ THIS SOFTWARE.
 <a href="#Index-of-Concepts-1_cp_letter-C" class="summary-letter"><b>C</b></a>
  &nbsp; 
 <a href="#Index-of-Concepts-1_cp_letter-D" class="summary-letter"><b>D</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-F" class="summary-letter"><b>F</b></a>
  &nbsp; 
 <a href="#Index-of-Concepts-1_cp_letter-G" class="summary-letter"><b>G</b></a>
  &nbsp; 
@@ -813,9 +871,10 @@ THIS SOFTWARE.
     <li><a name="toc-Depending-on-SimpleLogging-in-Your-Library" href="#Depending-on-SimpleLogging">2.2 Depending on SimpleLogging in Your Library</a></li>
     <li><a name="toc-Logging-Messages-with-_007b_007d-Arguments" href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></li>
     <li><a name="toc-Setting-Log-Level-or-Disabling-Logging" href="#Setting-Log-Level">2.4 Setting Log Level or Disabling Logging</a></li>
-    <li><a name="toc-How-SimpleLogging-Discovers-the-Logging-Backend" href="#Backend-Discovery">2.5 How SimpleLogging Discovers the Logging Backend</a></li>
-    <li><a name="toc-More-Usage-Examples-1" href="#More-Usage-Examples">2.6 More Usage Examples</a></li>
-    <li><a name="toc-Using-With-Maven" href="#Maven">2.7 Using With Maven</a></li>
+    <li><a name="toc-Using-_0022Fluent_0022-Logging-Method-Chaining" href="#Fluent-Logging">2.5 Using &quot;Fluent&quot; Logging Method Chaining</a></li>
+    <li><a name="toc-How-SimpleLogging-Discovers-the-Logging-Backend" href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></li>
+    <li><a name="toc-More-Usage-Examples-1" href="#More-Usage-Examples">2.7 More Usage Examples</a></li>
+    <li><a name="toc-Using-With-Maven" href="#Maven">2.8 Using With Maven</a></li>
   </ul></li>
   <li><a name="toc-Open-Source-License" href="#License">3. Open Source License</a></li>
   <li><a name="toc-Index-of-Concepts-1" href="#Index-of-Concepts">Index of Concepts</a></li>
@@ -831,7 +890,7 @@ THIS SOFTWARE.
 </tr></table>
 <h1>About This Document</h1>
 <p>
-  This document was generated by <em>Gray Watson</em> on <em>January 8, 2022</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+  This document was generated by <em>Gray Watson</em> on <em>November 15, 2022</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
 </p>
 <p>
   The buttons in the navigation panels have the following meaning:
@@ -933,7 +992,7 @@ THIS SOFTWARE.
 <hr size="1">
 <p>
  <font size="-1">
-  This document was generated by <em>Gray Watson</em> on <em>January 8, 2022</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+  This document was generated by <em>Gray Watson</em> on <em>November 15, 2022</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
  </font>
  <br>
 
