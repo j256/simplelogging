@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 public class FluentContextImpl implements FluentContext {
 
-	private final static int DEFAULT_NUM_ARGS = 3;
+	private final static int DEFAULT_NUM_ARGS = 4;
 	final static String JUST_THROWABLE_MESSAGE = "throwable";
 
 	private final Logger logger;
@@ -35,7 +35,7 @@ public class FluentContextImpl implements FluentContext {
 		}
 		this.msg = msg;
 
-		// now we count the number of arguments to initialize our arguments array
+		// get the number of {} arguments to initialize our arguments array
 		int count = Logger.countArgStrings(msg);
 		if (count > 0) {
 			if (args == null) {
@@ -150,11 +150,7 @@ public class FluentContextImpl implements FluentContext {
 			}
 			logger.log(level, throwable, msg, args);
 		}
-		// null the fields to help the gc
-		msg = null;
-		throwable = null;
-		args = null;
-		argCount = 0;
+		// chances are we are done with the object after this
 	}
 
 	private void addArg(Object arg) {
