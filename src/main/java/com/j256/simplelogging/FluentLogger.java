@@ -23,8 +23,6 @@ package com.j256.simplelogging;
  */
 public class FluentLogger {
 
-	private final static MuteContext MUTE_CONTEXT = new MuteContext();
-
 	private final Logger logger;
 
 	public FluentLogger(Logger logger) {
@@ -57,7 +55,7 @@ public class FluentLogger {
 		if (isLevelEnabled(level)) {
 			return new FluentContextImpl(logger, level);
 		} else {
-			return MUTE_CONTEXT;
+			return MuteContext.SINGLETON;
 		}
 	}
 
@@ -65,6 +63,9 @@ public class FluentLogger {
 	 * Context that doesn't do anything. This is returned when the log level is not enabled.
 	 */
 	private static class MuteContext implements FluentContext {
+
+		/** singleton instance of the context that is used by all calls when level not enabled */
+		public final static MuteContext SINGLETON = new MuteContext();
 
 		@Override
 		public FluentContext msg(String message) {

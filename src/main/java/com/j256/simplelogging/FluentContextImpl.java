@@ -144,8 +144,8 @@ public class FluentContextImpl implements FluentContext {
 			// no arguments
 			logger.log(level, throwable, msg);
 		} else {
-			if (argCount != args.length) {
-				// make the array smaller otherwise we may get null args in the message
+			if (argCount < args.length) {
+				// make the array smaller otherwise we may get null args in the message if extra {} in the msg
 				args = Arrays.copyOf(args, argCount);
 			}
 			logger.log(level, throwable, msg, args);
