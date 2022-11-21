@@ -8,5 +8,7 @@ The following set of tasks should be performed when the library gets released.
 4) Close and release sonos package.
 5) create release on github for X.X.X from that tag
     https://github.com/j256/simplelogging/tags
+6) Log into 256 server and download latest release.
+7) Explode docs.
 
 -------------------------------------------------------------------------------
