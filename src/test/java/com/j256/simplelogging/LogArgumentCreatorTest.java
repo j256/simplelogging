@@ -12,29 +12,29 @@ import org.junit.Test;
 public class LogArgumentCreatorTest {
 
 	private Logger logger;
-	private LogBackend mockLog;
+	private LogBackend mockBackend;
 
 	@Before
 	public void before() {
-		mockLog = createMock(LogBackend.class);
-		logger = new Logger(mockLog);
-		assertSame(mockLog, logger.getLogBackend());
+		mockBackend = createMock(LogBackend.class);
+		logger = new Logger(mockBackend);
+		assertSame(mockBackend, logger.getLogBackend());
 	}
 
 	@Test
 	public void testArgAtStart() {
 		String arg = "x";
 		String end = " yyy";
-		expect(mockLog.isLevelEnabled(Level.TRACE)).andReturn(false);
-		expect(mockLog.isLevelEnabled(Level.INFO)).andReturn(true);
-		mockLog.log(Level.INFO, arg + end);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(false);
+		expect(mockBackend.isLevelEnabled(Level.INFO)).andReturn(true);
+		mockBackend.log(Level.INFO, arg + end);
 		LogArgumentCreator logMessageCreator = createMock(LogArgumentCreator.class);
 		expect(logMessageCreator.createArg()).andReturn(arg);
-		replay(mockLog, logMessageCreator);
+		replay(mockBackend, logMessageCreator);
 		// this shouldn't be logged which means no calls to the creator
 		logger.trace("{}" + end, logMessageCreator);
 		// this should be logged
 		logger.info("{}" + end, logMessageCreator);
-		verify(mockLog, logMessageCreator);
+		verify(mockBackend, logMessageCreator);
 	}
 }

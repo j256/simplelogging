@@ -59,7 +59,7 @@ public class LoggerFactory {
 		if (logBackendFactory == null) {
 			logBackendFactory = findLogBackendFactory();
 		}
-		return new FluentLogger(new Logger(logBackendFactory.createLogBackend(className)));
+		return new FluentLogger(logBackendFactory.createLogBackend(className));
 	}
 
 	/**
