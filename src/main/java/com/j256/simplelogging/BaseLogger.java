@@ -90,7 +90,11 @@ public abstract class BaseLogger {
 			if (arg0 == UNKNOWN_ARG && argArray == null) {
 				// this will just output the message without parsing which will not parse any extraneous {}
 				fullMsg = msg;
+			} else if (msg == null) {
+				// if msg is null then just spit out the arguments
+				fullMsg = argMessage(arg0, arg1, arg2, arg3, argArray);
 			} else {
+				// do the whole {} expansion thing
 				fullMsg = buildFullMessage(msg, arg0, arg1, arg2, arg3, argArray);
 			}
 			if (fullMsg == null) {
@@ -108,10 +112,6 @@ public abstract class BaseLogger {
 	 * Return a combined single message from the msg (with possible {}) and optional arguments.
 	 */
 	private String buildFullMessage(String msg, Object arg0, Object arg1, Object arg2, Object arg3, Object[] argArray) {
-		if (msg == null) {
-			// if msg is null then just spit out the arguments
-			return argMessage(arg0, arg1, arg2, arg3, argArray);
-		}
 		StringBuilder sb = null;
 		int lastIndex = 0;
 		int argCount = 0;
@@ -165,12 +165,11 @@ public abstract class BaseLogger {
 			}
 		}
 		if (argCount == 0) {
+			// might not get here but let's be careful out there
 			return null;
 		}
-		if (argCount > 0) {
-			// we take off the ", '" at the end
-			sb.setLength(sb.length() - 3);
-		}
+		// we take off the ", '" at the end of the last arg because we can't tell ahead of time how many there are
+		sb.setLength(sb.length() - 3);
 		return sb.toString();
 	}
 
