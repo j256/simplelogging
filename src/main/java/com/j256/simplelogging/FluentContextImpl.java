@@ -15,14 +15,14 @@ public class FluentContextImpl implements FluentContext {
 	private final static int DEFAULT_NUM_ARGS = 4;
 	final static String JUST_THROWABLE_MESSAGE = "throwable";
 
-	private final Logger logger;
+	private final FluentLogger logger;
 	private final Level level;
 	private String msg;
 	private Throwable throwable;
 	private Object[] args;
 	private int argCount;
 
-	public FluentContextImpl(Logger logger, Level level) {
+	public FluentContextImpl(FluentLogger logger, Level level) {
 		this.logger = logger;
 		this.level = level;
 	}
@@ -36,7 +36,7 @@ public class FluentContextImpl implements FluentContext {
 		this.msg = msg;
 
 		// get the number of {} arguments to initialize our arguments array
-		int count = Logger.countArgStrings(msg);
+		int count = logger.countArgStrings(msg);
 		if (count > 0) {
 			if (args == null) {
 				args = new Object[count];
@@ -133,22 +133,22 @@ public class FluentContextImpl implements FluentContext {
 					// make the array smaller otherwise we may get null args in the message
 					args = Arrays.copyOf(args, argCount);
 				}
-				logger.log(level, throwable, null, args);
+				logger.logIfEnabled(level, throwable, null, args);
 			} else if (throwable == null) {
 				// ignore log line if no message, args, or throwable
 			} else {
 				// just log a throwable with a minimal message
-				logger.log(level, throwable, JUST_THROWABLE_MESSAGE);
+				logger.logIfEnabled(level, throwable, JUST_THROWABLE_MESSAGE);
 			}
 		} else if (argCount == 0) {
 			// no arguments
-			logger.log(level, throwable, msg);
+			logger.logIfEnabled(level, throwable, msg);
 		} else {
-			if (argCount != args.length) {
-				// make the array smaller otherwise we may get null args in the message
+			if (argCount < args.length) {
+				// make the array smaller otherwise we may get null args in the message if extra {} in the msg
 				args = Arrays.copyOf(args, argCount);
 			}
-			logger.log(level, throwable, msg, args);
+			logger.logIfEnabled(level, throwable, msg, args);
 		}
 		// chances are we are done with the object after this
 	}

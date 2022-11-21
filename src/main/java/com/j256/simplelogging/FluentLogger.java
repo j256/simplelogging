@@ -21,32 +21,10 @@ package com.j256.simplelogging;
  *
  * @author graywatson
  */
-public class FluentLogger {
+public class FluentLogger extends BaseLogger {
 
-	private final static MuteContext MUTE_CONTEXT = new MuteContext();
-
-	private final Logger logger;
-
-	public FluentLogger(Logger logger) {
-		this.logger = logger;
-	}
-
-	/**
-	 * Set the log level for all of the loggers. This should be done very early in an application's main or launch
-	 * methods. It allows the caller to set a filter on all log messages. Set to null to disable any global log level
-	 * filtering of messages and go back to the per-log level matching.
-	 * 
-	 * NOTE: this is a call through to {@link Logger#setGlobalLogLevel(Level)}.
-	 */
-	public static void setGlobalLogLevel(Level level) {
-		Logger.setGlobalLogLevel(level);
-	}
-
-	/**
-	 * Return true if logging level is enabled else false.
-	 */
-	public boolean isLevelEnabled(Level level) {
-		return logger.isLevelEnabled(level);
+	public FluentLogger(LogBackend backend) {
+		super(backend);
 	}
 
 	/**
@@ -55,9 +33,9 @@ public class FluentLogger {
 	 */
 	public FluentContext atLevel(Level level) {
 		if (isLevelEnabled(level)) {
-			return new FluentContextImpl(logger, level);
+			return new FluentContextImpl(this, level);
 		} else {
-			return MUTE_CONTEXT;
+			return MuteContext.SINGLETON;
 		}
 	}
 
@@ -65,6 +43,9 @@ public class FluentLogger {
 	 * Context that doesn't do anything. This is returned when the log level is not enabled.
 	 */
 	private static class MuteContext implements FluentContext {
+
+		/** singleton instance of the context that is used by all calls when level not enabled */
+		public final static MuteContext SINGLETON = new MuteContext();
 
 		@Override
 		public FluentContext msg(String message) {
