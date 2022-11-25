@@ -4,7 +4,8 @@ import java.util.Arrays;
 
 /**
  * Fluent-context implementation that records the message, throwable, and/or associated arguments and calls through to
- * {@link Logger#log(Level, Throwable, String)} to write out the message when the {@link #log()} method is called.
+ * {@link FluentLogger#logIfEnabled(Level, Throwable, String) to write out the message when the {@link #log()} method is
+ * called.
  * 
  * From SimpleLogging: https://github.com/j256/simplelogging
  *
@@ -42,6 +43,8 @@ public class FluentContextImpl implements FluentContext {
 				args = new Object[count];
 			} else if (args.length < count) {
 				args = Arrays.copyOf(args, count);
+			} else {
+				// no point in shrinking it now
 			}
 		}
 		return this;
@@ -144,7 +147,7 @@ public class FluentContextImpl implements FluentContext {
 			// no arguments
 			logger.logIfEnabled(level, throwable, msg);
 		} else {
-			if (argCount < args.length) {
+			if (argCount != args.length) {
 				// make the array smaller otherwise we may get null args in the message if extra {} in the msg
 				args = Arrays.copyOf(args, argCount);
 			}

@@ -251,8 +251,8 @@ public class LocalLogBackend implements LogBackend {
 	}
 
 	private static class PatternLevel {
-		Pattern pattern;
-		Level level;
+		final Pattern pattern;
+		final Level level;
 
 		public PatternLevel(Pattern pattern, Level level) {
 			this.pattern = pattern;
