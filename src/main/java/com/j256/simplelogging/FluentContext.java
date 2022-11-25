@@ -72,7 +72,7 @@ public interface FluentContext {
 	public FluentContext args(Object[] args);
 
 	/**
-	 * Log the message to output if the level is enabled. Must be at the end of the chain.
+	 * Log the message to output if the level is enabled. Must be at the end of the method call chain.
 	 */
 	public void log();
 }

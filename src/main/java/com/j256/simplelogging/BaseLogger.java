@@ -44,23 +44,23 @@ public abstract class BaseLogger {
 	/**
 	 * Return the count of the number of arg strings in the message.
 	 */
-	public int countArgStrings(String msg) {
+	protected int countArgStrings(String msg) {
 		int count = 0;
 		int index = 0;
 		while (true) {
-			int found = msg.indexOf(BaseLogger.ARG_STRING, index);
+			int found = msg.indexOf(ARG_STRING, index);
 			if (found < 0) {
 				return count;
 			}
 			count++;
-			index = found + BaseLogger.ARG_STRING_LENGTH;
+			index = found + ARG_STRING_LENGTH;
 		}
 	}
 
 	/**
 	 * Get the underlying log backend implementation for testing purposes.
 	 */
-	public LogBackend getLogBackend() {
+	LogBackend getLogBackend() {
 		return backend;
 	}
 
@@ -72,7 +72,7 @@ public abstract class BaseLogger {
 	}
 
 	/**
-	 * log-if-enabled with a msg and an arg-array.
+	 * log-if-enabled with a msg and args.
 	 */
 	protected void logIfEnabled(Level level, Throwable throwable, String msg, Object[] argArray) {
 		logIfEnabled(level, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
@@ -88,11 +88,11 @@ public abstract class BaseLogger {
 		} else if (backend.isLevelEnabled(level)) {
 			String fullMsg;
 			if (arg0 == UNKNOWN_ARG && argArray == null) {
-				// this will just output the message without parsing which will not parse any extraneous {}
+				// this will just output the message without parsing any {}
 				fullMsg = msg;
 			} else if (msg == null) {
 				// if msg is null then just spit out the arguments
-				fullMsg = argMessage(arg0, arg1, arg2, arg3, argArray);
+				fullMsg = buildArgsMessage(arg0, arg1, arg2, arg3, argArray);
 			} else {
 				// do the whole {} expansion thing
 				fullMsg = buildFullMessage(msg, arg0, arg1, arg2, arg3, argArray);
@@ -147,9 +147,9 @@ public abstract class BaseLogger {
 	}
 
 	/**
-	 * Build a message from a collection of objects.
+	 * Build a message just from the arguments like: 'arg0', 'arg1', ...
 	 */
-	private String argMessage(Object arg0, Object arg1, Object arg2, Object arg3, Object[] argArray) {
+	private String buildArgsMessage(Object arg0, Object arg1, Object arg2, Object arg3, Object[] argArray) {
 		StringBuilder sb = new StringBuilder(DEFAULT_FULL_MESSAGE_LENGTH);
 		boolean first = true;
 		int argCount = 0;
@@ -200,6 +200,9 @@ public abstract class BaseLogger {
 		}
 	}
 
+	/**
+	 * Append a particular argument object returning false if we are out of arguments.
+	 */
 	private boolean appendArg(StringBuilder sb, Object arg) {
 		if (arg == UNKNOWN_ARG) {
 			// ignore it

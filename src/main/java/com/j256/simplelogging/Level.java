@@ -14,7 +14,7 @@ public enum Level {
 	DEBUG(2),
 	/** information messages for tracking normal application progress */
 	INFO(3),
-	/** warning messages above conditions (maybe recoverable) that should be noticed but aren't errors */
+	/** warning messages about conditions (maybe recoverable) that should be noticed but aren't errors */
 	WARNING(4),
 	/** error messages */
 	ERROR(5),

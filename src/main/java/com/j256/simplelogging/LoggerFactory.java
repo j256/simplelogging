@@ -3,8 +3,8 @@ package com.j256.simplelogging;
 import com.j256.simplelogging.backend.LocalLogBackend;
 
 /**
- * Factory that creates {@link Logger} instances. It uses reflection to see what logging backends are available on the
- * classpath and tries to find the most appropriate one.
+ * Factory that creates {@link Logger} and {@link FluentLogger} instances. It uses reflection to see what logging
+ * backends are available on the classpath and tries to find the most appropriate one.
  * 
  * From SimpleLogging: https://github.com/j256/simplelogging
  *
