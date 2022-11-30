@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 /**
  * Fluent-context implementation that records the message, throwable, and/or associated arguments and calls through to
- * {@link FluentLogger#logIfEnabled(Level, Throwable, String) to write out the message when the {@link #log()} method is
- * called.
+ * {@link FluentLogger#logIfEnabled(Level, Throwable, String)} to write out the message when the {@link #log()} method
+ * is called.
  * 
  * From SimpleLogging: https://github.com/j256/simplelogging
  *
