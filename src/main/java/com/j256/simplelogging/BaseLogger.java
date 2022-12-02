@@ -68,21 +68,22 @@ public abstract class BaseLogger {
 	 * log-if-enabled with just a msg.
 	 */
 	protected void logIfEnabled(Level level, Throwable throwable, String msg) {
-		logIfEnabled(level, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, null);
+		logIfEnabled(level, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, null, 0);
 	}
 
 	/**
 	 * log-if-enabled with a msg and args.
 	 */
-	protected void logIfEnabled(Level level, Throwable throwable, String msg, Object[] argArray) {
-		logIfEnabled(level, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray);
+	protected void logIfEnabled(Level level, Throwable throwable, String msg, Object[] argArray, int argArrayLength) {
+		logIfEnabled(level, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray,
+				argArrayLength);
 	}
 
 	/**
 	 * Main log-if-enabled method with all argument combinations.
 	 */
 	protected void logIfEnabled(Level level, Throwable throwable, String msg, Object arg0, Object arg1, Object arg2,
-			Object arg3, Object[] argArray) {
+			Object arg3, Object[] argArray, int argArrayLength) {
 		if (globalLevel != null && !globalLevel.isEnabled(level)) {
 			// don't log the message if the global-level is set and not enabled
 		} else if (backend.isLevelEnabled(level)) {
@@ -92,10 +93,10 @@ public abstract class BaseLogger {
 				fullMsg = msg;
 			} else if (msg == null) {
 				// if msg is null then just spit out the arguments
-				fullMsg = buildArgsMessage(arg0, arg1, arg2, arg3, argArray);
+				fullMsg = buildArgsMessage(arg0, arg1, arg2, arg3, argArray, argArrayLength);
 			} else {
 				// do the whole {} expansion thing
-				fullMsg = buildFullMessage(msg, arg0, arg1, arg2, arg3, argArray);
+				fullMsg = buildFullMessage(msg, arg0, arg1, arg2, arg3, argArray, argArrayLength);
 			}
 			if (fullMsg == null) {
 				fullMsg = NO_MESSAGE_MESSAGE;
@@ -111,7 +112,8 @@ public abstract class BaseLogger {
 	/**
 	 * Return a combined single message from the msg (with possible {}) and optional arguments.
 	 */
-	private String buildFullMessage(String msg, Object arg0, Object arg1, Object arg2, Object arg3, Object[] argArray) {
+	private String buildFullMessage(String msg, Object arg0, Object arg1, Object arg2, Object arg3, Object[] argArray,
+			int argArrayLength) {
 		StringBuilder sb = null;
 		int lastIndex = 0;
 		int argCount = 0;
@@ -132,7 +134,7 @@ public abstract class BaseLogger {
 			// shift our last-index past the arg-string
 			lastIndex = argIndex + ARG_STRING_LENGTH;
 			// add the argument, if we still have any
-			appendArg(sb, argCount++, arg0, arg1, arg2, arg3, argArray);
+			appendArg(sb, argCount++, arg0, arg1, arg2, arg3, argArray, argArrayLength);
 		}
 		if (sb == null) {
 			// if we have yet to create a StringBuilder then just return the msg which has no {}
@@ -149,7 +151,8 @@ public abstract class BaseLogger {
 	/**
 	 * Build a message just from the arguments like: 'arg0', 'arg1', ...
 	 */
-	private String buildArgsMessage(Object arg0, Object arg1, Object arg2, Object arg3, Object[] argArray) {
+	private String buildArgsMessage(Object arg0, Object arg1, Object arg2, Object arg3, Object[] argArray,
+			int argArrayLength) {
 		StringBuilder sb = new StringBuilder(DEFAULT_FULL_MESSAGE_LENGTH);
 		boolean first = true;
 		int argCount = 0;
@@ -160,9 +163,10 @@ public abstract class BaseLogger {
 			} else {
 				sb.append("', '");
 			}
-			if (!appendArg(sb, argCount++, arg0, arg1, arg2, arg3, argArray)) {
+			if (!appendArg(sb, argCount, arg0, arg1, arg2, arg3, argArray, argArrayLength)) {
 				break;
 			}
+			argCount++;
 		}
 		if (argCount == 0) {
 			// might not get here but let's be careful out there
@@ -177,7 +181,7 @@ public abstract class BaseLogger {
 	 * Append an argument from the individual arguments or the array.
 	 */
 	private boolean appendArg(StringBuilder sb, int argCount, Object arg0, Object arg1, Object arg2, Object arg3,
-			Object[] argArray) {
+			Object[] argArray, int argArrayLength) {
 		if (argArray == null) {
 			switch (argCount) {
 				case 0:
@@ -192,7 +196,7 @@ public abstract class BaseLogger {
 					// we have too many {} so we just ignore them
 					return false;
 			}
-		} else if (argCount < argArray.length) {
+		} else if (argCount < argArrayLength) {
 			return appendArg(sb, argArray[argCount]);
 		} else {
 			// we have too many {} so we just ignore them

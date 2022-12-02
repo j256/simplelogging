@@ -58,9 +58,21 @@ public class FluentLoggerTest {
 		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
 		int arg1 = 456;
 		boolean arg2 = true;
+		long arg3 = 4327842372743L;
 		mockBackend.log(Level.TRACE, "hello " + arg1);
 		replay(mockBackend);
-		fluentLogger.atLevel(Level.TRACE).msg("hello {}").arg(arg1).arg(arg2).log();
+		fluentLogger.atLevel(Level.TRACE).msg("hello {}").arg(arg1).arg(arg2).arg(arg3).log();
+		verify(mockBackend);
+	}
+
+	@Test
+	public void testTooFewArgs() {
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		int arg1 = 456;
+		boolean arg2 = true;
+		mockBackend.log(Level.TRACE, "hello " + arg1 + " " + arg2 + " " + /* no arg3 */ " " /* no arg 4 */);
+		replay(mockBackend);
+		fluentLogger.atLevel(Level.TRACE).msg("hello {} {} {} {}").arg(arg1).arg(arg2).log();
 		verify(mockBackend);
 	}
 
@@ -134,7 +146,7 @@ public class FluentLoggerTest {
 	}
 
 	@Test
-	public void testStringIncreasesNumArgs() {
+	public void testMsgIncreasesNumArgs() {
 		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
 		char arg1 = 'b';
 		short arg2 = 2344;
@@ -142,6 +154,7 @@ public class FluentLoggerTest {
 		replay(mockBackend);
 		fluentLogger.atLevel(Level.TRACE) //
 				.args(new Object[] { arg1 })
+				// this increases the number args from 1 to 2
 				.msg("hello {} {}")
 				.arg(arg2)
 				.log();
@@ -149,7 +162,7 @@ public class FluentLoggerTest {
 	}
 
 	@Test
-	public void testStringDoesntIncreaseNumArgs() {
+	public void testMsgDoesntIncreaseNumArgs() {
 		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
 		float arg1 = 99.0F;
 		double arg2 = 2344.0;
