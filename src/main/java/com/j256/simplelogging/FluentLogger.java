@@ -30,7 +30,7 @@ public class FluentLogger extends BaseLogger {
 
 	/**
 	 * Start of the chaining that sets the log level of the message. If this level is not enabled then the method
-	 * returns a mute constant context and all calls to it are no-ops.
+	 * returns a mute context singleton and all calls to it are no-ops.
 	 */
 	public FluentContext atLevel(Level level) {
 		if (isLevelEnabled(level)) {

@@ -1,7 +1,7 @@
 package com.j256.simplelogging;
 
 /**
- * Class which fronts various log backend implementations which may or may not be in the classpath.
+ * Various log backend implementations which may or may not be in the classpath.
  * 
  * From SimpleLogging: https://github.com/j256/simplelogging
  *
