@@ -5,8 +5,6 @@ import com.j256.simplelogging.LogBackend;
 import com.j256.simplelogging.LogBackendFactory;
 import com.j256.simplelogging.LoggerFactory;
 
-import android.util.Log;
-
 /**
  * Log backend that delegates to the internal Android logger.
  * 
@@ -93,25 +91,25 @@ public class AndroidLogBackend implements LogBackend {
 	public void log(Level level, String msg) {
 		switch (level) {
 			case TRACE:
-				Log.v(className, msg);
+				android.util.Log.v(className, msg);
 				break;
 			case DEBUG:
-				Log.d(className, msg);
+				android.util.Log.d(className, msg);
 				break;
 			/* INFO below */
 			case WARNING:
-				Log.w(className, msg);
+				android.util.Log.w(className, msg);
 				break;
 			case ERROR:
-				Log.e(className, msg);
+				android.util.Log.e(className, msg);
 				break;
 			case FATAL:
 				// no fatal level
-				Log.e(className, msg);
+				android.util.Log.e(className, msg);
 				break;
 			case INFO:
 			default:
-				Log.i(className, msg);
+				android.util.Log.i(className, msg);
 				break;
 		}
 	}
@@ -120,25 +118,25 @@ public class AndroidLogBackend implements LogBackend {
 	public void log(Level level, String msg, Throwable t) {
 		switch (level) {
 			case TRACE:
-				Log.v(className, msg, t);
+				android.util.Log.v(className, msg, t);
 				break;
 			case DEBUG:
-				Log.d(className, msg, t);
+				android.util.Log.d(className, msg, t);
 				break;
 			/* INFO below */
 			case WARNING:
-				Log.w(className, msg, t);
+				android.util.Log.w(className, msg, t);
 				break;
 			case ERROR:
-				Log.e(className, msg, t);
+				android.util.Log.e(className, msg, t);
 				break;
 			case FATAL:
 				// no level higher than e
-				Log.e(className, msg, t);
+				android.util.Log.e(className, msg, t);
 				break;
 			case INFO:
 			default:
-				Log.i(className, msg, t);
+				android.util.Log.i(className, msg, t);
 				break;
 		}
 	}
@@ -154,25 +152,26 @@ public class AndroidLogBackend implements LogBackend {
 
 	private boolean isLevelEnabledInternal(int androidLevel) {
 		// this is supposedly expensive with an IO operation for each call so we cache them into levelCache[]
-		return Log.isLoggable(className, androidLevel) || Log.isLoggable(ALL_LOGS_NAME, androidLevel);
+		return (android.util.Log.isLoggable(className, androidLevel)
+				|| android.util.Log.isLoggable(ALL_LOGS_NAME, androidLevel));
 	}
 
 	private int levelToAndroidLevel(Level level) {
 		switch (level) {
 			case TRACE:
-				return Log.VERBOSE;
+				return android.util.Log.VERBOSE;
 			case DEBUG:
-				return Log.DEBUG;
+				return android.util.Log.DEBUG;
 			/* INFO below */
 			case WARNING:
-				return Log.WARN;
+				return android.util.Log.WARN;
 			case ERROR:
-				return Log.ERROR;
+				return android.util.Log.ERROR;
 			case FATAL:
-				return Log.ERROR;
+				return android.util.Log.ERROR;
 			case INFO:
 			default:
-				return Log.INFO;
+				return android.util.Log.INFO;
 		}
 	}
 
