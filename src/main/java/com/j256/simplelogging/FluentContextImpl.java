@@ -132,11 +132,7 @@ public class FluentContextImpl implements FluentContext {
 		if (msg == null) {
 			// if we have no message but we do have arguments then build a message like: '{}', '{}', ...
 			if (argCount > 0) {
-				if (argCount != args.length) {
-					// make the array smaller otherwise we may get null args in the message
-					args = Arrays.copyOf(args, argCount);
-				}
-				logger.logIfEnabled(level, throwable, null, args);
+				logger.logIfEnabled(level, throwable, null, args, argCount);
 			} else if (throwable == null) {
 				// ignore log line if no message, args, or throwable
 			} else {
@@ -147,11 +143,7 @@ public class FluentContextImpl implements FluentContext {
 			// no arguments
 			logger.logIfEnabled(level, throwable, msg);
 		} else {
-			if (argCount != args.length) {
-				// make the array smaller otherwise we may get null args in the message if extra {} in the msg
-				args = Arrays.copyOf(args, argCount);
-			}
-			logger.logIfEnabled(level, throwable, msg, args);
+			logger.logIfEnabled(level, throwable, msg, args, argCount);
 		}
 		// chances are we are done with the object after this
 	}
