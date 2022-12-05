@@ -15,7 +15,7 @@ public abstract class BaseLogger {
 	private final static int ARG_STRING_LENGTH = ARG_STRING.length();
 	protected final static Object UNKNOWN_ARG = new Object();
 	private final static int DEFAULT_FULL_MESSAGE_LENGTH = 128;
-	private final static String NO_MESSAGE_MESSAGE = "no log message";
+	final static String NO_MESSAGE_MESSAGE = "no log message";
 
 	private static Level globalLevel;
 
