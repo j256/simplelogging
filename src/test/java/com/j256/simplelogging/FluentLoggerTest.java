@@ -215,4 +215,16 @@ public class FluentLoggerTest {
 		fluentLogger.atLevel(Level.TRACE).msg(msg1).msg(msg2).log();
 		verify(mockBackend);
 	}
+
+	@Test
+	public void testExample() {
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(4);
+		Object[] args = new Object[] { 1, 2, 3 };
+		mockBackend.log(Level.TRACE, "1 + 2 = 3");
+		mockBackend.log(Level.TRACE, "integer args: [1, 2, 3]");
+		replay(mockBackend);
+		fluentLogger.atLevel(Level.TRACE).msg("{} + {} = {}").args(args).log();
+		fluentLogger.atLevel(Level.TRACE).msg("integer args: {}").arg(args).log();
+		verify(mockBackend);
+	}
 }
