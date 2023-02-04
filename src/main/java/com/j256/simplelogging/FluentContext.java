@@ -67,10 +67,22 @@ public interface FluentContext {
 	public FluentContext arg(double arg);
 
 	/**
-	 * Add an array of object arguments to the log message. To add a single argument that happens to be an array of
-	 * objects that you want to be associated with a single {} and displayed as [arg1, arg2, ...] then you need to cast
-	 * the argument as (Object) so it calls {@link #arg(Object)}. If you don't do this then the single {} will only
-	 * display the first element of the array passed in here.
+	 * Add an array of object arguments to the log message, each element of which will match a {} from the message. To
+	 * add an array to be associated with a single {} and displayed as [arg1, arg2, ...] then you need to use the method
+	 * {@link #arg(Object)}. If you don't do this then the single {} will only display the first element of the array
+	 * passed in here.
+	 * 
+	 * For example, the following code which calls this method will output: "1 + 2 = 3"
+	 * 
+	 * <pre>
+	 * logger.msg("{} + {} = {}").args(new Object[] { 1, 2, 3 }).log();
+	 * </pre>
+	 * 
+	 * While the following code which calls {@link #arg(Object)} will output: "integer args: [1, 2, 3]"
+	 * 
+	 * <pre>
+	 * logger.msg("integer args: {}").arg(new Object[] { 1, 2, 3 }).log();
+	 * </pre>
 	 */
 	public FluentContext args(Object[] args);
 

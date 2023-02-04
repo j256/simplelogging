@@ -172,7 +172,7 @@ public abstract class BaseLogger {
 			// might not get here but let's be careful out there
 			return null;
 		}
-		// we take off the ", '" at the end of the last arg because we can't tell ahead of time how many there are
+		// take off the ", '" at the end of the last arg because we can't tell ahead of time how many args there are
 		sb.setLength(sb.length() - 3);
 		return sb.toString();
 	}
