@@ -12,7 +12,8 @@ package com.j256.simplelogging;
 public interface FluentContext {
 
 	/**
-	 * Set the required log message on the context. Only the first call to this method is honored.
+	 * Set the required log message on the context. Only the first call to this method is honored. Some optimizations
+	 * may happen if this method is called _before_ any arg(...) or args(...) methods but it is not required.
 	 */
 	public FluentContext msg(String message);
 
@@ -22,12 +23,13 @@ public interface FluentContext {
 	public FluentContext throwable(Throwable th);
 
 	/**
-	 * Add object argument to the log message.
+	 * Add object argument to the log message. This can also be an array of objects if you want them to match a single
+	 * {} from the message and displayed as "[ele1, ele2, ...]". For more information, see {@link #args(Object[])}.
 	 */
 	public FluentContext arg(Object arg);
 
 	/**
-	 * Add boolean argument to the log message.
+	 * Add boolean primitive argument to the log message.
 	 */
 	public FluentContext arg(boolean arg);
 
@@ -68,11 +70,11 @@ public interface FluentContext {
 
 	/**
 	 * Add an array of object arguments to the log message, each element of which will match a {} from the message. To
-	 * add an array to be associated with a single {} and displayed as [arg1, arg2, ...] then you need to use the method
-	 * {@link #arg(Object)}. If you don't do this then the single {} will only display the first element of the array
-	 * passed in here.
+	 * add an array to be associated with a single {} and displayed as "[arg1, arg2, ...]" then you need to use the
+	 * method {@link #arg(Object)} and case the array as an object. If you don't do this then the single {} will only
+	 * display the first element of the array passed in here.
 	 * 
-	 * For example, the following code which calls this method will output: "1 + 2 = 3"
+	 * For example, the following code which calls this args(...) method will output: "1 + 2 = 3"
 	 * 
 	 * <pre>
 	 * logger.msg("{} + {} = {}").args(new Object[] { 1, 2, 3 }).log();
