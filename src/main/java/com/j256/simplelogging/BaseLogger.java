@@ -65,21 +65,6 @@ public abstract class BaseLogger {
 	}
 
 	/**
-	 * log-if-enabled with just a msg.
-	 */
-	protected void logIfEnabled(Level level, Throwable throwable, String msg) {
-		logIfEnabled(level, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, null, 0);
-	}
-
-	/**
-	 * log-if-enabled with a msg and args.
-	 */
-	protected void logIfEnabled(Level level, Throwable throwable, String msg, Object[] argArray, int argArrayLength) {
-		logIfEnabled(level, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray,
-				argArrayLength);
-	}
-
-	/**
 	 * Main log-if-enabled method with all argument combinations.
 	 */
 	protected void logIfEnabled(Level level, Throwable throwable, String msg, Object arg0, Object arg1, Object arg2,
@@ -87,25 +72,40 @@ public abstract class BaseLogger {
 		if (globalLevel != null && !globalLevel.isEnabled(level)) {
 			// don't log the message if the global-level is set and not enabled
 		} else if (backend.isLevelEnabled(level)) {
-			String fullMsg;
-			if (arg0 == UNKNOWN_ARG && argArray == null) {
-				// this will just output the message without parsing any {}
-				fullMsg = msg;
-			} else if (msg == null) {
-				// if msg is null then just spit out the arguments
-				fullMsg = buildArgsMessage(arg0, arg1, arg2, arg3, argArray, argArrayLength);
-			} else {
-				// do the whole {} expansion thing
-				fullMsg = buildFullMessage(msg, arg0, arg1, arg2, arg3, argArray, argArrayLength);
-			}
-			if (fullMsg == null) {
-				fullMsg = NO_MESSAGE_MESSAGE;
-			}
-			if (throwable == null) {
-				backend.log(level, fullMsg);
-			} else {
-				backend.log(level, fullMsg, throwable);
-			}
+			doLog(level, throwable, msg, arg0, arg1, arg2, arg3, argArray, argArrayLength);
+		}
+	}
+
+	/**
+	 * Log msg, throwable, and args. If-enabled checks should have been done by this point.
+	 */
+	protected void doLog(Level level, Throwable throwable, String msg, Object[] argArray, int argArrayLength) {
+		doLog(level, throwable, msg, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, UNKNOWN_ARG, argArray, argArrayLength);
+	}
+
+	/**
+	 * Main log method with all argument combinations. If-enabled checks should have been done by this point.
+	 */
+	private void doLog(Level level, Throwable throwable, String msg, Object arg0, Object arg1, Object arg2, Object arg3,
+			Object[] argArray, int argArrayLength) {
+		String fullMsg;
+		if (arg0 == UNKNOWN_ARG && argArray == null) {
+			// this will just output the message without parsing any {}
+			fullMsg = msg;
+		} else if (msg == null) {
+			// if msg is null then just spit out the arguments
+			fullMsg = buildArgsMessage(arg0, arg1, arg2, arg3, argArray, argArrayLength);
+		} else {
+			// do the whole {} expansion thing
+			fullMsg = buildFullMessage(msg, arg0, arg1, arg2, arg3, argArray, argArrayLength);
+		}
+		if (fullMsg == null) {
+			fullMsg = NO_MESSAGE_MESSAGE;
+		}
+		if (throwable == null) {
+			backend.log(level, fullMsg);
+		} else {
+			backend.log(level, fullMsg, throwable);
 		}
 	}
 

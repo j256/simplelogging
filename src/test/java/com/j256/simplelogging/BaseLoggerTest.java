@@ -1,7 +1,6 @@
 package com.j256.simplelogging;
 
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
@@ -15,7 +14,6 @@ public class BaseLoggerTest {
 		OurLogger logger = new OurLogger(backend);
 
 		Level level = Level.TRACE;
-		expect(backend.isLevelEnabled(level)).andReturn(true);
 		backend.log(level, BaseLogger.NO_MESSAGE_MESSAGE);
 
 		replay(backend);
@@ -24,7 +22,7 @@ public class BaseLoggerTest {
 		 * message so we build the args message but there is an object array of 0 size we were getting a string-builder
 		 * array out of bounds issue because of a argCount++ in the wrong place.
 		 */
-		logger.logIfEnabled(level, null, null, new Object[0], 0);
+		logger.doLog(level, null, null, new Object[0], 0);
 		verify(backend);
 	}
 
