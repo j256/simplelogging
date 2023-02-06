@@ -5,6 +5,8 @@ package com.j256.simplelogging;
  * which allows lazy message creation. This can be used on an object when the default toString() can't be changed or
  * otherwise is not appropriate for the log messages such as if security information needs to be masked.
  * 
+ * From SimpleLogging: https://github.com/j256/simplelogging
+ * 
  * @author graywatson
  */
 public interface LogArgumentCreator {
