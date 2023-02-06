@@ -18,14 +18,10 @@ import java.util.Arrays;
  */
 public class LoggerFactory {
 
-	public static final String LOG_TYPE_SYSTEM_PROPERTY = "com.j256.simplelogger.backend";
-
 	private static LogBackendFactory logBackendFactory;
 
-	/**
-	 * For static calls only.
-	 */
 	private LoggerFactory() {
+		// only here for static usage
 	}
 
 	/**
@@ -113,7 +109,7 @@ public class LoggerFactory {
 		LogBackendType defaultBackend = chooseDefaultBackend();
 
 		// see if the log-type was specified as a system property
-		String logTypeString = System.getProperty(LOG_TYPE_SYSTEM_PROPERTY);
+		String logTypeString = System.getProperty(LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY);
 		if (logTypeString != null) {
 			try {
 				// first we see if the log-type is an enum value
@@ -126,8 +122,9 @@ public class LoggerFactory {
 				}
 				LogBackend backend = defaultBackend.createLogBackend(LoggerFactory.class.getName());
 				backend.log(Level.WARNING,
-						"Could not find valid log-type from system property '" + LOG_TYPE_SYSTEM_PROPERTY + "', value '"
-								+ logTypeString + "' not one of " + Arrays.toString(LogBackendType.values())
+						"Could not find valid log-type from system property '"
+								+ LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY + "', value '" + logTypeString
+								+ "' not one of " + Arrays.toString(LogBackendType.values())
 								+ " nor a class name that implements LogBackendFactory");
 			}
 		}
@@ -151,8 +148,9 @@ public class LoggerFactory {
 
 		if (!LogBackendFactory.class.isAssignableFrom(clazz)) {
 			LogBackend backend = defaultBackend.createLogBackend(LoggerFactory.class.getName());
-			backend.log(Level.WARNING, "Was expecting the name of a class that implements LogBackendFactory from "
-					+ "system property '" + LOG_TYPE_SYSTEM_PROPERTY + "', value '" + logTypeString + "'");
+			backend.log(Level.WARNING,
+					"Was expecting the name of a class that implements LogBackendFactory from " + "system property '"
+							+ LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY + "', value '" + logTypeString + "'");
 			return null;
 		}
 
@@ -163,7 +161,7 @@ public class LoggerFactory {
 		} catch (Exception e) {
 			LogBackend backend = defaultBackend.createLogBackend(LoggerFactory.class.getName());
 			backend.log(Level.WARNING, "Could not construct an instance of class from system property '"
-					+ LOG_TYPE_SYSTEM_PROPERTY + "', value '" + logTypeString + "'", e);
+					+ LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY + "', value '" + logTypeString + "'", e);
 			return null;
 		}
 	}
