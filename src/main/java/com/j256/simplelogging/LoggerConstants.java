@@ -1,5 +1,7 @@
 package com.j256.simplelogging;
 
+import android.util.Log;
+
 /**
  * Class to have one place in case you want to tweak the logging constants for your application.
  * 
@@ -17,7 +19,8 @@ public class LoggerConstants {
 	public static final String LOG_TYPE_SYSTEM_PROPERTY = "com.j256.simplelogger.backend";
 
 	/**
-	 * Name of the Android
+	 * Name of the Android tag that is used with {@link Log#isLoggable(String, int)} to determine if the global logs are
+	 * enabled.
 	 */
 	public static final String ANDROID_ALL_LOGS_NAME = "simplelogging";
 
