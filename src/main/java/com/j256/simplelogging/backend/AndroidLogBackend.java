@@ -3,6 +3,7 @@ package com.j256.simplelogging.backend;
 import com.j256.simplelogging.Level;
 import com.j256.simplelogging.LogBackend;
 import com.j256.simplelogging.LogBackendFactory;
+import com.j256.simplelogging.LoggerConstants;
 import com.j256.simplelogging.LoggerFactory;
 
 /**
@@ -40,10 +41,9 @@ import com.j256.simplelogging.LoggerFactory;
  */
 public class AndroidLogBackend implements LogBackend {
 
-	private final static String ALL_LOGS_NAME = "simplelogging";
-	// check to see if the android level has changed every so often
+	/** check to see if the android level has changed every so often */
 	private final static int REFRESH_LEVEL_CACHE_EVERY = 200;
-
+	/** maximum allowed length of the tag per Android spec */
 	private final static int MAX_TAG_LENGTH = 23;
 	private final String className;
 
@@ -83,7 +83,7 @@ public class AndroidLogBackend implements LogBackend {
 		if (androidLevel < levelCache.length) {
 			return levelCache[androidLevel];
 		} else {
-			return isLevelEnabledInternal(androidLevel);
+			return doIsLevelEnabled(androidLevel);
 		}
 	}
 
@@ -142,18 +142,30 @@ public class AndroidLogBackend implements LogBackend {
 	}
 
 	private void refreshLevelCache() {
+		Level enabledLevel = null;
 		for (Level level : Level.values()) {
 			int androidLevel = levelToAndroidLevel(level);
-			if (androidLevel < levelCache.length) {
-				levelCache[androidLevel] = isLevelEnabledInternal(androidLevel);
+			if (androidLevel >= levelCache.length) {
+				continue;
 			}
+			boolean enabled;
+			if (enabledLevel != null && enabledLevel.isEnabled(level)) {
+				// no need for us to check WARNING if INFO enabled
+				enabled = true;
+			} else {
+				enabled = doIsLevelEnabled(androidLevel);
+				if (enabled && enabledLevel == null) {
+					enabledLevel = level;
+				}
+			}
+			levelCache[androidLevel] = enabled;
 		}
 	}
 
-	private boolean isLevelEnabledInternal(int androidLevel) {
+	private boolean doIsLevelEnabled(int androidLevel) {
 		// this is supposedly expensive with an IO operation for each call so we cache them into levelCache[]
 		return (android.util.Log.isLoggable(className, androidLevel)
-				|| android.util.Log.isLoggable(ALL_LOGS_NAME, androidLevel));
+				|| android.util.Log.isLoggable(LoggerConstants.ANDROID_ALL_LOGS_NAME, androidLevel));
 	}
 
 	private int levelToAndroidLevel(Level level) {
