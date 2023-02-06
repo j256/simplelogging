@@ -132,18 +132,18 @@ public class FluentContextImpl implements FluentContext {
 		if (msg == null) {
 			// if we have no message but we do have arguments then build a message like: '{}', '{}', ...
 			if (argCount > 0) {
-				logger.logIfEnabled(level, throwable, null, args, argCount);
+				logger.doLog(level, throwable, null, args, argCount);
 			} else if (throwable == null) {
 				// ignore log line if no message, args, or throwable
 			} else {
 				// just log a throwable with a minimal message
-				logger.logIfEnabled(level, throwable, JUST_THROWABLE_MESSAGE);
+				logger.doLog(level, throwable, JUST_THROWABLE_MESSAGE, null, 0);
 			}
 		} else if (argCount == 0) {
 			// no arguments
-			logger.logIfEnabled(level, throwable, msg);
+			logger.doLog(level, throwable, msg, null, 0);
 		} else {
-			logger.logIfEnabled(level, throwable, msg, args, argCount);
+			logger.doLog(level, throwable, msg, args, argCount);
 		}
 		// chances are we are done with the object after this
 	}

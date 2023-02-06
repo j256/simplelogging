@@ -31,7 +31,7 @@ public class FluentLoggerTest {
 	@Test
 	public void testNormal() {
 		FluentLogger.setGlobalLogLevel(Level.TRACE);
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		int arg = 123;
 		mockBackend.log(Level.TRACE, "hello " + arg);
 		replay(mockBackend);
@@ -42,7 +42,7 @@ public class FluentLoggerTest {
 	@Test
 	public void testArgs() {
 		FluentLogger.setGlobalLogLevel(Level.TRACE);
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		int arg1 = 123;
 		boolean arg2 = false;
 		long arg3 = 456;
@@ -55,7 +55,7 @@ public class FluentLoggerTest {
 
 	@Test
 	public void testExtraArgs() {
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		int arg1 = 456;
 		boolean arg2 = true;
 		long arg3 = 4327842372743L;
@@ -67,7 +67,7 @@ public class FluentLoggerTest {
 
 	@Test
 	public void testTooFewArgs() {
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		int arg1 = 456;
 		boolean arg2 = true;
 		mockBackend.log(Level.TRACE, "hello " + arg1 + " " + arg2 + " " + /* no arg3 */ " " /* no arg 4 */);
@@ -78,7 +78,7 @@ public class FluentLoggerTest {
 
 	@Test
 	public void testNoArgs() {
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		mockBackend.log(Level.TRACE, "hello {}");
 		replay(mockBackend);
 		fluentLogger.atLevel(Level.TRACE).msg("hello {}").log();
@@ -87,7 +87,7 @@ public class FluentLoggerTest {
 
 	@Test
 	public void testNoArgStrings() {
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		mockBackend.log(Level.TRACE, "hello");
 		replay(mockBackend);
 		fluentLogger.atLevel(Level.TRACE).msg("hello").log();
@@ -96,7 +96,7 @@ public class FluentLoggerTest {
 
 	@Test
 	public void testArgsFromMethod() {
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		double arg1 = 1.0;
 		mockBackend.log(Level.TRACE, "hello " + arg1);
 		replay(mockBackend);
@@ -110,7 +110,7 @@ public class FluentLoggerTest {
 	@Test
 	public void testCoverage() {
 		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(false);
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		boolean arg1 = true;
 		mockBackend.log(Level.TRACE, "hello " + arg1, throwable);
 		replay(mockBackend);
@@ -147,7 +147,7 @@ public class FluentLoggerTest {
 
 	@Test
 	public void testMsgIncreasesNumArgs() {
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		char arg1 = 'b';
 		short arg2 = 2344;
 		mockBackend.log(Level.TRACE, "hello " + arg1 + " " + arg2);
@@ -163,7 +163,7 @@ public class FluentLoggerTest {
 
 	@Test
 	public void testMsgDoesntIncreaseNumArgs() {
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		float arg1 = 99.0F;
 		double arg2 = 2344.0;
 		mockBackend.log(Level.TRACE, "hello " + arg1 + " " + arg2);
@@ -177,7 +177,7 @@ public class FluentLoggerTest {
 
 	@Test
 	public void testJustThrowable() {
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		mockBackend.log(Level.TRACE, FluentContextImpl.JUST_THROWABLE_MESSAGE, throwable);
 		replay(mockBackend);
 		fluentLogger.atLevel(Level.TRACE)//
@@ -188,7 +188,7 @@ public class FluentLoggerTest {
 
 	@Test
 	public void testJustArgs() {
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		String arg1 = "ewpjfwfwe";
 		long arg2 = 1343134;
 		mockBackend.log(Level.TRACE, "'" + arg1 + "', '" + arg2 + "'");
@@ -207,7 +207,7 @@ public class FluentLoggerTest {
 
 	@Test
 	public void testTwoMessages() {
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		String msg1 = "ewpjfwfwe";
 		String msg2 = "fjpefewpjfewjpo";
 		mockBackend.log(Level.TRACE, msg1);
@@ -218,7 +218,7 @@ public class FluentLoggerTest {
 
 	@Test
 	public void testExample() {
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(4);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).times(2);
 		Object[] args = new Object[] { 1, 2, 3 };
 		mockBackend.log(Level.TRACE, "1 + 2 = 3");
 		mockBackend.log(Level.TRACE, "integer args: [1, 2, 3]");
