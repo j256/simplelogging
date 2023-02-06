@@ -13,8 +13,8 @@ public class LoggerConstants {
 
 	/**
 	 * System property used to set the logger backend. Can be one of the values of {@link LogBackendType} (such as
-	 * "LOGBACK") or the class name that implements {@link LogBackendFactory} (such as
-	 * "com.j256.simplelogging.backend.LogbackLogBackend.LogbackLogBackendFactory").
+	 * "LOGBACK") or a class name that implements {@link LogBackendFactory} (such as
+	 * "com.j256.simplelogging.backend.LogbackLogBackend$LogbackLogBackendFactory").
 	 */
 	public static final String LOG_TYPE_SYSTEM_PROPERTY = "com.j256.simplelogger.backend";
 

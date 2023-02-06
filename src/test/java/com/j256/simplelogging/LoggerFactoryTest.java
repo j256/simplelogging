@@ -19,6 +19,7 @@ import com.j256.simplelogging.backend.JavaUtilLogBackend;
 import com.j256.simplelogging.backend.LocalLogBackend;
 import com.j256.simplelogging.backend.Log4j2LogBackend;
 import com.j256.simplelogging.backend.Log4jLogBackend;
+import com.j256.simplelogging.backend.LogbackLogBackend;
 import com.j256.simplelogging.backend.NullLogBackend;
 import com.j256.simplelogging.backend.Slf4jLoggingLogBackend;
 
@@ -158,8 +159,8 @@ public class LoggerFactoryTest {
 	@Test
 	public void testLogFactoryAsClass() {
 		LoggerFactory.setLogBackendFactory(null);
-		System.setProperty(LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY, OurLogFactory.class.getName());
 		try {
+			System.setProperty(LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY, OurLogFactory.class.getName());
 			OurLogFactory.lastClassLabel = null;
 			// this should work and not throw
 			String label = "fopwejfwejfwe";
@@ -171,10 +172,24 @@ public class LoggerFactoryTest {
 	}
 
 	@Test
+	public void testLogFactoryExample() {
+		LoggerFactory.setLogBackendFactory(null);
+		try {
+			System.setProperty(LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY,
+					"com.j256.simplelogging.backend.LogbackLogBackend$LogbackLogBackendFactory");
+			// this should work and not throw
+			Logger logger = LoggerFactory.getLogger("fopwejfwejfwe");
+			assertTrue(logger.getLogBackend() instanceof LogbackLogBackend);
+		} finally {
+			System.clearProperty(LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY);
+		}
+	}
+
+	@Test
 	public void testLogFactoryAsClassPrivateConstructor() {
 		LoggerFactory.setLogBackendFactory(null);
-		System.setProperty(LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY, OurLogFactoryPrivate.class.getName());
 		try {
+			System.setProperty(LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY, OurLogFactoryPrivate.class.getName());
 			OurLogFactoryPrivate.lastClassLabel = null;
 			// this shouldn't use the factory because constructor not public
 			String label = "fopwejfwejfwe";
@@ -188,8 +203,8 @@ public class LoggerFactoryTest {
 	@Test
 	public void testLogFactoryAsClassNotLoggerFactoryBackend() {
 		LoggerFactory.setLogBackendFactory(null);
-		System.setProperty(LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY, Object.class.getName());
 		try {
+			System.setProperty(LoggerConstants.LOG_TYPE_SYSTEM_PROPERTY, Object.class.getName());
 			// this shouldn't use the factory because class is not a LoggerFactoryBackend
 			LoggerFactory.getLogger("fopwejfwejfwe");
 		} finally {
