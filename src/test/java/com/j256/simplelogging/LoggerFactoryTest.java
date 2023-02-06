@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -169,7 +170,49 @@ public class LoggerFactoryTest {
 		}
 	}
 
+	@Test
+	public void testLogFactoryAsClassPrivateConstructor() {
+		LoggerFactory.setLogBackendFactory(null);
+		System.setProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY, OurLogFactoryPrivate.class.getName());
+		OurLogFactoryPrivate.lastClassLabel = null;
+		try {
+			// this should work and not throw but it shouldn't use the factory because constructor not public
+			String label = "fopwejfwejfwe";
+			LoggerFactory.getLogger(label);
+			assertNull(OurLogFactoryPrivate.lastClassLabel);
+		} finally {
+			System.clearProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY);
+		}
+	}
+
+	@Test
+	public void testLogFactoryAsClassNotLoggerFactoryBackend() {
+		LoggerFactory.setLogBackendFactory(null);
+		System.setProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY, Object.class.getName());
+		OurLogFactoryPrivate.lastClassLabel = null;
+		try {
+			// this should work and not throw but it shouldn't use the factory because constructor not public
+			String label = "fopwejfwejfwe";
+			LoggerFactory.getLogger(label);
+			assertNull(OurLogFactoryPrivate.lastClassLabel);
+		} finally {
+			System.clearProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY);
+		}
+	}
+
 	public static class OurLogFactory implements LogBackendFactory {
+
+		LogBackend log;
+		static String lastClassLabel;
+
+		@Override
+		public LogBackend createLogBackend(String classLabel) {
+			OurLogFactory.lastClassLabel = classLabel;
+			return log;
+		}
+	}
+
+	private static class OurLogFactoryPrivate implements LogBackendFactory {
 
 		LogBackend log;
 		static String lastClassLabel;
