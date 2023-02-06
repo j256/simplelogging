@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;
@@ -153,12 +154,29 @@ public class LoggerFactoryTest {
 		assertEquals(logClass, backend.getClass());
 	}
 
-	private static class OurLogFactory implements LogBackendFactory {
+	@Test
+	public void testLogFactoryAsClass() {
+		LoggerFactory.setLogBackendFactory(null);
+		System.setProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY, OurLogFactory.class.getName());
+		OurLogFactory.lastClassLabel = null;
+		try {
+			// this should work and not throw
+			String label = "fopwejfwejfwe";
+			LoggerFactory.getLogger(label);
+			assertSame(label, OurLogFactory.lastClassLabel);
+		} finally {
+			System.clearProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY);
+		}
+	}
+
+	public static class OurLogFactory implements LogBackendFactory {
 
 		LogBackend log;
+		static String lastClassLabel;
 
 		@Override
 		public LogBackend createLogBackend(String classLabel) {
+			OurLogFactory.lastClassLabel = classLabel;
 			return log;
 		}
 	}
