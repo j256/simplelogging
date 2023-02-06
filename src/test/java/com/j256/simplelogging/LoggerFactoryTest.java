@@ -159,8 +159,8 @@ public class LoggerFactoryTest {
 	public void testLogFactoryAsClass() {
 		LoggerFactory.setLogBackendFactory(null);
 		System.setProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY, OurLogFactory.class.getName());
-		OurLogFactory.lastClassLabel = null;
 		try {
+			OurLogFactory.lastClassLabel = null;
 			// this should work and not throw
 			String label = "fopwejfwejfwe";
 			LoggerFactory.getLogger(label);
@@ -174,9 +174,9 @@ public class LoggerFactoryTest {
 	public void testLogFactoryAsClassPrivateConstructor() {
 		LoggerFactory.setLogBackendFactory(null);
 		System.setProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY, OurLogFactoryPrivate.class.getName());
-		OurLogFactoryPrivate.lastClassLabel = null;
 		try {
-			// this should work and not throw but it shouldn't use the factory because constructor not public
+			OurLogFactoryPrivate.lastClassLabel = null;
+			// this shouldn't use the factory because constructor not public
 			String label = "fopwejfwejfwe";
 			LoggerFactory.getLogger(label);
 			assertNull(OurLogFactoryPrivate.lastClassLabel);
@@ -189,12 +189,9 @@ public class LoggerFactoryTest {
 	public void testLogFactoryAsClassNotLoggerFactoryBackend() {
 		LoggerFactory.setLogBackendFactory(null);
 		System.setProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY, Object.class.getName());
-		OurLogFactoryPrivate.lastClassLabel = null;
 		try {
-			// this should work and not throw but it shouldn't use the factory because constructor not public
-			String label = "fopwejfwejfwe";
-			LoggerFactory.getLogger(label);
-			assertNull(OurLogFactoryPrivate.lastClassLabel);
+			// this shouldn't use the factory because class is not a LoggerFactoryBackend
+			LoggerFactory.getLogger("fopwejfwejfwe");
 		} finally {
 			System.clearProperty(LoggerFactory.LOG_TYPE_SYSTEM_PROPERTY);
 		}
