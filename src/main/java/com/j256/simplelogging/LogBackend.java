@@ -1,7 +1,7 @@
 package com.j256.simplelogging;
 
 /**
- * Various log backend implementations which may or may not be in the classpath.
+ * Log backend classes which persist log messages. The implementations of this may or may not be in the classpath.
  * 
  * From SimpleLogging: https://github.com/j256/simplelogging
  *

@@ -81,7 +81,7 @@ public interface FluentContext {
 	 * </pre>
 	 * 
 	 * While the following code which calls {@link #arg(Object)} will output: "port numbers: [1, 2, 3]" which interprets
-	 * the array as an @code{Object} and will match a single @{@} from the message.
+	 * the array as an @code{Object} and will match a single {} from the message.
 	 * 
 	 * <pre>
 	 * fluentLogger.msg("port numbers: {}").arg(new Object[] { 1, 2, 3 }).log();

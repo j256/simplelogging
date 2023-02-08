@@ -5,7 +5,7 @@ import com.j256.simplelogging.backend.LocalLogBackend.LocalLogBackendFactory;
 import com.j256.simplelogging.backend.NullLogBackend.NullLogBackendFactory;
 
 /**
- * Type of logging backends that are supported. The class names are specified as strings in the constructor so there is
+ * Default logging backends that are supported. The class names are specified as strings in the constructor so there is
  * not a direct dependency placed on them since these classes may reference types not on the classpath.
  * 
  * From SimpleLogging: https://github.com/j256/simplelogging
