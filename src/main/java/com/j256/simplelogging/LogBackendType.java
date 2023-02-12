@@ -31,10 +31,6 @@ public enum LogBackendType implements LogBackendFactory {
 	 */
 	LOGBACK("LogbackLogBackend$LogbackLogBackendFactory"),
 	/**
-	 * Apache commons logging. See https://commons.apache.org/proper/commons-logging/
-	 */
-	COMMONS_LOGGING("CommonsLoggingLogBackend$CommonsLoggingLogBackendFactory"),
-	/**
 	 * Version 2 of the log4j package. See https://logging.apache.org/log4j/2.x/
 	 */
 	LOG4J2("Log4j2LogBackend$Log4j2LogBackendFactory"),
@@ -46,6 +42,10 @@ public enum LogBackendType implements LogBackendFactory {
 	 * Support for the logger available inside AWS lambda SDK.
 	 */
 	LAMBDA("LambdaLoggerLogBackend$LambdaLoggerLogBackendFactory"),
+	/**
+	 * Apache commons logging. See https://commons.apache.org/proper/commons-logging/
+	 */
+	COMMONS_LOGGING("CommonsLoggingLogBackend$CommonsLoggingLogBackendFactory"),
 	/**
 	 * Local simple log backend that writes to a output file.
 	 * 
