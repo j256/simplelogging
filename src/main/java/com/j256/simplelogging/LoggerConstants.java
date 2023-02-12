@@ -24,6 +24,31 @@ public class LoggerConstants {
 	 */
 	public static final String ANDROID_ALL_LOGS_NAME = "simplelogging";
 
+	/**
+	 * You can set the log level by setting the System.setProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY, "trace").
+	 * Acceptable values are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL.
+	 */
+	public static final String LOCAL_LOG_LEVEL_PROPERTY = "com.j256.simplelogging.level";
+
+	/**
+	 * You can also redirect the log to a file by setting the
+	 * System.setProperty(LocalLogBackend.LOCAL_LOG_FILE_PROPERTY, "log.out"). Otherwise, log output will go to stdout.
+	 */
+	public static final String LOCAL_LOG_FILE_PROPERTY = "com.j256.simplelogging.file";
+
+	/**
+	 * It also supports a file simpleLoggingLocalLog.properties file which contains lines such as:
+	 * 
+	 * <pre>
+	 * # regex-pattern = Level
+	 * com\.foo\.yourclass.*=DEBUG
+	 * com\.foo\.yourclass\.BaseMappedStatement=TRACE
+	 * com\.foo\.yourclass\.MappedCreate=TRACE
+	 * com\.foo\.yourclass\.StatementExecutor=TRACE
+	 * </pre>
+	 */
+	public static final String LOCAL_LOG_PROPERTIES_FILE = "/ormliteLocalLog.properties";
+
 	private LoggerConstants() {
 		// only here for static usage
 	}

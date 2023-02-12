@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import com.j256.simplelogging.Level;
 import com.j256.simplelogging.LogBackend;
+import com.j256.simplelogging.LoggerConstants;
 import com.j256.simplelogging.backend.LocalLogBackend.LocalLogBackendFactory;
 
 public class LocalLogBackendTest extends BaseLogBackendTest {
@@ -28,22 +29,22 @@ public class LocalLogBackendTest extends BaseLogBackendTest {
 		if (log.isLevelEnabled(Level.TRACE)) {
 			return;
 		}
-		System.setProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY, "TRACE");
+		System.setProperty(LoggerConstants.LOCAL_LOG_LEVEL_PROPERTY, "TRACE");
 		try {
 			log = new LocalLogBackend("foo");
 			assertTrue(log.isLevelEnabled(Level.TRACE));
 		} finally {
-			System.clearProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY);
+			System.clearProperty(LoggerConstants.LOCAL_LOG_LEVEL_PROPERTY);
 		}
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testInvalidLevelProperty() {
-		System.setProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY, "not a valid level");
+		System.setProperty(LoggerConstants.LOCAL_LOG_LEVEL_PROPERTY, "not a valid level");
 		try {
 			new LocalLogBackend("foo");
 		} finally {
-			System.clearProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY);
+			System.clearProperty(LoggerConstants.LOCAL_LOG_LEVEL_PROPERTY);
 		}
 	}
 
