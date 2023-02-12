@@ -47,7 +47,7 @@ public class LoggerConstants {
 	 * com\.foo\.yourclass\.StatementExecutor=TRACE
 	 * </pre>
 	 */
-	public static final String LOCAL_LOG_PROPERTIES_FILE = "/ormliteLocalLog.properties";
+	public static final String LOCAL_LOG_PROPERTIES_FILE = "/simpleLoggingLocalLog.properties";
 
 	private LoggerConstants() {
 		// only here for static usage
