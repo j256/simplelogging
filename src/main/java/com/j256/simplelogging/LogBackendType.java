@@ -77,9 +77,13 @@ public enum LogBackendType implements LogBackendFactory {
 		this.factory = factory;
 	}
 
-	private LogBackendType(String factoryClassNameSuffix) {
-		this.factory =
-				detectFactory(LocalLogBackendFactory.class.getPackage().getName() + '.' + factoryClassNameSuffix);
+	private LogBackendType(String factoryClassName) {
+		if (factoryClassName.contains(".")) {
+			this.factory = detectFactory(factoryClassName);
+		} else {
+			// the name is a suffix and we tack on the package from the local log factory
+			this.factory = detectFactory(LocalLogBackendFactory.class.getPackage().getName() + '.' + factoryClassName);
+		}
 	}
 
 	@Override
