@@ -228,7 +228,7 @@ public abstract class BaseLogger {
 			sb.append(']');
 		} else if (arg instanceof LogArgumentCreator) {
 			// call the method to get the argument which can be null
-			String str = ((LogArgumentCreator) arg).createArg();
+			String str = ((LogArgumentCreator) arg).createLogArg();
 			sb.append(str);
 		} else {
 			// might as well do the toString here because we know it isn't null
