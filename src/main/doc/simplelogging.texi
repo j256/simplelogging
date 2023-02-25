@@ -213,7 +213,8 @@ Here's how the arguments are turned into strings in the log message:
 @item if you have more arguments than you have @code{@{@}} patterns in the message then they will be ignored
 @item @code{null} values will output the string @code{null}
 @item arrays will be displayed as @code{[ele1, ele2, ...]} with each element going through the same logic here
-@item if the argument implements @code{LogArgumentCreator} then the results of @code{arg.createArg()} will be displayed
+@item if the argument implements @code{LogArgumentCreator} then the results of @code{arg.createLogArg()} will be
+displayed
 @item by default @code{arg.toString()} will be displayed
 @end enumerate
 
@@ -246,7 +247,7 @@ logger.info("connected to hosts @{@} failed", hosts);
 // outputs: connected to hosts [srv1, srv2]
 
 // logging of Host which implements LogArgumentCreator where
-// host.createArg() method returns the string: host4
+// host.createLogArg() method returns the string: host4
 Host host = new Host();
 logger.info("connected to host '@{@}'", host);
 // outputs: connected to host 'host4'
@@ -318,7 +319,7 @@ private static final FluentLogger fluentLogger =
 ...
 // this generates no additional objects even due to auto-boxing
 // unless trace logging is enabled
-fluentLogger.atLevel(Level.TRACE)
+fluentLogger.atTrace()
     .msg("connected to host '@{@}' port '@{@}'")
     .arg(host)
     .arg(port)

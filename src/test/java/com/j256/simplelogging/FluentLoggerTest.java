@@ -227,4 +227,29 @@ public class FluentLoggerTest {
 		fluentLogger.atLevel(Level.TRACE).msg("integer args: {}").arg(args).log();
 		verify(mockBackend);
 	}
+
+	@Test
+	public void testAtEachLevel() {
+		String prefix = "logging level ";
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
+		mockBackend.log(Level.TRACE, prefix + Level.TRACE);
+		expect(mockBackend.isLevelEnabled(Level.DEBUG)).andReturn(true);
+		mockBackend.log(Level.DEBUG, prefix + Level.DEBUG);
+		expect(mockBackend.isLevelEnabled(Level.INFO)).andReturn(true);
+		mockBackend.log(Level.INFO, prefix + Level.INFO);
+		expect(mockBackend.isLevelEnabled(Level.WARNING)).andReturn(true);
+		mockBackend.log(Level.WARNING, prefix + Level.WARNING);
+		expect(mockBackend.isLevelEnabled(Level.ERROR)).andReturn(true);
+		mockBackend.log(Level.ERROR, prefix + Level.ERROR);
+		expect(mockBackend.isLevelEnabled(Level.FATAL)).andReturn(true);
+		mockBackend.log(Level.FATAL, prefix + Level.FATAL);
+		replay(mockBackend);
+		fluentLogger.atTrace().msg(prefix + "{}").arg(Level.TRACE).log();
+		fluentLogger.atDebug().msg(prefix + "{}").arg(Level.DEBUG).log();
+		fluentLogger.atInfo().msg(prefix + "{}").arg(Level.INFO).log();
+		fluentLogger.atWarn().msg(prefix + "{}").arg(Level.WARNING).log();
+		fluentLogger.atError().msg(prefix + "{}").arg(Level.ERROR).log();
+		fluentLogger.atFatal().msg(prefix + "{}").arg(Level.FATAL).log();
+		verify(mockBackend);
+	}
 }

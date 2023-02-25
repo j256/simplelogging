@@ -41,6 +41,54 @@ public class FluentLogger extends BaseLogger {
 	}
 
 	/**
+	 * Start of the chaining that sets the log level of the message at a TRACE level. If TRACE not enabled then the
+	 * method returns a mute context singleton and all calls to it are no-ops.
+	 */
+	public FluentContext atTrace() {
+		return atLevel(Level.TRACE);
+	}
+
+	/**
+	 * Start of the chaining that sets the log level of the message at a DEBUG level. If DEBUG not enabled then the
+	 * method returns a mute context singleton and all calls to it are no-ops.
+	 */
+	public FluentContext atDebug() {
+		return atLevel(Level.DEBUG);
+	}
+
+	/**
+	 * Start of the chaining that sets the log level of the message at an INFO level. If INFO not enabled then the
+	 * method returns a mute context singleton and all calls to it are no-ops.
+	 */
+	public FluentContext atInfo() {
+		return atLevel(Level.INFO);
+	}
+
+	/**
+	 * Start of the chaining that sets the log level of the message at a WARNING level. If WARNING not enabled then the
+	 * method returns a mute context singleton and all calls to it are no-ops.
+	 */
+	public FluentContext atWarn() {
+		return atLevel(Level.WARNING);
+	}
+
+	/**
+	 * Start of the chaining that sets the log level of the message at an ERROR level. If ERROR not enabled then the
+	 * method returns a mute context singleton and all calls to it are no-ops.
+	 */
+	public FluentContext atError() {
+		return atLevel(Level.ERROR);
+	}
+
+	/**
+	 * Start of the chaining that sets the log level of the message at a FATAL level. If FATAL not enabled then the
+	 * method returns a mute context singleton and all calls to it are no-ops.
+	 */
+	public FluentContext atFatal() {
+		return atLevel(Level.FATAL);
+	}
+
+	/**
 	 * Context that doesn't do anything. This is returned when the log level is not enabled.
 	 */
 	private static class MuteContext implements FluentContext {
