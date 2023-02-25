@@ -1,5 +1,7 @@
 package com.j256.simplelogging.backend;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import com.j256.simplelogging.Level;
 import com.j256.simplelogging.LogBackend;
 import com.j256.simplelogging.LogBackendFactory;
@@ -30,7 +32,8 @@ import com.j256.simplelogging.LoggerFactory;
  * </pre>
  * 
  * <p>
- * To see all log messages use:
+ * To see all log messages use "log.tag." followed by the constant in {@link LoggerConstants#ANDROID_ALL_LOGS_NAME}.
+ * Something like:
  * </p>
  * 
  * <pre>
@@ -47,8 +50,8 @@ public class AndroidLogBackend implements LogBackend {
 	private final static int MAX_TAG_LENGTH = 23;
 	private final String className;
 
-	// we do this because supposedly Log.isLoggable() always does IO
-	private volatile int levelCacheC = 0;
+	// we do this because supposedly Log.isLoggable() always does IO so we want to slow down the refreshes
+	private final AtomicLong levelCacheCount = new AtomicLong();
 	private final boolean levelCache[];
 
 	public AndroidLogBackend(String className) {
@@ -75,9 +78,10 @@ public class AndroidLogBackend implements LogBackend {
 	@Override
 	public boolean isLevelEnabled(Level level) {
 		// we don't care if this is not synchronized, it will be updated sooner or later and multiple updates are fine.
-		if (++levelCacheC >= REFRESH_LEVEL_CACHE_EVERY) {
+		if (levelCacheCount.incrementAndGet() >= REFRESH_LEVEL_CACHE_EVERY) {
 			refreshLevelCache();
-			levelCacheC = 0;
+			// publishes the update as well
+			levelCacheCount.set(0);
 		}
 		int androidLevel = levelToAndroidLevel(level);
 		if (androidLevel < levelCache.length) {
