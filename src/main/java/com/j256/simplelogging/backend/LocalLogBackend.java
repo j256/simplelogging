@@ -34,11 +34,12 @@ import com.j256.simplelogging.LoggerFactory;
  * </p>
  * 
  * <p>
- * It also supports a file simpleLoggingLocalLog.properties file which contains lines such as:
+ * It also supports a properties file (name defined in {@link LoggerConstants#LOCAL_LOG_PROPERTIES_FILE} which contains
+ * lines such as:
  * </p>
  * 
  * <pre>
- * # regex-pattern = Level
+ * # line format: regex-pattern = Level
  * com\.foo\.yourclass.*=DEBUG
  * com\.foo\.yourclass\.BaseMappedStatement=TRACE
  * com\.foo\.yourclass\.MappedCreate=TRACE
