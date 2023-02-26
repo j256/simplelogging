@@ -34,7 +34,7 @@ The following logging implementations will be discovered on the classpath in thi
 3. Logback directly (using slf4j-api)
 4. Apache Commons Logging
 5. LOG4J2 (version 2+)
-6. LOG4J (older)
+6. LOG4J (older, accessed only through reflection if already on the classpath so no dependencies)
 7. AWS lambda logging.
 8. Local log implementation that can write to a simple file.
 9. Simple console output.
@@ -127,7 +127,7 @@ Maven packages are published via [![Maven Central](https://maven-badges.herokuap
 <dependency>
 	<groupId>com.j256.simplelogging</groupId>
 	<artifactId>simplelogging</artifactId>
-	<version>1.10</version>
+	<version>1.11</version>
 </dependency>
 ```
 

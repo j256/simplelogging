@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
 <html>
-<!-- Created on November 15, 2022 by texi2html 1.82
+<!-- Created on February 26, 2023 by texi2html 1.82
 texi2html was written by: 
             Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
@@ -51,7 +51,7 @@ ul.toc {list-style: none}
 <a name="SimpleLogging"></a>
 <h1 class="settitle">SimpleLogging</h1>
 
-<p>Version 1.10 &ndash; November 2022
+<p>Version 1.11 &ndash; February 2023
 </p>
 <a name="index-introduction"></a>
 <a name="index-author"></a>
@@ -238,7 +238,8 @@ package in your code and rename the package as necessary.  You may want to tune 
 </p>
 <p>SimpleLogging is designed to be copied into your open source project so you don&rsquo;t have to add a dependency.  Just copy
 the java files from <code>src/main/java</code> into your source tree and rename the packages as necessary.  Please also copy
-the <code>SIMPLELOGGING_LICENSE.txt</code> file which is the very permissive ISC license.
+the <code>SIMPLELOGGING_LICENSE.txt</code> file which is the very permissive ISC license.  You may want to change the
+constants in <code>LoggerConstants.java</code>.
 </p>
 <hr size="6">
 <a name="Logging-Arguments"></a>
@@ -312,7 +313,8 @@ It is recommended that you test for the log level with an <code>if</code> statem
 </li><li> if you have more arguments than you have <code>{}</code> patterns in the message then they will be ignored
 </li><li> <code>null</code> values will output the string <code>null</code>
 </li><li> arrays will be displayed as <code>[ele1, ele2, ...]</code> with each element going through the same logic here
-</li><li> if the argument implements <code>LogArgumentCreator</code> then the results of <code>arg.createArg()</code> will be displayed
+</li><li> if the argument implements <code>LogArgumentCreator</code> then the results of <code>arg.createLogArg()</code> will be
+displayed
 </li><li> by default <code>arg.toString()</code> will be displayed
 </li></ol>
 
@@ -344,7 +346,7 @@ logger.info(&quot;connected to hosts {} failed&quot;, hosts);
 // outputs: connected to hosts [srv1, srv2]
 
 // logging of Host which implements LogArgumentCreator where
-// host.createArg() method returns the string: host4
+// host.createLogArg() method returns the string: host4
 Host host = new Host();
 logger.info(&quot;connected to host '{}'&quot;, host);
 // outputs: connected to host 'host4'
@@ -381,7 +383,7 @@ logger.info(&quot;connected to host '{}'&quot;, server);
 <a name="index-setting-log-level"></a>
 
 <p>By default the choice of whether or not to log, for example, a trace log message is up to the specific
-log backend.  For example. if you are using LOG4J, your LOG4J properties file determines whether or not
+log backend.  For example. if you are using LOG4J2, your LOG4J2 config file determines whether or not
 trace logging is enabled for a particular package.  That said, there are some ways that you can impact
 in code which messages will get logged with calls to the SimpleLogging methods regardless of the log
 backend.
@@ -446,11 +448,28 @@ private static final FluentLogger fluentLogger =
 ...
 // this generates no additional objects even due to auto-boxing
 // unless trace logging is enabled
-fluentLogger.atLevel(Level.TRACE)
+fluentLogger.atTrace()
     .msg(&quot;connected to host '{}' port '{}'&quot;)
     .arg(host)
     .arg(port)
     .log();
+</pre></td></tr></table>
+
+<a name="index-arrays_002c-fluent-logging"></a>
+<p>Logging of arrays in fluent logging can be done one of two ways.  You can use the <code>flientLogger.args(...)</code>
+method to add an array of object arguments to the log message, each element of which will match a {} from the
+message. If you want an array to be associated with a single {} and displayed as <code>[arg1, arg2, ...]</code>
+then you need to use the method <code>fluentLogger.arg(Object)</code> which will interpret the array as a single object.
+</p>
+<p>For example, the following code which calls this <code>args(...)</code> method will output: &quot;1 + 2 = 3&quot;
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">fluentLogger.msg(&quot;{} + {} = {}&quot;).args(new Object[] { 1, 2, 3 }).log();
+</pre></td></tr></table>
+
+<p>While the following code which calls <code>arg(...)</code> will output: &quot;port numbers: [1, 2, 3]&quot; which interprets the
+array as an <code>Object</code> and will match a single {} from the message.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">fluentLogger.msg(&quot;port numbers: {}&quot;).arg(new Object[] { 1, 2, 3 }).log();
 </pre></td></tr></table>
 
 <hr size="6">
@@ -475,6 +494,7 @@ fluentLogger.atLevel(Level.TRACE)
 <h2 class="section">2.6 How SimpleLogging Discovers the Logging Backend</h2>
 
 <a name="index-discovering-backend"></a>
+<a name="index-backend_002c-discovering"></a>
 <a name="index-log-backend-discovery"></a>
 <p>Built into the <code>LoggerFactory</code> class is a <code>LogBackendType</code> enumerated type which SimpleLogging uses to try to
 locate what logging packages are on the classpath and therefore should be used.
@@ -497,7 +517,7 @@ locate what logging packages are on the classpath and therefore should be used.
 </li><li> LOGBACK &ndash; Logback direct without SLF4J
 </li><li> COMMONS_LOGGING &ndash; Apache Commons Logging
 </li><li> LOG4J2 &ndash; version 2+
-</li><li> LOG4J &ndash; older
+</li><li> LOG4J &ndash; older, only used via reflection if available on the classpath
 </li><li> LAMBDA &ndash; AWS Lambda systems logging
 </li><li> LOCAL &ndash; log implementation that can write to a simple file
 </li><li> CONSOLE &ndash; log writing to <code>System.out</code> or <code>System.err</code>
@@ -518,9 +538,22 @@ LoggerFactory.setLogBackendType(LogBackendType.LOGBACK);
 LoggerFactory.setLogBackendFactory(new LogbackLogBackendFactory());
 </pre></td></tr></table>
 
-<p>You can also set the <code>com.j256.simplelogger.backend</code> Java property to one of the <code>LogBackendType</code>
-values in the above list.  For example: <code>java -Dcom.j256.simplelogger.backend=LOGBACK</code>
+<a name="index-system-property"></a>
+<a name="index-java-property"></a>
+<a name="index-property_002c-system"></a>
+<a name="index-com_002ej256_002esimplelogger_002ebackend-property"></a>
+
+<p>You can also set the <code>com.j256.simplelogger.backend</code> Java system property to one of the <code>LogBackendType</code>
+values in the above list.
 </p>
+<table><tr><td>&nbsp;</td><td><pre class="example">java -Dcom.j256.simplelogger.backend=LOGBACK ...
+</pre></td></tr></table>
+
+<p>You can also set the property to be a class name that implements <code>LogBackendFactory</code>.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">java -Dcom.j256.simplelogger.backend=com.j256.simplelogging.backend.LogbackLogBackend$LogbackLogBackendFactory ...
+</pre></td></tr></table>
+
 <hr size="6">
 <a name="More-Usage-Examples"></a>
 <table cellpadding="1" cellspacing="1" border="0">
@@ -603,7 +636,7 @@ either case, an <code>Object[]</code> is created even if the message is never lo
 <table><tr><td>&nbsp;</td><td><pre class="example">&lt;dependency&gt;
    &lt;groupId&gt;com.j256.simplelogging&lt;/groupId&gt;
    &lt;artifactId&gt;simplelogging&lt;/artifactId&gt;
-   &lt;version&gt;1.10&lt;/version&gt;
+   &lt;version&gt;1.11&lt;/version&gt;
 &lt;/dependency&gt;
 </pre></td></tr></table>
 
@@ -634,7 +667,7 @@ either case, an <code>Object[]</code> is created even if the message is never lo
 <a name="index-open-source-license"></a>
 <p><a href="https://opensource.org/licenses/ISC">ISC License</a>.  This document is part of the SimpleLogging project. 
 </p>
-<p>Copyright 2022, Gray Watson
+<p>Copyright 2023, Gray Watson
 </p>
 <p>Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted,
 provided that this permission notice appear in all copies.
@@ -670,6 +703,8 @@ THIS SOFTWARE.
  &nbsp; 
 <br>
 <a href="#Index-of-Concepts-1_cp_letter-A" class="summary-letter"><b>A</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-B" class="summary-letter"><b>B</b></a>
  &nbsp; 
 <a href="#Index-of-Concepts-1_cp_letter-C" class="summary-letter"><b>C</b></a>
  &nbsp; 
@@ -720,11 +755,16 @@ THIS SOFTWARE.
 <tr><td></td><td valign="top"><a href="#index-android-logging_002c-use-with">android logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-arguments-in-the-message">arguments in the message</a></td><td valign="top"><a href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-array-argument-logging">array argument logging</a></td><td valign="top"><a href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-arrays_002c-fluent-logging">arrays, fluent logging</a></td><td valign="top"><a href="#Fluent-Logging">2.5 Using &quot;Fluent&quot; Logging Method Chaining</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-author">author</a></td><td valign="top"><a href="#Top">SimpleLogging</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-aws-lambda-logging_002c-use-with">aws lambda logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="Index-of-Concepts-1_cp_letter-B">B</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-backend_002c-discovering">backend, discovering</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-C">C</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-chaining-methods">chaining methods</a></td><td valign="top"><a href="#Fluent-Logging">2.5 Using &quot;Fluent&quot; Logging Method Chaining</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-com_002ej256_002esimplelogger_002ebackend-property">com.j256.simplelogger.backend property</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-commons-logging_002c-use-with">commons logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-copying-code">copying code</a></td><td valign="top"><a href="#Depending-on-SimpleLogging">2.2 Depending on SimpleLogging in Your Library</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
@@ -749,6 +789,7 @@ THIS SOFTWARE.
 <tr><td></td><td valign="top"><a href="#index-isc-license">isc license</a></td><td valign="top"><a href="#License">3. Open Source License</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-J">J</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-java-property">java property</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-java-util-logging_002c-use-with">java util logging, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-L">L</a></th><td></td><td></td></tr>
@@ -778,6 +819,7 @@ THIS SOFTWARE.
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-P">P</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-pom_002exml-dependency">pom.xml dependency</a></td><td valign="top"><a href="#Maven">2.8 Using With Maven</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-property_002c-system">property, system</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-Q">Q</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-quick-start">quick start</a></td><td valign="top"><a href="#Quick-Start">1. Start Using Quickly</a></td></tr>
@@ -789,6 +831,7 @@ THIS SOFTWARE.
 <tr><td></td><td valign="top"><a href="#index-setting-log-level">setting log level</a></td><td valign="top"><a href="#Setting-Log-Level">2.4 Setting Log Level or Disabling Logging</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-simple-logging">simple logging</a></td><td valign="top"><a href="#Top">SimpleLogging</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-slf4j_002c-use-with">slf4j, use with</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-system-property">system property</a></td><td valign="top"><a href="#Backend-Discovery">2.6 How SimpleLogging Discovers the Logging Backend</a></td></tr>
 <tr><td colspan="3"> <hr></td></tr>
 <tr><th><a name="Index-of-Concepts-1_cp_letter-T">T</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-toString_002c-don_0027t-use">toString, don&rsquo;t use</a></td><td valign="top"><a href="#Logging-Arguments">2.3 Logging Messages with {} Arguments</a></td></tr>
@@ -810,6 +853,8 @@ THIS SOFTWARE.
  &nbsp; 
 <br>
 <a href="#Index-of-Concepts-1_cp_letter-A" class="summary-letter"><b>A</b></a>
+ &nbsp; 
+<a href="#Index-of-Concepts-1_cp_letter-B" class="summary-letter"><b>B</b></a>
  &nbsp; 
 <a href="#Index-of-Concepts-1_cp_letter-C" class="summary-letter"><b>C</b></a>
  &nbsp; 
@@ -890,7 +935,7 @@ THIS SOFTWARE.
 </tr></table>
 <h1>About This Document</h1>
 <p>
-  This document was generated by <em>Gray Watson</em> on <em>November 15, 2022</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+  This document was generated by <em>Gray Watson</em> on <em>February 26, 2023</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
 </p>
 <p>
   The buttons in the navigation panels have the following meaning:
@@ -992,7 +1037,7 @@ THIS SOFTWARE.
 <hr size="1">
 <p>
  <font size="-1">
-  This document was generated by <em>Gray Watson</em> on <em>November 15, 2022</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
+  This document was generated by <em>Gray Watson</em> on <em>February 26, 2023</em> using <a href="http://www.nongnu.org/texi2html/"><em>texi2html 1.82</em></a>.
  </font>
  <br>
 

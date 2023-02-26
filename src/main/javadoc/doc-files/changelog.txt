@@ -1,4 +1,4 @@
-1.11: ?/?/2023
+1.11: 2/26/2023
 	* Add the ability to configure a log factory using the com.j256.simplelogger.backend system property.
 	* Moved critical constants to LoggerConstants.java to make it easier to tweak if you are copying into your project.
 	* Renamed LogArgumentCreator.createArg() to be createLogArg() to better mirror behavior.
