@@ -18,7 +18,6 @@ import com.j256.simplelogging.backend.CommonsLoggingLogBackend;
 import com.j256.simplelogging.backend.JavaUtilLogBackend;
 import com.j256.simplelogging.backend.LocalLogBackend;
 import com.j256.simplelogging.backend.Log4j2LogBackend;
-import com.j256.simplelogging.backend.Log4jLogBackend;
 import com.j256.simplelogging.backend.LogbackLogBackend;
 import com.j256.simplelogging.backend.NullLogBackend;
 import com.j256.simplelogging.backend.Slf4jLoggingLogBackend;
@@ -57,11 +56,12 @@ public class LoggerFactoryTest {
 
 	@Test
 	public void testLogTypes() {
+		Class<LocalLogBackend> backupBackend = LocalLogBackend.class;
 		checkLog(LogBackendType.SLF4J, Slf4jLoggingLogBackend.class, true);
-		checkLog(LogBackendType.ANDROID, LocalLogBackend.class, false);
+		checkLog(LogBackendType.ANDROID, backupBackend, false);
 		checkLog(LogBackendType.COMMONS_LOGGING, CommonsLoggingLogBackend.class, true);
 		checkLog(LogBackendType.LOG4J2, Log4j2LogBackend.class, true);
-		checkLog(LogBackendType.LOG4J, Log4jLogBackend.class, true);
+		checkLog(LogBackendType.LOG4J, backupBackend, false);
 		checkLog(LogBackendType.LOCAL, LocalLogBackend.class, true);
 		checkLog(LogBackendType.JAVA_UTIL, JavaUtilLogBackend.class, true);
 		checkLog(LogBackendType.NULL, NullLogBackend.class, false);

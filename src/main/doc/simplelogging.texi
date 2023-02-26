@@ -267,7 +267,7 @@ logger.info("connected to host '@{@}'", server);
 @cindex setting log level
 
 By default the choice of whether or not to log, for example, a trace log message is up to the specific
-log backend.  For example. if you are using LOG4J, your LOG4J properties file determines whether or not
+log backend.  For example. if you are using LOG4J2, your LOG4J2 config file determines whether or not
 trace logging is enabled for a particular package.  That said, there are some ways that you can impact
 in code which messages will get logged with calls to the SimpleLogging methods regardless of the log
 backend.
@@ -326,10 +326,11 @@ fluentLogger.atTrace()
     .log();
 @end example
 
+@cindex arrays, fluent logging
 Logging of arrays in fluent logging can be done one of two ways.  You can use the @code{flientLogger.args(...)}
 method to add an array of object arguments to the log message, each element of which will match a @{@} from the
 message. If you want an array to be associated with a single @{@} and displayed as @code{[arg1, arg2, ...]}
-then you need to use the method @code{fluentLogger.arg(Object)} which will interpret the array as an object.
+then you need to use the method @code{fluentLogger.arg(Object)} which will interpret the array as a single object.
 
 For example, the following code which calls this @code{args(...)} method will output: "1 + 2 = 3"
 
@@ -373,7 +374,7 @@ The following logging implementations will be discovered on the classpath in thi
 @item LOGBACK -- Logback direct without SLF4J
 @item COMMONS_LOGGING -- Apache Commons Logging
 @item LOG4J2 -- version 2+
-@item LOG4J -- older
+@item LOG4J -- older, only used via reflection if available on the classpath
 @item LAMBDA -- AWS Lambda systems logging
 @item LOCAL -- log implementation that can write to a simple file
 @item CONSOLE -- log writing to @code{System.out} or @code{System.err}
