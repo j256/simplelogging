@@ -99,6 +99,8 @@ fi
 
 cd $LOCAL_DIR
 mvn test || exit 1
+# test our reflection hacks for log4j v1
+mvn -P testlog4jv1 -Dtest=Log4jLogBackendTest test || exit 1
 
 #############################################################
 
