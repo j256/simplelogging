@@ -3,6 +3,7 @@
 	* Moved critical constants to LoggerConstants.java to make it easier to tweak if you are copying into your project.
 	* Renamed LogArgumentCreator.createArg() to be createLogArg() to better mirror behavior.
 	* Added FluentLogger.atTrace(), atDebug(), etc. instead of atLevel(Level.TRACE), atLevel(Level.INFO), etc..
+	* Changed log4j v1 to be reflection based to remove any hint of a dependency.  Won't be called unless in classpath.
 
 1.10: 11/15/2022
 	* Added fluent-logging pattern where you can build a log message with method chaining.
