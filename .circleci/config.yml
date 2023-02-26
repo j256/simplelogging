@@ -20,7 +20,7 @@ jobs:
           name: mvn package
           command: mvn package
       - run_log4j1_tests:
-          name: mvn -Dtest=Log4jLogBackendTest test
+          name: mvn test log4j1
           command: mvn -Dtest=Log4jLogBackendTest test
       # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard. 
       - store_test_results: 
