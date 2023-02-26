@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.j256.simplelogging</groupId>
 	<artifactId>simplelogging</artifactId>
@@ -7,7 +8,10 @@
 	<packaging>jar</packaging>
 	<name>Simple Logging</name>
 	<url>https://256stuff.com/sources/simplelogging/</url>
-	<description>Simple logging package</description>
+	<description>Small logging facade that backends to a number of standard logging packages and that
+		can be copied into another project.  This allows you to write your code and include log messages
+		without having a fixed dependency on any one logging package.  I include this code into my libraries
+		and so they can stay agnostic. </description>
 	<licenses>
 		<license>
 			<name>ISC License</name>
