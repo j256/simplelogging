@@ -1,3 +1,8 @@
+2.1: 2/26/2023
+	* Finally forcing the Java version 8 because of dependency version requirements.  Maybe overdue.
+	* Bumped the versions of log4j2 to 2.13.2 to resolve some security issues.
+	* This is a 2.1 release and not 2.0 because there are no logic changes here.
+
 1.11: 2/26/2023
 	* Add the ability to configure a log factory using the com.j256.simplelogger.backend system property.
 	* Moved critical constants to LoggerConstants.java to make it easier to tweak if you are copying into your project.
