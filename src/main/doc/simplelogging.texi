@@ -6,9 +6,9 @@
 @c %**end of header
 
 @c ----------------------------------------------------------------
-@set simplelogging_version 2.1
+@set simplelogging_version 2.2
 @set simplelogging_year 2023
-@set simplelogging_date February @value{simplelogging_year}
+@set simplelogging_date March @value{simplelogging_year}
 @set package SimpleLogging
 @c ----------------------------------------------------------------
 
