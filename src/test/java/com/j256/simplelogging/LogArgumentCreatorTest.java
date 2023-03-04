@@ -28,13 +28,15 @@ public class LogArgumentCreatorTest {
 		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(false);
 		expect(mockBackend.isLevelEnabled(Level.INFO)).andReturn(true);
 		mockBackend.log(Level.INFO, arg + end);
-		LogArgumentCreator logMessageCreator = createMock(LogArgumentCreator.class);
-		expect(logMessageCreator.createLogArg()).andReturn(arg);
-		replay(mockBackend, logMessageCreator);
+		LogArgumentCreator logMessageCreator1 = createMock(LogArgumentCreator.class);
+		// no calls to logMessageCreator1
+		LogArgumentCreator logMessageCreator2 = createMock(LogArgumentCreator.class);
+		expect(logMessageCreator2.createLogArg()).andReturn(arg);
+		replay(mockBackend, logMessageCreator1, logMessageCreator2);
 		// this shouldn't be logged which means no calls to the creator
-		logger.trace("{}" + end, logMessageCreator);
+		logger.trace("{}" + end, logMessageCreator1);
 		// this should be logged
-		logger.info("{}" + end, logMessageCreator);
-		verify(mockBackend, logMessageCreator);
+		logger.info("{}" + end, logMessageCreator2);
+		verify(mockBackend, logMessageCreator1, logMessageCreator2);
 	}
 }
