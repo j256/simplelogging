@@ -29,7 +29,7 @@ public class FluentContextImpl implements FluentContext {
 
 	@Override
 	public FluentContext msg(String msg) {
-		if (this.msg != null) {
+		if (this.msg != null || msg == null) {
 			// only the first call is honored in case we want to set max arguments
 			return this;
 		}
@@ -51,7 +51,9 @@ public class FluentContextImpl implements FluentContext {
 
 	@Override
 	public FluentContext throwable(Throwable throwable) {
-		this.throwable = throwable;
+		if (this.throwable == null && throwable != null) {
+			this.throwable = throwable;
+		}
 		return this;
 	}
 
@@ -111,6 +113,9 @@ public class FluentContextImpl implements FluentContext {
 
 	@Override
 	public FluentContext args(Object[] addArgs) {
+		if (addArgs == null) {
+			return this;
+		}
 		if (this.args == null) {
 			args = addArgs;
 			argCount = addArgs.length;

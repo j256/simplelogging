@@ -12,19 +12,20 @@ package com.j256.simplelogging;
 public interface FluentContext {
 
 	/**
-	 * Set the required log message on the context. Only the first call to this method is honored. Some optimizations
-	 * may happen if this method is called _before_ any arg(...) or args(...) methods but it is not required.
+	 * Set the required log message on the context. Only the first call to this method is honored. Optimizations may
+	 * happen if this method is called _before_ any arg(...) or args(...) methods but this is not required.
 	 */
 	public FluentContext msg(String message);
 
 	/**
-	 * Set the optional throwable on the context.
+	 * Set the optional throwable on the context. Only the first call to this method is honored.
 	 */
 	public FluentContext throwable(Throwable th);
 
 	/**
-	 * Add object argument to the log message. This can also be an array of objects if you want them to match a single
-	 * {} from the message and displayed as "[ele1, ele2, ...]". For more information, see {@link #args(Object[])}.
+	 * Add a single object argument to the log message. This can also be an array of objects if you want them to match a
+	 * single {} from the message and displayed as "[ele1, ele2, ...]". For more information, see
+	 * {@link #args(Object[])}.
 	 */
 	public FluentContext arg(Object arg);
 
@@ -69,9 +70,9 @@ public interface FluentContext {
 	public FluentContext arg(double arg);
 
 	/**
-	 * Add an array of object arguments to the log message, each element of which will match a {} from the message. To
-	 * add an array to be associated with a single {} and displayed as {@code [arg1, arg2, ...]} then you need to use
-	 * the method {@link #arg(Object)} which will interpret the array as an object.
+	 * Add an array of object arguments to the log message, each element of which will match a single {} from the
+	 * message. To add an array to be associated with a single {} and displayed as {@code [arg1, arg2, ...]} then you
+	 * need to use the method {@link #arg(Object)} which will interpret the array as an object.
 	 * 
 	 * For example, the following code calls this args(...) method:
 	 * 

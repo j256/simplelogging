@@ -111,7 +111,9 @@ public class FluentLoggerTest {
 	public void testCoverage() {
 		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(false);
 		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
 		boolean arg1 = true;
+		mockBackend.log(Level.TRACE, "hello " + arg1, throwable);
 		mockBackend.log(Level.TRACE, "hello " + arg1, throwable);
 		replay(mockBackend);
 		fluentLogger.atLevel(Level.TRACE) //
@@ -141,6 +143,25 @@ public class FluentLoggerTest {
 				.arg("String")
 				.args(new Object[0])
 				.throwable(throwable)
+				.log();
+		fluentLogger.atLevel(Level.TRACE) //
+				.msg(null)
+				.msg("hello {}")
+				.msg("bar {}")
+				.arg(arg1)
+				.arg((byte) 1)
+				.arg('x')
+				.arg((short) 1)
+				.arg(1)
+				.arg(1L)
+				.arg(1.0F)
+				.arg(1.0)
+				.arg("String")
+				.args(null)
+				.args(new Object[0])
+				.throwable(null)
+				.throwable(throwable)
+				.throwable(null)
 				.log();
 		verify(mockBackend);
 	}
@@ -182,6 +203,19 @@ public class FluentLoggerTest {
 		replay(mockBackend);
 		fluentLogger.atLevel(Level.TRACE)//
 				.throwable(throwable)
+				.log();
+		verify(mockBackend);
+	}
+
+	@Test
+	public void testMultipleThrowables() {
+		Throwable throwable2 = new Throwable("ignored");
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true);
+		mockBackend.log(Level.TRACE, FluentContextImpl.JUST_THROWABLE_MESSAGE, throwable);
+		replay(mockBackend);
+		fluentLogger.atLevel(Level.TRACE)//
+				.throwable(throwable)
+				.throwable(throwable2)
 				.log();
 		verify(mockBackend);
 	}
