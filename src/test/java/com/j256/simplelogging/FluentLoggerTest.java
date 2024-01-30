@@ -129,6 +129,7 @@ public class FluentLoggerTest {
 				.arg(1.0)
 				.arg("String")
 				.args(new Object[0])
+				.appendMsg("hello")
 				.throwable(throwable)
 				.log();
 		fluentLogger.atLevel(Level.TRACE) //
