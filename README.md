@@ -6,6 +6,7 @@ Java Simple Logging Package
 [![ChangeLog](https://img.shields.io/github/v/release/j256/simplelogging?label=changelog&display_name=release)](https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/changelog.txt)
 [![CodeCov](https://img.shields.io/codecov/c/github/j256/simplelogging.svg)](https://codecov.io/github/j256/simplelogging/)
 [![CircleCI](https://circleci.com/gh/j256/simplelogging.svg?style=shield)](https://circleci.com/gh/j256/simplelogging)
+[![GitHub License](https://img.shields.io/github/license/j256/simplelogging)](https://github.com/j256/simplelogging/blob/master/LICENSE.txt)
 
 The goal of this library is to be a small logging facade that backends to a number of standard logging packages and that
 can be copied into another project.  This allows you to write your code and include log messages without having a fixed
