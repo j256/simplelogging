@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class FluentLoggerTest {
@@ -128,6 +129,7 @@ public class FluentLoggerTest {
 				.arg(1.0)
 				.arg("String")
 				.args(new Object[0])
+				.appendMsg("hello")
 				.throwable(throwable)
 				.log();
 		fluentLogger.atLevel(Level.TRACE) //
@@ -285,5 +287,92 @@ public class FluentLoggerTest {
 		fluentLogger.atError().msg(prefix + "{}").arg(Level.ERROR).log();
 		fluentLogger.atFatal().msg(prefix + "{}").arg(Level.FATAL).log();
 		verify(mockBackend);
+	}
+
+	@Test
+	public void testAppendMsg() {
+		String msg1 = "start";
+		String msg2 = "mid1";
+		String msg3 = "mid2";
+		String msg4 = "mid3";
+		String msg5 = "end";
+		String arg1 = "fwepfeqw";
+		int arg2 = 10;
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).anyTimes();
+		mockBackend.log(Level.TRACE, msg1);
+		mockBackend.log(Level.TRACE, msg1 + msg2 + arg1);
+		mockBackend.log(Level.TRACE, msg1 + msg2 + arg1 + msg3);
+		mockBackend.log(Level.TRACE, msg1 + msg2 + arg1 + msg3 + msg4 + arg2);
+		mockBackend.log(Level.TRACE, msg1 + msg2 + arg1 + msg3 + msg4 + arg2 + msg5);
+		mockBackend.log(Level.TRACE, msg1 + msg2 + arg1 + msg3 + msg4 + arg2 + msg5);
+		mockBackend.log(Level.TRACE, msg1);
+		replay(mockBackend);
+		String msg = msg1;
+		FluentContext context = fluentLogger.atTrace();
+
+		context.msg(msg).arg(arg1).arg(arg2);
+		context.log();
+		
+		context.appendMsg(msg2 + "{}");
+		context.log();
+
+		context.appendMsg(msg3);
+		context.log();
+
+		context.appendMsg(msg4 + "{}");
+		context.log();
+
+		context.appendMsg(msg5);
+		context.log();
+		
+		context.msg("should not show up");
+		context.log();
+
+		// for coverage
+		context = fluentLogger.atTrace();
+		context.appendMsg(msg);
+		context.appendMsg("");
+		context.appendMsg(null);
+		context.log();
+
+		verify(mockBackend);
+	}
+
+	@Test
+	@Ignore("Only to be run once and a while")
+	public void testPerformance() {
+		/*
+		 * Not really a fair test because hotswap might take out some of the method calls but I thought it would be
+		 * interesting. In the loop, constant 1, 2, 3 numbers was similar times between fluent and non because it wasn't
+		 * actually creating the objects but was using the JVM numeric object cache so i was used.
+		 */
+		Logger logger = new Logger(new NullBackend());
+		FluentLogger fluentLogger = new FluentLogger(new NullBackend());
+		boolean fluent = false;
+		for (long x = 0; x < 10 * 1000 * 1000 * 1000L; x++) {
+			if (fluent) {
+				fluentLogger.atTrace().msg("{} + {} = {}").arg(x).arg(x + 1).arg(x + 2).log();
+			} else {
+				logger.trace("{} + {} = {}", x, x + 1, x + 2);
+			}
+		}
+	}
+
+	private static class NullBackend implements LogBackend {
+
+		@Override
+		public boolean isLevelEnabled(Level level) {
+			return false;
+		}
+
+		@Override
+		public void log(Level level, String message) {
+			// no-op
+		}
+
+		@Override
+		public void log(Level level, String message, Throwable throwable) {
+			// no-op
+		}
 	}
 }
