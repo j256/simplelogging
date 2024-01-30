@@ -51,7 +51,7 @@ public class FluentContextImpl implements FluentContext {
 
 	@Override
 	public FluentContext throwable(Throwable throwable) {
-		if (this.throwable == null && throwable != null) {
+		if (this.throwable == null) {
 			this.throwable = throwable;
 		}
 		return this;
@@ -117,6 +117,7 @@ public class FluentContextImpl implements FluentContext {
 			return this;
 		}
 		if (this.args == null) {
+			// NOTE: this will reuse the args argument but only until the log() call or until another arg is added
 			args = addArgs;
 			argCount = addArgs.length;
 		} else {
