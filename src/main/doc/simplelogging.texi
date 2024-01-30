@@ -345,6 +345,18 @@ array as an @code{Object} and will match a single @{@} from the message.
 fluentLogger.msg("port numbers: @{@}").arg(new Object[] @{ 1, 2, 3 @}).log();
 @end example
 
+You can also append to the previous message in case you want to do something like the following logic:
+
+@example
+FluentContext context = fluentLogger.atTrace().msg("connection parameters: ");
+if (host != null) {
+    fluentLogger.appendMsg("host {}, ").arg(host);
+}
+fluentLogger.appendMsg("port {}").arg(port);
+fluentLogger.log();
+@end example
+
+
 @c ----------------------------------------------------------------
 @node Backend Discovery, More Usage Examples, Setting Log Level, Using
 @section How SimpleLogging Discovers the Logging Backend

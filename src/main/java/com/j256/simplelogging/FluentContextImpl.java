@@ -18,6 +18,7 @@ public class FluentContextImpl implements FluentContext {
 	private final FluentLogger logger;
 	private final Level level;
 	private String msg;
+	private StringBuilder msgBuilder;
 	private Throwable throwable;
 	private Object[] args;
 	private int argCount;
@@ -29,7 +30,7 @@ public class FluentContextImpl implements FluentContext {
 
 	@Override
 	public FluentContext msg(String msg) {
-		if (this.msg != null || msg == null) {
+		if (this.msg != null || this.msgBuilder != null || msg == null) {
 			// only the first call is honored in case we want to set max arguments
 			return this;
 		}
@@ -45,6 +46,23 @@ public class FluentContextImpl implements FluentContext {
 			} else {
 				// no point in shrinking it now
 			}
+		}
+		return this;
+	}
+
+	@Override
+	public FluentContext appendMsg(String msgSuffix) {
+		if (msgSuffix == null) {
+			// no-op
+		} else if (this.msgBuilder != null) {
+			this.msgBuilder.append(msgSuffix);
+		} else if (this.msg == null) {
+			// effectively the same as msg(String)
+			this.msg = msgSuffix;
+		} else if (msgSuffix.length() > 0) {
+			this.msgBuilder = new StringBuilder(this.msg);
+			this.msg = null;
+			this.msgBuilder.append(msgSuffix);
 		}
 		return this;
 	}
@@ -134,7 +152,13 @@ public class FluentContextImpl implements FluentContext {
 
 	@Override
 	public void log() {
-		if (msg == null) {
+		String msgToPrint;
+		if (msgBuilder == null) {
+			msgToPrint = msg;
+		} else {
+			msgToPrint = msgBuilder.toString();
+		}
+		if (msgToPrint == null) {
 			// if we have no message but we do have arguments then build a message like: '{}', '{}', ...
 			if (argCount > 0) {
 				logger.doLog(level, throwable, null, args, argCount);
@@ -146,9 +170,9 @@ public class FluentContextImpl implements FluentContext {
 			}
 		} else if (argCount == 0) {
 			// no arguments
-			logger.doLog(level, throwable, msg, null, 0);
+			logger.doLog(level, throwable, msgToPrint, null, 0);
 		} else {
-			logger.doLog(level, throwable, msg, args, argCount);
+			logger.doLog(level, throwable, msgToPrint, args, argCount);
 		}
 		// chances are we are done with the object after this
 	}

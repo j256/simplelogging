@@ -102,6 +102,11 @@ public class FluentLogger extends BaseLogger {
 		}
 
 		@Override
+		public FluentContext appendMsg(String message) {
+			return this;
+		}
+
+		@Override
 		public FluentContext throwable(Throwable th) {
 			return this;
 		}

@@ -12,10 +12,18 @@ package com.j256.simplelogging;
 public interface FluentContext {
 
 	/**
-	 * Set the required log message on the context. Only the first call to this method is honored. Optimizations may
-	 * happen if this method is called _before_ any arg(...) or args(...) methods but this is not required.
+	 * Set the required log message on the context. If there has been a previous call to this method or
+	 * {@link #appendMsg(String)} then this method call is ignored. Optimizations may happen if this method is called
+	 * _before_ any arg(...) or args(...) methods but this is not required.
 	 */
 	public FluentContext msg(String message);
+
+	/**
+	 * Append the message argument to any previously set message whether there be none or from a call to {@link #msg} or
+	 * {@link #appendMsg(String)}. This is less efficient than a single call to {@link #msg(String)} because of the use
+	 * of a {@link StringBuilder} under the covers but only if the logger is enabled.
+	 */
+	public FluentContext appendMsg(String message);
 
 	/**
 	 * Set the optional throwable on the context. Only the first call to this method is honored.
