@@ -3,7 +3,7 @@ Java Simple Logging Package
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/badge.svg?style=flat-square)](https://mvnrepository.com/artifact/com.j256.simplelogging/simplelogging/latest)
 [![javadoc](https://javadoc.io/badge2/com.j256.simplelogging/simplelogging/javadoc.svg)](https://javadoc.io/doc/com.j256.simplelogging/simplelogging)
-[![ChangeLog](https://img.shields.io/github/v/release/j256/simplelogging?label=changelog)](https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/changelog.txt)
+[![ChangeLog](https://img.shields.io/github/v/release/j256/simplelogging?label=changelog&display_name=release)](https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/changelog.txt)
 [![CodeCov](https://img.shields.io/codecov/c/github/j256/simplelogging.svg)](https://codecov.io/github/j256/simplelogging/)
 [![CircleCI](https://circleci.com/gh/j256/simplelogging.svg?style=shield)](https://circleci.com/gh/j256/simplelogging)
 
@@ -26,7 +26,7 @@ copy the java files from ``src/main/java`` into your source tree and rename the 
 the ``SIMPLELOGGING_LICENSE.txt`` file which is the very permissive ISC license.  You may want to change the constants in
 ``LoggerConstants.java``.
 
-* The source code be found on the [git repository](https://github.com/j256/simplelogging).
+* The source code be found on the [git repository](https://github.com/j256/simplelogging)
 * Maven packages are published via [Maven Central](https://mvnrepository.com/artifact/com.j256.simplelogging/simplelogging/latest)
 * [Javadoc documentation](https://javadoc.io/doc/com.j256.simplelogging/simplelogging)
 
