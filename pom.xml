@@ -75,7 +75,7 @@
 			<id>testlog4jv1</id>
 			<dependencies>
 				<dependency>
-					<!-- these are injected from release.sh to test the log4j reflection backend -->
+					<!-- these are injected from release.sh and circleci config to test log4j reflection backend -->
 					<groupId>${log4j.group}</groupId>
 					<artifactId>${log4j.artifact}</artifactId>
 					<version>${log4j.version}</version>
