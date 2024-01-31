@@ -1,5 +1,6 @@
 2.3: ?/?/2024
 	* Added appendMsg() to the fluent logger context to allow building the log message dynamically. 
+	* Did a better job of detaching from log4j v1 for testing of reflection backend.
 
 2.2: 3/4/2023
 	* Removed import on Android Log in the LoggerConstants.java that should not have been there.
