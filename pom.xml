@@ -28,11 +28,9 @@
 		<commons-logging-version>1.2</commons-logging-version>
 		<slf4j-version>1.7.32</slf4j-version>
 		<android-version>4.1.1.4</android-version>
-		<logback.version>1.2.10</logback.version>
+		<logback.version>1.2.13</logback.version>
 		<aws-lambda-java-core-version>1.2.0</aws-lambda-java-core-version>
 		<maven-plugin-api-version>3.6.3</maven-plugin-api-version>
-		<!-- log4j version 1 is here for backwards compatibility testing only -->
-		<log4j-version>1.2.17</log4j-version>
 		<log4j2-version>2.20.0</log4j2-version>
 		<!-- external test package versions -->
 		<easymock-version>3.6</easymock-version>
@@ -77,9 +75,10 @@
 			<id>testlog4jv1</id>
 			<dependencies>
 				<dependency>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-					<version>1.2.17</version>
+					<!-- these are injected from release.sh and circleci config to test log4j reflection backend -->
+					<groupId>${log4j.group}</groupId>
+					<artifactId>${log4j.artifact}</artifactId>
+					<version>${log4j.version}</version>
 				</dependency>
 			</dependencies>
 		</profile>

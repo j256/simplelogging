@@ -312,7 +312,7 @@ public class FluentLoggerTest {
 
 		context.msg(msg).arg(arg1).arg(arg2);
 		context.log();
-		
+
 		context.appendMsg(msg2 + "{}");
 		context.log();
 
@@ -324,7 +324,7 @@ public class FluentLoggerTest {
 
 		context.appendMsg(msg5);
 		context.log();
-		
+
 		context.msg("should not show up");
 		context.log();
 
