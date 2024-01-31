@@ -7,7 +7,8 @@ import com.j256.simplelogging.LogBackend;
 import com.j256.simplelogging.LogBackendFactory;
 
 /**
- * Log backend that delegates to Apache Log4j.
+ * Log backend that delegates to Apache Log4j through reflection so there isn't a direct dependency it will only work if
+ * log4j is already on the4 classpath.
  * 
  * From SimpleLogging: https://github.com/j256/simplelogging
  *
@@ -122,9 +123,25 @@ public class Log4jLogBackend implements LogBackend {
 	 * Factory for generating Log4jLogBackend instances.
 	 */
 	public static class Log4jLogBackendFactory implements LogBackendFactory {
+		
+		private final String loggerNamePrefix;
+		
+		public Log4jLogBackendFactory() {
+			this.loggerNamePrefix = null;
+		}
+		
+		public Log4jLogBackendFactory(String loggerNamePrefix) {
+			// this is used by the log4j reflection class to show if it is log4j or log4j2
+			this.loggerNamePrefix = loggerNamePrefix; 
+		}
+		
 		@Override
 		public LogBackend createLogBackend(String classLabel) {
-			return new Log4jLogBackend(classLabel);
+			if (loggerNamePrefix == null) {
+				return new Log4jLogBackend(classLabel);
+			} else {
+				return new Log4jLogBackend(loggerNamePrefix + classLabel);
+			}
 		}
 	}
 }
