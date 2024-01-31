@@ -338,6 +338,40 @@ public class FluentLoggerTest {
 		verify(mockBackend);
 	}
 
+	/**
+	 * Test the appendMsg() call logic from the documentation.
+	 */
+	@SuppressWarnings("unused")
+	@Test
+	public void testAppendMsgDocs() {
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(true).anyTimes();
+
+		String host = null;
+		int port = 80;
+
+		mockBackend.log(Level.TRACE, "connection parameters: port " + port);
+		mockBackend.log(Level.TRACE, "connection parameters: host localhost, port " + port);
+
+		replay(mockBackend);
+		FluentContext context = fluentLogger.atTrace().msg("connection parameters: ");
+		// this won't be called because host is null
+		if (host != null) {
+			context.appendMsg("host {}, ").arg(host);
+		}
+		context.appendMsg("port {}").arg(port);
+		context.log();
+
+		host = "localhost";
+		context = fluentLogger.atTrace().msg("connection parameters: ");
+		// this will be called now that host is set so message will be appended
+		if (host != null) {
+			context.appendMsg("host {}, ").arg(host);
+		}
+		context.appendMsg("port {}").arg(port);
+		context.log();
+		verify(mockBackend);
+	}
+
 	@Test
 	@Ignore("Only to be run once and a while")
 	public void testPerformance() {
