@@ -17,15 +17,14 @@ method for variable arguments.  It also supports "fluent" logging where you can 
 log message which generates no objects if the log level is not enabled.
 
 I understand that this library is similar to other logging systems which separate the API from the logging
-implementation.  I think SimpleLogging is better than the others because it doesn't use the classpath order to satisfy
-the connection between the API and the backend.  SimpleLogging includes calls directly to specific backend APIs which
-can be chosen through code or configuration. This direct calling allows for more control over the backend selection and
-usually fewer dependencies.
+implementation.  I think SimpleLogging is better than the others because it calls directly to specific backend APIs
+which can be chosen through code or configuration. This direct calling allows for more control over the backend
+selection and usually fewer dependencies.
 
-SimpleLogging is designed to be copied into your open source project so you don't have to add a maven dependency. Just
-copy the java files from ``src/main/java`` into your source tree and rename the packages as necessary.  Please also copy
-the ``SIMPLELOGGING_LICENSE.txt`` file which is the very permissive ISC license.  You may want to change the constants in
-``LoggerConstants.java``.
+SimpleLogging is also designed to be copied into your open source project so you don't have to add a maven dependency.
+Just copy the java files from ``src/main/java`` into your source tree and rename the packages as necessary.  Please also
+copy the ``SIMPLELOGGING_LICENSE.txt`` file which is the very permissive ISC license.  You may want to change the
+constants in ``LoggerConstants.java``.
 
 * The source code be found on the [git repository](https://github.com/j256/simplelogging)
 * Maven packages are published via [Maven Central](https://mvnrepository.com/artifact/com.j256.simplelogging/simplelogging/latest)

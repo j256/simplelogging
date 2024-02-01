@@ -6,9 +6,9 @@
 @c %**end of header
 
 @c ----------------------------------------------------------------
-@set simplelogging_version 2.2
-@set simplelogging_year 2023
-@set simplelogging_date March @value{simplelogging_year}
+@set simplelogging_version 2.3
+@set simplelogging_year 2024
+@set simplelogging_date January @value{simplelogging_year}
 @set package SimpleLogging
 @c ----------------------------------------------------------------
 
@@ -51,15 +51,15 @@ logging code allows you to write messages with the slf4j-style @code{@{@}} argum
 appropriately and supports up to 4 arguments before forcing the caller to pass in an object array or calling a different
 @code{logArgs(...)} method for variable arguments.
 
-I understand that this facade is similar to other logging systems which separate their API from the implementation.
-I think SimpleLogging is better than the others because it doesn't use the classpath order to satisfy the connection
-between the API and the backend.  SimpleLogging includes calls directly to specific backend APIs which can be chosen
-through code or configuration. This direct calling allows for more control over the backend selection and usually fewer
-dependencies.
+I understand that this library is similar to other logging systems which separate the API from the logging
+implementation.  I think SimpleLogging is better than the others because it calls directly to specific backend APIs
+which can be chosen through code or configuration. This direct calling allows for more control over the backend
+selection and usually fewer dependencies.
 
 SimpleLogging is also designed to be copied into your open source project so you don't have to add a maven dependency.
 Just copy the java files from @code{src/main/java} into your source tree and rename the packages as necessary.  Please
-also copy the @code{SIMPLELOGGING_LICENSE.txt} file which is the very permissive ISC license.
+also copy the @code{SIMPLELOGGING_LICENSE.txt} file which is the very permissive ISC license.  You may want to change
+the constants in @code{LoggerConstants.java}.
 
 To get started quickly using SimpleLogging, @pxref{Quick Start}.
 @ifhtml
@@ -349,7 +349,7 @@ You can also append to a previous log message set with @code{msg(String)} in cas
 the following logic:
 
 @example
-FluentContext context = fluentLogger.atTrace().msg("connection parameters: ");
+FluentContext context = fluentLogger.atTrace().msg("connection from: ");
 if (host != null) @{
     context.appendMsg("host @{@}, ").arg(host);
 @}

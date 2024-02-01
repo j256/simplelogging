@@ -349,11 +349,11 @@ public class FluentLoggerTest {
 		String host = null;
 		int port = 80;
 
-		mockBackend.log(Level.TRACE, "connection parameters: port " + port);
-		mockBackend.log(Level.TRACE, "connection parameters: host localhost, port " + port);
+		mockBackend.log(Level.TRACE, "connection from: port " + port);
+		mockBackend.log(Level.TRACE, "connection from: host localhost, port " + port);
 
 		replay(mockBackend);
-		FluentContext context = fluentLogger.atTrace().msg("connection parameters: ");
+		FluentContext context = fluentLogger.atTrace().msg("connection from: ");
 		// this won't be called because host is null
 		if (host != null) {
 			context.appendMsg("host {}, ").arg(host);
@@ -362,7 +362,7 @@ public class FluentLoggerTest {
 		context.log();
 
 		host = "localhost";
-		context = fluentLogger.atTrace().msg("connection parameters: ");
+		context = fluentLogger.atTrace().msg("connection from: ");
 		// this will be called now that host is set so message will be appended
 		if (host != null) {
 			context.appendMsg("host {}, ").arg(host);
