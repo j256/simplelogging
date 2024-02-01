@@ -135,7 +135,7 @@ Maven packages are published via [![Maven Central](https://maven-badges.herokuap
 <dependency>
 	<groupId>com.j256.simplelogging</groupId>
 	<artifactId>simplelogging</artifactId>
-	<version>2.2</version>
+	<version>2.3</version>
 </dependency>
 ```
 
