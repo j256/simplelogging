@@ -29,6 +29,7 @@ constants in ``LoggerConstants.java``.
 
 * The source code be found on the [git repository](https://github.com/j256/simplelogging)
 * Maven packages are published via [Maven Central](https://mvnrepository.com/artifact/com.j256.simplelogging/simplelogging/latest)
+* [Documentation for the library](https://htmlpreview.github.io/?https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/simplelogging.html).  More on the [home page](https://256stuff.com/sources/simplelogging/).
 * [Javadoc documentation](https://javadoc.io/doc/com.j256.simplelogging/simplelogging)
 
 Enjoy.  Gray Watson
