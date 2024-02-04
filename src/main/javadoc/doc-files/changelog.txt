@@ -1,6 +1,13 @@
+3.0: ?/?/2024
+	* Added support for a '* = LEVEL' setting in the simpleLoggingLocalLog.properties file.  NULL value supported.
+	* Added support for simpleLogging.properties file to choose a backend.
+	* Added detection of the no-op logging to slf4j backend.
+	* Pushed SLF4J down the backend list since we should detect logback or log4j2 before. 
+
 2.3: 1/31/2024
 	* Added appendMsg() to the fluent logger context to allow building the log message dynamically. 
 	* Did a better job of detaching from log4j v1 for testing of reflection backend.
+	* Bumped the version of logback for security reasons.
 
 2.2: 3/4/2023
 	* Removed import on Android Log in the LoggerConstants.java that should not have been there.

@@ -14,10 +14,6 @@ import com.j256.simplelogging.backend.NullLogBackend.NullLogBackendFactory;
  */
 public enum LogBackendType implements LogBackendFactory {
 	/**
-	 * SLF4J which is often paired with logback. See: http://www.slf4j.org/
-	 */
-	SLF4J("Slf4jLoggingLogBackend$Slf4jLoggingLogBackendFactory"),
-	/**
 	 * Android Log mechanism. See: https://developer.android.com/reference/android/util/Log
 	 * 
 	 * <p>
@@ -34,6 +30,11 @@ public enum LogBackendType implements LogBackendFactory {
 	 * Version 2 of the log4j package. See https://logging.apache.org/log4j/2.x/
 	 */
 	LOG4J2("Log4j2LogBackend$Log4j2LogBackendFactory"),
+	/**
+	 * SLF4J which is often paired with logback. See: http://www.slf4j.org/ This should be below logback and log4j2
+	 * since those are typical backends used by slf4j.
+	 */
+	SLF4J("Slf4jLoggingLogBackend$Slf4jLoggingLogBackendFactory"),
 	/**
 	 * Old version of the log4j package. See https://logging.apache.org/log4j/2.x/
 	 */
@@ -79,7 +80,7 @@ public enum LogBackendType implements LogBackendFactory {
 
 	private LogBackendType(String factoryClassName) {
 		if (factoryClassName.contains(".")) {
-			// NOTE: may not get here but others could add full class names to this list
+			// NOTE: may not get here but others could add full class names to the above list
 			this.factory = detectFactory(factoryClassName);
 		} else {
 			// the name is a suffix and we tack on the package from the local log factory
