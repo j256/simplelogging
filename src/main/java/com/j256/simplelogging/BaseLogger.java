@@ -17,12 +17,24 @@ public abstract class BaseLogger {
 	private final static int DEFAULT_FULL_MESSAGE_LENGTH = 128;
 	final static String NO_MESSAGE_MESSAGE = "no log message";
 
-	private static Level globalLevel;
+	/**
+	 * Global log level that overrides any backend configuration about the log level. You can set this to, for example,
+	 * Level.INFO to show all info messages or Level.OFF to disable all log messages. Set it to null to have the log
+	 * backend configuration determine whether to display log messages.
+	 */
+	private static Level globalLevel = LoggerConstants.DEFAULT_GLOBAL_LOG_LEVEL;
 
 	private final LogBackend backend;
 
 	public BaseLogger(LogBackend backend) {
 		this.backend = backend;
+	}
+
+	/**
+	 * Get the global log level.  For testing purposes. 
+	 */
+	public static Level getGlobalLevel() {
+		return globalLevel;
 	}
 
 	/**
