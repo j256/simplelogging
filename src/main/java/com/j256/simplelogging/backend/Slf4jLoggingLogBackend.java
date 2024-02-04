@@ -101,6 +101,10 @@ public class Slf4jLoggingLogBackend implements LogBackend {
 
 		public Slf4jLoggingLogBackendFactory() {
 			this.factory = org.slf4j.LoggerFactory.getILoggerFactory();
+			// if the factory is null or if it is the no-op factory then the slf4j logs should not be used
+			if (factory == null || factory.getClass().getSimpleName().contains("NOP")) {
+				throw new IllegalStateException("slf4j logger is disabled and shouldn't be used");
+			}
 		}
 
 		@Override
