@@ -1,5 +1,7 @@
 package com.j256.simplelogging;
 
+import java.util.Locale;
+
 /**
  * Level of log messages being sent.
  *
@@ -39,5 +41,24 @@ public enum Level {
 	 */
 	public boolean isEnabled(Level otherLevel) {
 		return (this != Level.OFF && otherLevel != Level.OFF && value <= otherLevel.value);
+	}
+
+	/**
+	 * Like {{@link #valueOf(String)}} but tries to capitalize it first.
+	 * 
+	 * @return null if it is invalid.
+	 */
+	public static Level fromString(String str) {
+		try {
+			// try default locale first
+			return Level.valueOf(str.toUpperCase());
+		} catch (IllegalArgumentException e1) {
+			try {
+				// then try english locale
+				return valueOf(str.toUpperCase(Locale.ENGLISH));
+			} catch (IllegalArgumentException e2) {
+				return null;
+			}
+		}
 	}
 }

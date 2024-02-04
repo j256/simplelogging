@@ -2,7 +2,6 @@ package com.j256.simplelogging;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -148,7 +147,7 @@ public class PropertiesUtilsTest {
 		PropertyUtils.clearProperties();
 		PropertyUtils.setPropertiesInputStream(new ByteArrayInputStream(stringWriter.toString().getBytes()));
 		List<PatternLevel> logPatterns = PropertyUtils.readLocalLogPatterns(LogBackendType.LOCAL);
-		assertTrue(logPatterns.isEmpty());
+		assertNull(logPatterns);
 	}
 
 	@Test
@@ -161,7 +160,7 @@ public class PropertiesUtilsTest {
 		PropertyUtils.clearProperties();
 		PropertyUtils.setPropertiesInputStream(new ByteArrayInputStream(stringWriter.toString().getBytes()));
 		List<PatternLevel> logPatterns = PropertyUtils.readLocalLogPatterns(LogBackendType.LOCAL);
-		assertTrue(logPatterns.isEmpty());
+		assertNull(logPatterns);
 	}
 
 	@Test

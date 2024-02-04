@@ -34,6 +34,9 @@ public class PropertyUtils {
 	 */
 	public static String readBackendTypeClassProperty(LogBackendFactory defaultBackendFactory) {
 		List<String[]> props = getProperties(defaultBackendFactory);
+		if (props == null) {
+			return null;
+		}
 		for (String[] entry : props) {
 			if (BACKEND_TYPE_CLASS_PROPERTY.equals(entry[0])) {
 				return entry[1];
@@ -46,8 +49,11 @@ public class PropertyUtils {
 	 * Read the backend type order property from the properties file. Returns null if none.
 	 */
 	public static LogBackendType[] readDiscoveryOrderProperty(LogBackendFactory defaultBackendFactory) {
-		List<LogBackendType> typeList = null;
 		List<String[]> props = getProperties(defaultBackendFactory);
+		if (props == null) {
+			return null;
+		}
+		List<LogBackendType> typeList = null;
 		for (String[] entry : props) {
 			if (!DISCOVERY_ORDER_PROPERTY.equals(entry[0])) {
 				continue;
@@ -78,6 +84,9 @@ public class PropertyUtils {
 	 */
 	public static void assignGlobalLevelFromProperty(LogBackendFactory defaultBackendFactory) {
 		List<String[]> props = getProperties(defaultBackendFactory);
+		if (props == null) {
+			return;
+		}
 		for (String[] entry : props) {
 			if (!GLOBAL_LEVEL_PROPERTY.equals(entry[0])) {
 				continue;
@@ -99,11 +108,14 @@ public class PropertyUtils {
 	}
 
 	/**
-	 * Read the local log level patterns for the loggers
+	 * Read the local log level patterns for the loggers or null if none.
 	 */
 	public static List<PatternLevel> readLocalLogPatterns(LogBackendFactory defaultBackendFactory) {
-		List<PatternLevel> patternLevels = new ArrayList<>();
 		List<String[]> props = getProperties(defaultBackendFactory);
+		if (props == null) {
+			return null;
+		}
+		List<PatternLevel> patternLevels = null;
 		for (String[] entry : props) {
 			if (!entry[0].startsWith(LOCAL_LOG_PROPERTY_PREFIX)) {
 				continue;
@@ -120,6 +132,9 @@ public class PropertyUtils {
 				continue;
 			}
 			Pattern pattern = Pattern.compile(patternStr);
+			if (patternLevels == null) {
+				patternLevels = new ArrayList<>();
+			}
 			patternLevels.add(new PatternLevel(pattern, level));
 		}
 		return patternLevels;
