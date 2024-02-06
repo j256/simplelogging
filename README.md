@@ -36,18 +36,21 @@ Enjoy.  Gray Watson
 
 # Supported Logging Backends
 
-The following logging implementations will be discovered on the classpath in this order.
+The following logging implementations will be discovered in this order.  You can also select a machine through
+code or configuration.
 
-1. SLF4J (often paired with logback)
-2. Android native Log
-3. Logback directly (using slf4j-api)
-4. Apache Commons Logging
-5. LOG4J2 (version 2+)
-6. LOG4J (older, accessed only through reflection if already on the classpath so no dependencies)
-7. AWS lambda logging.
+1. Android native Log
+2. Logback directly (using slf4j-api)
+3. LOG4J2 (version 2+)
+4. LOG4J (older, accessed only through reflection if already on the classpath so no dependencies)
+5. AWS lambda logging.
+6. SLF4J (often paired with logback)
+8. Apache Commons Logging
 8. Local log implementation that can write to a simple file.
 9. Simple console output.
 10. Java util logging which is usually available in the JRE but never chosen directly. 
+
+[Backend discovery documentation](https://256stuff.com/sources/simplelogging/docs/backend-discovery)
 
 # Getting Started
 
@@ -64,6 +67,8 @@ logger.trace("some trace information: {} and {}", arg1, arg2);
 // NOTE: exception argument comes _before_ the message format to not confuse the arguments
 logger.error(exception, "http client threw getting URL: {}", url);
 ```
+
+[Getting started documentation](https://256stuff.com/sources/simplelogging/docs/getting-started)
 
 # "Fluent" Logging with Method Chaining Supported
 
@@ -83,6 +88,8 @@ fluentLogger.atLevel(Level.TRACE)
     .arg(port)
     .log();
 ```
+
+[Fluent logging documentation](https://256stuff.com/sources/simplelogging/docs/fluent-logging)
 
 # Examples of Argument Processing
 
