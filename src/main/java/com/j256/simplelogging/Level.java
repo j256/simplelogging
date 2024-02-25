@@ -44,21 +44,22 @@ public enum Level {
 	}
 
 	/**
-	 * Like {{@link #valueOf(String)}} but tries to capitalize it first.
+	 * Like {{@link #valueOf(String)}} but tries to capitalize it first with the current locale and then English.
 	 * 
 	 * @return null if it is invalid.
 	 */
 	public static Level fromString(String str) {
-		try {
-			// try default locale first
-			return Level.valueOf(str.toUpperCase());
-		} catch (IllegalArgumentException e1) {
-			try {
-				// then try english locale
-				return valueOf(str.toUpperCase(Locale.ENGLISH));
-			} catch (IllegalArgumentException e2) {
-				return null;
+		if (str == null || str.isEmpty()) {
+			return null;
+		}
+		String upper = str.toUpperCase();
+		String upperEnglish = str.toUpperCase(Locale.ENGLISH);
+		for (Level level : values()) {
+			if (level.name().equals(upper)
+					|| level.name().equals(upperEnglish)) {
+				return level;
 			}
 		}
+		return null;
 	}
 }
