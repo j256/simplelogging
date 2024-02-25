@@ -225,10 +225,39 @@ public class LoggerFactoryTest {
 		}
 	}
 
+	@Test
+	public void testGlobalProperty() {
+		String restore = System.getProperty(LoggerConstants.GLOBAL_LOG_LEVEL_SYSTEM_PROPERTY);
+		try {
+			System.clearProperty(LoggerConstants.GLOBAL_LOG_LEVEL_SYSTEM_PROPERTY);
+			Logger.setGlobalLogLevel(null);
+			LoggerFactory.maybeAssignGlobalLogLevelFromProperty();
+			assertNull(Logger.getGlobalLevel());
+			Level level = Level.DEBUG;
+			System.setProperty(LoggerConstants.GLOBAL_LOG_LEVEL_SYSTEM_PROPERTY, level.name());
+			LoggerFactory.maybeAssignGlobalLogLevelFromProperty();
+			assertEquals(level, Logger.getGlobalLevel());
+			System.setProperty(LoggerConstants.GLOBAL_LOG_LEVEL_SYSTEM_PROPERTY, "unknown");
+			LoggerFactory.maybeAssignGlobalLogLevelFromProperty();
+			assertEquals(level, Logger.getGlobalLevel());
+		} finally {
+			if (restore == null) {
+				System.clearProperty(LoggerConstants.GLOBAL_LOG_LEVEL_SYSTEM_PROPERTY);
+			} else {
+				System.setProperty(LoggerConstants.GLOBAL_LOG_LEVEL_SYSTEM_PROPERTY, restore);
+			}
+		}
+	}
+
 	public static class OurLogFactory implements LogBackendFactory {
 
 		LogBackend log;
 		static String lastClassLabel;
+
+		@Override
+		public boolean isAvailable() {
+			return true;
+		}
 
 		@Override
 		public LogBackend createLogBackend(String classLabel) {
@@ -241,6 +270,11 @@ public class LoggerFactoryTest {
 
 		LogBackend log;
 		static String lastClassLabel;
+
+		@Override
+		public boolean isAvailable() {
+			return true;
+		}
 
 		@Override
 		public LogBackend createLogBackend(String classLabel) {
