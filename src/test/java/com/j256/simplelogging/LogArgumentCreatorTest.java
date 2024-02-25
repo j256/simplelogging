@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertSame;
 
+import org.easymock.IAnswer;
 import org.junit.Test;
 
 public class LogArgumentCreatorTest {
@@ -18,8 +19,20 @@ public class LogArgumentCreatorTest {
 
 		String arg = "x";
 		String end = " yyy";
-		expect(mockBackend.isLevelEnabled(Level.TRACE)).andReturn(false);
-		expect(mockBackend.isLevelEnabled(Level.INFO)).andReturn(true);
+		expect(mockBackend.isLevelEnabled(Level.TRACE)).andAnswer(new IAnswer<Boolean>() {
+			@Override
+			public Boolean answer() {
+				new Throwable().printStackTrace();
+				return false;
+			}
+		});
+		expect(mockBackend.isLevelEnabled(Level.INFO)).andAnswer(new IAnswer<Boolean>() {
+			@Override
+			public Boolean answer() {
+				new Throwable().printStackTrace();
+				return true;
+			}
+		});
 		mockBackend.log(Level.INFO, arg + end);
 		LogArgumentCreator logMessageCreator1 = createMock(LogArgumentCreator.class);
 		// no calls to logMessageCreator1
