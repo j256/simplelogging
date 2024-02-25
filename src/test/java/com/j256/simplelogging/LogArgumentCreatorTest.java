@@ -10,13 +10,10 @@ import org.junit.Test;
 
 public class LogArgumentCreatorTest {
 
-	private Logger logger;
-	private LogBackend mockBackend;
-
 	@Test
 	public void testArgAtStart() {
-		mockBackend = createMock(LogBackend.class);
-		logger = new Logger(mockBackend);
+		LogBackend mockBackend = createMock(LogBackend.class);
+		Logger logger = new Logger(mockBackend);
 		assertSame(mockBackend, logger.getLogBackend());
 
 		String arg = "x";
