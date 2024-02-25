@@ -199,4 +199,35 @@ public class PropertiesUtilsTest {
 		PropertyUtils.setPropertiesInputStream(errorStream);
 		PropertyUtils.readLocalLogPatterns(LogBackendType.LOCAL);
 	}
+
+	@Test
+	public void testOrder() {
+		StringWriter stringWriter = new StringWriter();
+		// invalid line
+		stringWriter.write("x\n");
+		// blank line
+		stringWriter.write("\n");
+		PropertyUtils.clearProperties();
+		PropertyUtils.setPropertiesInputStream(new ByteArrayInputStream(stringWriter.toString().getBytes()));
+		LogBackendType[] order = PropertyUtils.readDiscoveryOrderProperty(LogBackendType.LOCAL);
+		assertNull(order);
+	}
+
+	@Test
+	public void testCoverage() {
+		StringWriter stringWriter = new StringWriter();
+		// invalid line
+		stringWriter.write("=\n");
+		stringWriter.write("x=\n");
+		PropertyUtils.clearProperties();
+		PropertyUtils.setPropertiesInputStream(new ByteArrayInputStream(stringWriter.toString().getBytes()));
+		LogBackendType[] order = PropertyUtils.readDiscoveryOrderProperty(LogBackendType.LOCAL);
+		assertNull(order);
+	}
+
+	@Test
+	public void testOrderStringProcessing() {
+		assertNull(PropertyUtils.processDiscoveryOrderValue(null, LogBackendType.LOCAL));
+		assertNull(PropertyUtils.processDiscoveryOrderValue("", LogBackendType.LOCAL));
+	}
 }
