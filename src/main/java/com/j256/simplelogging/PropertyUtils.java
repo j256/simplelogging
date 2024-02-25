@@ -34,9 +34,6 @@ public class PropertyUtils {
 	 */
 	public static String readBackendTypeClassProperty(LogBackendFactory defaultBackendFactory) {
 		List<String[]> props = getProperties(defaultBackendFactory);
-		if (props == null) {
-			return null;
-		}
 		for (String[] entry : props) {
 			if (BACKEND_TYPE_CLASS_PROPERTY.equals(entry[0])) {
 				return entry[1];
@@ -50,25 +47,37 @@ public class PropertyUtils {
 	 */
 	public static LogBackendType[] readDiscoveryOrderProperty(LogBackendFactory defaultBackendFactory) {
 		List<String[]> props = getProperties(defaultBackendFactory);
-		if (props == null) {
+		for (String[] entry : props) {
+			if (DISCOVERY_ORDER_PROPERTY.equals(entry[0])) {
+				return processDiscoveryOrderValue(entry[1], defaultBackendFactory);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Process a list of the discovery order backend types (enum names) and return them as an array.
+	 * 
+	 * @return null if none configured.
+	 */
+	static LogBackendType[] processDiscoveryOrderValue(String value, LogBackendFactory defaultBackendFactory) {
+		if (value == null) {
 			return null;
 		}
 		List<LogBackendType> typeList = null;
-		for (String[] entry : props) {
-			if (!DISCOVERY_ORDER_PROPERTY.equals(entry[0])) {
+		String[] parts = value.split(",");
+		for (String part : parts) {
+			if (part.isEmpty()) {
 				continue;
 			}
-			String[] parts = entry[1].split(",");
-			for (String part : parts) {
-				try {
-					if (typeList == null) {
-						typeList = new ArrayList<>();
-					}
-					typeList.add(LogBackendType.valueOf(part));
-				} catch (IllegalArgumentException iae) {
-					logWarning(defaultBackendFactory,
-							"unknown backend type value '" + part + "' in discovery order property", null);
+			try {
+				if (typeList == null) {
+					typeList = new ArrayList<>(parts.length);
 				}
+				typeList.add(LogBackendType.valueOf(part));
+			} catch (IllegalArgumentException iae) {
+				logWarning(defaultBackendFactory,
+						"unknown backend type value '" + part + "' in discovery order property", null);
 			}
 		}
 		if (typeList == null || typeList.isEmpty()) {
@@ -84,9 +93,6 @@ public class PropertyUtils {
 	 */
 	public static void assignGlobalLevelFromProperty(LogBackendFactory defaultBackendFactory) {
 		List<String[]> props = getProperties(defaultBackendFactory);
-		if (props == null) {
-			return;
-		}
 		for (String[] entry : props) {
 			if (!GLOBAL_LEVEL_PROPERTY.equals(entry[0])) {
 				continue;
@@ -112,9 +118,6 @@ public class PropertyUtils {
 	 */
 	public static List<PatternLevel> readLocalLogPatterns(LogBackendFactory defaultBackendFactory) {
 		List<String[]> props = getProperties(defaultBackendFactory);
-		if (props == null) {
-			return null;
-		}
 		List<PatternLevel> patternLevels = null;
 		for (String[] entry : props) {
 			if (!entry[0].startsWith(LOCAL_LOG_PROPERTY_PREFIX)) {
@@ -172,7 +175,7 @@ public class PropertyUtils {
 			stream = LoggerFactory.class.getResourceAsStream(LoggerConstants.PROPERTIES_CONFIG_FILE);
 			if (stream == null) {
 				// file not found
-				return null;
+				return Collections.emptyList();
 			}
 		}
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream));) {
@@ -206,6 +209,7 @@ public class PropertyUtils {
 
 	private static String trimString(String str) {
 		if (str == null || str.isEmpty()) {
+			// may not get here but let's be careful out there
 			return str;
 		} else {
 			return str.trim();

@@ -2,6 +2,8 @@ package com.j256.simplelogging;
 
 import java.util.Arrays;
 
+import com.j256.simplelogging.backend.NullLogBackend.NullLogBackendFactory;
+
 /**
  * Factory that creates {@link Logger} and {@link FluentLogger} instances. It uses reflection to see what logging
  * backends are available on the classpath and tries to find the most appropriate one.
@@ -26,6 +28,8 @@ public class LoggerFactory {
 
 	{
 		PropertyUtils.assignGlobalLevelFromProperty(LogBackendType.NULL);
+		// system property overrides property setting
+		maybeAssignGlobalLogLevelFromProperty();
 	}
 
 	/**
@@ -106,15 +110,40 @@ public class LoggerFactory {
 	}
 
 	/**
-	 * Return the most appropriate log backend factory. This should _never_ return null.
+	 * Maybe assign the global log level based on the system property. Exposed for testing purposes.
 	 */
-	private static LogBackendFactory findLogBackendFactory() {
+	static void maybeAssignGlobalLogLevelFromProperty() {
+		if (LoggerConstants.GLOBAL_LOG_LEVEL_SYSTEM_PROPERTY != null) {
+			String value = System.getProperty(LoggerConstants.GLOBAL_LOG_LEVEL_SYSTEM_PROPERTY);
+			if (value != null) {
+				Level level = Level.fromString(value);
+				if (level != null) {
+					Logger.setGlobalLogLevel(level);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Return the most appropriate log backend factory. This should _never_ return null. Exposed for testing.
+	 */
+	static LogBackendFactory findLogBackendFactory() {
 
 		// see if the propertied specify the discovery order
-		LogBackendType[] discoveryOrder = PropertyUtils.readDiscoveryOrderProperty(LogBackendType.NULL);
-		if (discoveryOrder == null) {
-			discoveryOrder = LogBackendType.values();
+		LogBackendFactory[] discoveryOrder = PropertyUtils.readDiscoveryOrderProperty(LogBackendType.NULL);
+		// system property overrides property setting
+		if (LoggerConstants.BACKEND_DISCOVERY_ORDER_SYSTEM_PROPERTY != null) {
+			String value = System.getProperty(LoggerConstants.BACKEND_DISCOVERY_ORDER_SYSTEM_PROPERTY);
+			LogBackendType[] order =
+					PropertyUtils.processDiscoveryOrderValue(value, NullLogBackendFactory.getSingleton());
+			if (order != null) {
+				discoveryOrder = order;
+			}
 		}
+		if (discoveryOrder == null) {
+			discoveryOrder = LoggerConstants.DEFAULT_BACKEND_DISCOVERY_ORDER;
+		}
+
 		LogBackendFactory defaultBackendFactory = chooseDefaultBackendFactory(discoveryOrder);
 
 		// see if the log-type was specified as a system property
@@ -192,8 +221,8 @@ public class LoggerFactory {
 		}
 	}
 
-	private static LogBackendFactory chooseDefaultBackendFactory(LogBackendType[] discoveryOrder) {
-		for (LogBackendType logType : discoveryOrder) {
+	private static LogBackendFactory chooseDefaultBackendFactory(LogBackendFactory[] discoveryOrder) {
+		for (LogBackendFactory logType : discoveryOrder) {
 			if (logType.isAvailable()) {
 				return logType;
 			}

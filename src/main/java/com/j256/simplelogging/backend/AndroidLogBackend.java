@@ -196,6 +196,12 @@ public class AndroidLogBackend implements LogBackend {
 	 */
 	public static class AndroidLogBackendFactory implements LogBackendFactory {
 		@Override
+		public boolean isAvailable() {
+			// if we were able to load the classes here then it is available.
+			return true;
+		}
+
+		@Override
 		public LogBackend createLogBackend(String classLabel) {
 			return new AndroidLogBackend(classLabel);
 		}
