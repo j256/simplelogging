@@ -241,6 +241,7 @@ public class LoggerFactoryTest {
 			LoggerFactory.maybeAssignGlobalLogLevelFromProperty();
 			assertEquals(level, Logger.getGlobalLevel());
 		} finally {
+			Logger.setGlobalLogLevel(null);
 			if (restore == null) {
 				System.clearProperty(LoggerConstants.GLOBAL_LOG_LEVEL_SYSTEM_PROPERTY);
 			} else {
