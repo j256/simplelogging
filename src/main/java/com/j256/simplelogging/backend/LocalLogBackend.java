@@ -171,6 +171,12 @@ public class LocalLogBackend implements LogBackend {
 		}
 
 		@Override
+		public boolean isAvailable() {
+			// always available
+			return true;
+		}
+
+		@Override
 		public LogBackend createLogBackend(String classLabel) {
 			LocalLogBackend backend = new LocalLogBackend(classLabel);
 			String queuedWarning = this.queuedWarning.getAndSet(null);
