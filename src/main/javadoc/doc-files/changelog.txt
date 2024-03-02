@@ -6,7 +6,8 @@
 	* Added support for the global log level in the properties file including OFF and NULL.
 	* Added detection of the no-op logging to slf4j backend.
 	* Added isAvailable() check to the LogBackendFactory to allow additional per-factory availability checks.
-	* Pushed SLF4J and COMMONS_LOGGING down the backend list since we should detect logback or log4j2 before. 
+	* Pushed SLF4J and COMMONS_LOGGING down the backend list since we should detect logback or log4j2 before.
+	* Bumped versions of logback and log4j2.
 
 2.3: 1/31/2024
 	* Added appendMsg() to the fluent logger context to allow building the log message dynamically. 
