@@ -17,10 +17,9 @@ supports up to 4 arguments before forcing the caller to pass in an object array 
 method for variable arguments.  It also supports "fluent" logging where you can chain log methods together to build your
 log message which generates no objects if the log level is not enabled.
 
-I understand that this library is similar to other logging systems which separate the API from the logging
-implementation.  I think SimpleLogging is better than the others because it calls directly to specific backend APIs
-which can be chosen through code or configuration. This direct calling allows for more control over the backend
-selection and usually fewer dependencies.
+This library is similar to other logging systems which separate the API from the logging implementation. SimpleLogging
+is better than the others because it calls directly to specific backend APIs which can be chosen through code or
+configuration. this direct calling allows for more control over the backend selection and usually fewer dependencies.
 
 SimpleLogging is also designed to be copied into your open source project so you don't have to add a maven dependency.
 Just copy the java files from ``src/main/java`` into your source tree and rename the packages as necessary.  Please also
@@ -144,7 +143,7 @@ Maven packages are published via [![Maven Central](https://maven-badges.herokuap
 <dependency>
 	<groupId>com.j256.simplelogging</groupId>
 	<artifactId>simplelogging</artifactId>
-	<version>2.3</version>
+	<version>3.0</version>
 </dependency>
 ```
 

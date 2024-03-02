@@ -43,8 +43,8 @@ public class LoggerConstants {
 	public static final String LOG_BACKEND_SYSTEM_PROPERTY = "com.j256.simplelogger.backend";
 
 	/**
-	 * File path to the properties for the simplelogging library. Lines are in the form field = value. Supported fields
-	 * include 'backend = type-or-class' and 'locallog.class-regex-pattern = level'.
+	 * File path to the properties for the simplelogging library. Lines are in the form field = value. See the
+	 * {@link PropertyUtils} for what properties can be set.
 	 */
 	public static final String PROPERTIES_CONFIG_FILE = "/simplelogging.properties";
 

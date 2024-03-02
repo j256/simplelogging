@@ -1,8 +1,12 @@
-3.0: ?/?/2024
-	* Added support for a '* = LEVEL' setting in the simpleLoggingLocalLog.properties file.  NULL value supported.
-	* Added support for simpleLogging.properties file to choose a backend.
+3.0: 3/2/2024
+	* Improved configurability including backend discovery order and global log level.
+	* Added support for all configurations in the simplelogging.properties properties file.
+	* Moved the LocalLog configuration to the central properties file.
+	* Added support for properties file to choose a backend and the backend order.
+	* Added support for the global log level in the properties file including OFF and NULL.
 	* Added detection of the no-op logging to slf4j backend.
-	* Pushed SLF4J down the backend list since we should detect logback or log4j2 before. 
+	* Added isAvailable() check to the LogBackendFactory to allow additional per-factory availability checks.
+	* Pushed SLF4J and COMMONS_LOGGING down the backend list since we should detect logback or log4j2 before. 
 
 2.3: 1/31/2024
 	* Added appendMsg() to the fluent logger context to allow building the log message dynamically. 

@@ -100,13 +100,16 @@ public enum LogBackendType implements LogBackendFactory {
 	 */
 	@Override
 	public boolean isAvailable() {
-		/*
-		 * If this is LogBackendType.LOCAL then it is always available. LogBackendType.NULL is never available. If it is
-		 * another LogBackendType then we might have defaulted to using the local-log backend if it was not available.
-		 */
-		return (this == LogBackendType.LOCAL //
-				|| (this != LogBackendType.NULL && this.factory.isAvailable()
-						&& !(factory instanceof LocalLogBackendFactory)));
+		if (this == LogBackendType.LOCAL) {
+			// always available
+			return true;
+		} else if (this == LogBackendType.NULL || !this.factory.isAvailable()) {
+			// LogBackendType.NULL is never available or check the factory availability method
+			return false;
+		} else {
+			// we might have defaulted to using the local-log backend if it was not available
+			return !(factory instanceof LocalLogBackendFactory);
+		}
 	}
 
 	/**

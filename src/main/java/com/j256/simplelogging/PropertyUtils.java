@@ -18,11 +18,14 @@ import java.util.regex.Pattern;
  */
 public class PropertyUtils {
 
-	public static final String BACKEND_TYPE_CLASS_PROPERTY = "backend";
+	// properties that can be set
+	static final String BACKEND_TYPE_CLASS_PROPERTY = "backend";
 	static final String DISCOVERY_ORDER_PROPERTY = "dicovery.order";
 	static final String GLOBAL_LEVEL_PROPERTY = "global.level";
-	static final String GLOBAL_LEVEL_NULL_VALUE = "NULL";
 	static final String LOCAL_LOG_PROPERTY_PREFIX = "locallog.";
+
+	// other constants
+	static final String GLOBAL_LEVEL_NULL_VALUE = "NULL";
 
 	private static volatile List<String[]> propertyEntries;
 
