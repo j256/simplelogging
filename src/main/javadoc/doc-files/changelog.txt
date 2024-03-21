@@ -1,3 +1,6 @@
+3.1: 3/20/2024
+	* Fixed logback backend by changing logback and slf4j versions.
+
 3.0: 3/2/2024
 	* Improved configurability including backend discovery order and global log level.
 	* Added support for all configurations in the simplelogging.properties properties file.
