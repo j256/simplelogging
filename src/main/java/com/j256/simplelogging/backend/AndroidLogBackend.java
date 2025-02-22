@@ -6,7 +6,6 @@ import com.j256.simplelogging.Level;
 import com.j256.simplelogging.LogBackend;
 import com.j256.simplelogging.LogBackendFactory;
 import com.j256.simplelogging.LoggerConstants;
-import com.j256.simplelogging.LoggerFactory;
 
 /**
  * Log backend that delegates to the internal Android logger.
@@ -56,7 +55,15 @@ public class AndroidLogBackend implements LogBackend {
 
 	public AndroidLogBackend(String className) {
 		// get the last part of the class name
-		String simpleName = LoggerFactory.getSimpleClassName(className);
+		String simpleName;
+		// get the last part of the class name
+		int index = className.lastIndexOf('.');
+		if (index < 0 || index == className.length() - 1) {
+			simpleName = className;
+		} else {
+			simpleName = className.substring(index + 1);
+		}
+
 		// make sure that our tag length is not too long
 		int length = simpleName.length();
 		if (length > MAX_TAG_LENGTH) {

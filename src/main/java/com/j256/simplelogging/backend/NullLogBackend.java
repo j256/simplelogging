@@ -3,7 +3,6 @@ package com.j256.simplelogging.backend;
 import com.j256.simplelogging.Level;
 import com.j256.simplelogging.LogBackend;
 import com.j256.simplelogging.LogBackendFactory;
-import com.j256.simplelogging.LoggerFactory;
 
 /**
  * Log backend that ignores all log requests.
@@ -36,7 +35,7 @@ public class NullLogBackend implements LogBackend {
 
 	/**
 	 * Factory for generating NullLogBackend instances. This can be used with the
-	 * {@link LoggerFactory#setLogBackendFactory(LogBackendFactory)} method to completely disable all logging.
+	 * LoggerFactory.setLogBackendFactory(LogBackendFactory) method to completely disable all logging.
 	 */
 	public static class NullLogBackendFactory implements LogBackendFactory {
 
