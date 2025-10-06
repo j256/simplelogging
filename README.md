@@ -98,6 +98,12 @@ Here are some more examples showing the details about the argument logic:
 private static final Logger logger = LoggerFactory.getLogger(MyClass.class);
 ...
 
+// standard arguments
+String host = "host1";
+int port = 80;
+logger.info("connected to server '{}:{}'", host, port);
+// outputs: connected to server 'host1:80'
+
 // no arguments but a {} pattern
 logger.info("connected to host '{}'");
 // outputs: connected to host '{}'

@@ -18,7 +18,7 @@ public class FluentContextImpl implements FluentContext {
 	private final FluentLogger logger;
 	private final Level level;
 	private String msg;
-	/** message builder only used if {@link FluentContext#appendMsg(String)} is called */
+	/** message builder only used if {@link #appendMsg(String)} is called */
 	private StringBuilder msgBuilder;
 	private Throwable throwable;
 	private Object[] args;
@@ -42,10 +42,9 @@ public class FluentContextImpl implements FluentContext {
 		if (count > 0) {
 			if (args == null) {
 				args = new Object[count];
-			} else if (args.length < count) {
-				args = Arrays.copyOf(args, count);
 			} else {
-				// no point in shrinking it now
+				// NOTE: no point in shrinking it if count < args.length
+				maybeGrowArgs(count, count);
 			}
 		}
 		return this;
@@ -60,7 +59,7 @@ public class FluentContextImpl implements FluentContext {
 		} else if (this.msg == null) {
 			// effectively the same as msg(String)
 			this.msg = msgSuffix;
-		} else if (msgSuffix.length() > 0) {
+		} else {
 			this.msgBuilder = new StringBuilder(this.msg);
 			this.msg = null;
 			this.msgBuilder.append(msgSuffix);
@@ -141,9 +140,8 @@ public class FluentContextImpl implements FluentContext {
 			argCount = addArgs.length;
 		} else {
 			// extend the array if necessary
-			if (args.length - argCount < addArgs.length) {
-				this.args = Arrays.copyOf(args, argCount + addArgs.length);
-			}
+			int needed = argCount + addArgs.length;
+			maybeGrowArgs(needed, needed);
 			for (int i = 0; i < addArgs.length; i++) {
 				args[argCount++] = addArgs[i];
 			}
@@ -181,10 +179,19 @@ public class FluentContextImpl implements FluentContext {
 	private void addArg(Object arg) {
 		if (args == null) {
 			args = new Object[DEFAULT_NUM_ARGS];
-		} else if (argCount >= args.length) {
+		} else {
 			// whenever we grow the array we double it
-			args = Arrays.copyOf(args, args.length * 2);
+			maybeGrowArgs(argCount + 1, args.length * 2);
 		}
 		args[argCount++] = arg;
+	}
+
+	/**
+	 * Maybe grow our args array if the new-length is more than the args.length.
+	 */
+	private void maybeGrowArgs(int neededLength, int growToLength) {
+		if (neededLength > args.length) {
+			args = Arrays.copyOf(args, growToLength);
+		}
 	}
 }

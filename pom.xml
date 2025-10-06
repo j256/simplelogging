@@ -84,18 +84,6 @@
 	</profiles>
 	<build>
 		<finalName>simplelogging</finalName>
-		<!-- Resources -->
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>
-		<!-- Test Resources -->
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-			</testResource>
-		</testResources>
 		<!-- Plugins -->
 		<plugins>
 			<plugin>

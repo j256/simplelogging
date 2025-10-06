@@ -82,19 +82,20 @@ public interface FluentContext {
 	 * message. To add an array to be associated with a single {} and displayed as {@code [arg1, arg2, ...]} then you
 	 * need to use the method {@link #arg(Object)} which will interpret the array as a single object.
 	 * 
-	 * For example, the following code calls this args(...) method:
+	 * For example, the following code calls this args(...) method where each element in the array matches a {} from the
+	 * message.
 	 * 
 	 * <pre>
-	 * // this outputs: 1 + 2 = 3
 	 * fluentLogger.msg("{} + {} = {}").args(new Object[] { 1, 2, 3 }).log();
+	 * // this outputs: 1 + 2 = 3
 	 * </pre>
 	 * 
 	 * While this code calls {@link #arg(Object)} which interprets the array as an @code{Object} and will match a single
 	 * {} from the message:
 	 * 
 	 * <pre>
-	 * // this outputs: port numbers: [1, 2, 3]
 	 * fluentLogger.msg("port numbers: {}").arg(new Object[] { 1, 2, 3 }).log();
+	 * // this outputs: port numbers: [1, 2, 3]
 	 * </pre>
 	 * 
 	 * <b>NOTE:</b> this will reuse the args argument but only until the log() call or until another arg is added.
