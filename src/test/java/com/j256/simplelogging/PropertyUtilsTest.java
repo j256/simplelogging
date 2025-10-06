@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.j256.simplelogging.PropertyUtils.PatternLevel;
 
-public class PropertiesUtilsTest {
+public class PropertyUtilsTest {
 
 	@AfterClass
 	public static void afterClass() {

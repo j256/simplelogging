@@ -105,4 +105,14 @@ public class LocalLogBackendTest extends BaseLogBackendTest {
 		assertTrue(backend.isLevelEnabled(Level.DEBUG));
 		assertTrue(backend.isLevelEnabled(Level.TRACE));
 	}
+
+	@Test
+	public void testCoverage() {
+		LocalLogBackend backend = new LocalLogBackend("Foo");
+		assertFalse(backend.isLevelEnabled(Level.TRACE));
+		backend = new LocalLogBackend("Foo.");
+		assertFalse(backend.isLevelEnabled(Level.TRACE));
+		backend = new LocalLogBackend("com.j256.simplelogging.Initial");
+		assertFalse(backend.isLevelEnabled(Level.TRACE));
+	}
 }
