@@ -384,18 +384,19 @@ public class FluentLoggerTest {
 	@Ignore("Only to be run once and a while")
 	public void testPerformance() {
 		/*
-		 * Not really a fair test because hotswap might take out some of the method calls but I thought it would be
-		 * interesting. In the loop, constant 1, 2, 3 numbers was similar times between fluent and non because it wasn't
-		 * actually creating the objects but was using the JVM numeric object cache so i was used.
+		 * Not really a fair test because hotswap might take out some of the method calls that might not happen in a
+		 * larger program with fewer log calls but I thought it would be interesting. In the loop, constant 1, 2, 3
+		 * numbers was similar times between fluent and non because it wasn't actually creating the objects but was
+		 * using the JVM numeric object cache so i was used.
 		 */
 		Logger logger = new Logger(new NullBackend());
 		FluentLogger fluentLogger = new FluentLogger(new NullBackend());
 		boolean fluent = false;
 		for (long x = 0; x < 10 * 1000 * 1000 * 1000L; x++) {
 			if (fluent) {
-				fluentLogger.atTrace().msg("{} + {} = {}").arg(x).arg(x + 1).arg(x + 2).log();
+				fluentLogger.atTrace().msg("{} + {} != {}").arg(x).arg(x + 1).arg(x + 2).log();
 			} else {
-				logger.trace("{} + {} = {}", x, x + 1, x + 2);
+				logger.trace("{} + {} != {}", x, x + 1, x + 2);
 			}
 		}
 	}

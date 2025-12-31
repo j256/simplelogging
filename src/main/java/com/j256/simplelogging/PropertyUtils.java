@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * Utilities class for dealing with the simplelogging properties file.
+ * Utility class for dealing with the optional simplelogging properties file.
  * 
  * From SimpleLogging: https://github.com/j256/simplelogging
  * 

@@ -36,7 +36,8 @@ public enum LogBackendType implements LogBackendFactory {
 	 */
 	SLF4J("Slf4jLoggingLogBackend$Slf4jLoggingLogBackendFactory"),
 	/**
-	 * Old version of the log4j package. See https://logging.apache.org/log4j/2.x/
+	 * Old version of the log4j package accessed through reflection so as to not show up as a dependency. This will only
+	 * be used if the log4j jar is supplied. See https://logging.apache.org/log4j/2.x/
 	 */
 	LOG4J("Log4jLogBackend$Log4jLogBackendFactory"),
 	/**

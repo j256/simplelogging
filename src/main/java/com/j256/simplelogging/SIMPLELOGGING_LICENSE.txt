@@ -2,7 +2,7 @@ License for the SimpleLogging code: https://github.com/j256/simplelogging
 
 ISC License (https://opensource.org/licenses/ISC)
 
-Copyright 2023, Gray Watson
+Copyright 2025, Gray Watson
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
