@@ -1,7 +1,7 @@
 Java Simple Logging Package
 ===========================
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/badge.svg?style=flat-square)](https://mvnrepository.com/artifact/com.j256.simplelogging/simplelogging/latest)
+[![Maven Central](https://img.shields.io/maven-central/v/simplelogging/simplelogging?style=flat-square)](https://mvnrepository.com/artifact/com.j256.simplelogging/simplelogging/latest)
 [![javadoc](https://javadoc.io/badge2/com.j256.simplelogging/simplelogging/javadoc.svg)](https://javadoc.io/doc/com.j256.simplelogging/simplelogging)
 [![ChangeLog](https://img.shields.io/github/v/release/j256/simplelogging?label=changelog&display_name=release)](https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/changelog.txt)
 [![Documentation](https://img.shields.io/github/v/release/j256/simplelogging?label=documentation&display_name=release)](https://htmlpreview.github.io/?https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/simplelogging.html)
@@ -143,7 +143,9 @@ logger.info("connected to host '{}'", server);
 
 # Maven Configuration
 
-Maven packages are published via [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.j256.simplelogging/simplelogging/badge.svg?style=flat-square)](https://mvnrepository.com/artifact/com.j256.simplelogging/simplelogging/latest)
+
+Maven packages are published via [Maven Central](https://mvnrepository.com/artifact/com.j256.simplelogging/simplelogging/latest)
+
 
 ``` xml
 <dependency>
@@ -160,4 +162,4 @@ they are already in your application's classpath.
 
 # ChangeLog Release Notes
 
-See the [![ChangeLog](https://img.shields.io/github/v/release/j256/simplelogging?label=changelog)](https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/changelog.txt)
+See the [ChangeLog](https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/changelog.txt)
