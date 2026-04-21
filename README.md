@@ -151,7 +151,7 @@ Maven packages are published via [Maven Central](https://mvnrepository.com/artif
 <dependency>
 	<groupId>com.j256.simplelogging</groupId>
 	<artifactId>simplelogging</artifactId>
-	<version>3.0</version>
+	<version>3.1</version>
 </dependency>
 ```
 
@@ -162,4 +162,4 @@ they are already in your application's classpath.
 
 # ChangeLog Release Notes
 
-See the [ChangeLog](https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/changelog.txt)
+See the [ChangeLog file](https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/changelog.txt)
