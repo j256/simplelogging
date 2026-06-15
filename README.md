@@ -3,11 +3,11 @@ Java Simple Logging Package
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.j256.simplelogging/simplelogging?style=flat-square)](https://mvnrepository.com/artifact/com.j256.simplelogging/simplelogging/latest)
 [![javadoc](https://javadoc.io/badge2/com.j256.simplelogging/simplelogging/javadoc.svg)](https://javadoc.io/doc/com.j256.simplelogging/simplelogging)
-[![ChangeLog](https://img.shields.io/github/v/release/j256/simplelogging?label=changelog&display_name=release)](https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/changelog.txt)
-[![Documentation](https://img.shields.io/github/v/release/j256/simplelogging?label=documentation&display_name=release)](https://htmlpreview.github.io/?https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/simplelogging.html)
+[![ChangeLog](https://img.shields.io/github/v/release/j256/simplelogging?label=changelog&display_name=release)](https://github.com/j256/simplelogging/blob/main/src/main/javadoc/doc-files/changelog.txt)
+[![Documentation](https://img.shields.io/github/v/release/j256/simplelogging?label=documentation&display_name=release)](https://htmlpreview.github.io/?https://github.com/j256/simplelogging/blob/main/src/main/javadoc/doc-files/simplelogging.html)
 [![CodeCov](https://img.shields.io/codecov/c/github/j256/simplelogging.svg)](https://codecov.io/github/j256/simplelogging/)
 [![CI](https://github.com/j256/simplelogging/actions/workflows/maven.yml/badge.svg)](https://github.com/j256/simplelogging/actions/workflows/maven.yml)
-[![GitHub License](https://img.shields.io/github/license/j256/simplelogging)](https://github.com/j256/simplelogging/blob/master/LICENSE.txt)
+[![GitHub License](https://img.shields.io/github/license/j256/simplelogging)](https://github.com/j256/simplelogging/blob/main/LICENSE.txt)
 
 The goal of this library is to be a small logging facade that backends to a number of standard logging packages and that
 can be copied into another project.  This allows you to write your code and include log messages without having a fixed
@@ -28,7 +28,7 @@ constants in ``LoggerConstants.java``.
 
 * The source code be found on the [git repository](https://github.com/j256/simplelogging)
 * Maven packages are published via [Maven Central](https://mvnrepository.com/artifact/com.j256.simplelogging/simplelogging/latest)
-* [Documentation for the library](https://htmlpreview.github.io/?https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/simplelogging.html).  More on the [home page](https://256stuff.com/sources/simplelogging/).
+* [Documentation for the library](https://htmlpreview.github.io/?https://github.com/j256/simplelogging/blob/main/src/main/javadoc/doc-files/simplelogging.html).  More on the [home page](https://256stuff.com/sources/simplelogging/).
 * [Javadoc documentation](https://javadoc.io/doc/com.j256.simplelogging/simplelogging)
 
 Enjoy.  Gray Watson
@@ -162,4 +162,4 @@ they are already in your application's classpath.
 
 # ChangeLog Release Notes
 
-See the [ChangeLog file](https://github.com/j256/simplelogging/blob/master/src/main/javadoc/doc-files/changelog.txt)
+See the [ChangeLog file](https://github.com/j256/simplelogging/blob/main/src/main/javadoc/doc-files/changelog.txt)
