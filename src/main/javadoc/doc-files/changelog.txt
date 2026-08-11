@@ -1,5 +1,6 @@
 3.2: 8/11/2026
 	* Fixed a NPE in LogBackendType b/c class.getPackage() can return null.  Obfuscated?  Thanks AndroidDeveloperLB.
+	* Removed old log4j v1 backend.  Overdue.
 
 3.1: 4/21/2026
 	* Fixed logback backend by changing logback and slf4j versions.

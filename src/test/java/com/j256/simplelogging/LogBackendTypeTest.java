@@ -13,10 +13,6 @@ public class LogBackendTypeTest {
 	@Test
 	public void testBackends() {
 		for (LogBackendType type : LogBackendType.values()) {
-			if (type == LogBackendType.LOG4J) {
-				// we have to skip it because it is only enabled with a certain profile
-				continue;
-			}
 			if (type == LogBackendType.ANDROID || type == LogBackendType.NULL) {
 				assertFalse(type + " should not be available", type.isAvailable());
 				// NOTE: type.createLogBackend() defers to LocalLog
@@ -31,10 +27,6 @@ public class LogBackendTypeTest {
 	@Test
 	public void testBackendsAvailable() {
 		for (LogBackendType type : LogBackendType.values()) {
-			if (type == LogBackendType.LOG4J) {
-				// we have to skip it because it is only enabled with a certain profile
-				continue;
-			}
 			if (type == LogBackendType.ANDROID || type == LogBackendType.NULL) {
 				assertFalse(type + " should not be available", LogBackendType.isAvailable(type));
 				// NOTE: type.createLogBackend() defers to LocalLog
