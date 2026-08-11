@@ -8,7 +8,7 @@
 @c ----------------------------------------------------------------
 @set simplelogging_version 3.1
 @set simplelogging_year 2026
-@set simplelogging_date April @value{simplelogging_year}
+@set simplelogging_date August @value{simplelogging_year}
 @set package SimpleLogging
 @c ----------------------------------------------------------------
 
