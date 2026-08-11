@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.j256.simplelogging</groupId>
 	<artifactId>simplelogging</artifactId>
-	<version>3.1</version>
+	<version>3.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Simple Logging</name>
 	<url>https://256stuff.com/sources/simplelogging/</url>
@@ -38,7 +38,7 @@
 		<url>https://github.com/j256/simplelogging</url>
 		<connection>scm:git:ssh://git@github.com/j256/simplelogging.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/j256/simplelogging.git</developerConnection>
-	  <tag>simplelogging-3.1</tag>
+	  <tag>HEAD</tag>
   </scm>
 	<developers>
 		<developer>
