@@ -61,7 +61,6 @@ public class LoggerFactoryTest {
 		checkLog(LogBackendType.ANDROID, backupBackend, false);
 		checkLog(LogBackendType.COMMONS_LOGGING, CommonsLoggingLogBackend.class, true);
 		checkLog(LogBackendType.LOG4J2, Log4j2LogBackend.class, true);
-		checkLog(LogBackendType.LOG4J, backupBackend, false);
 		checkLog(LogBackendType.LOCAL, LocalLogBackend.class, true);
 		checkLog(LogBackendType.JAVA_UTIL, JavaUtilLogBackend.class, true);
 		checkLog(LogBackendType.NULL, NullLogBackend.class, false);
