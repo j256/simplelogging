@@ -80,14 +80,7 @@ public enum LogBackendType implements LogBackendFactory {
 	}
 
 	private LogBackendType(String factoryClassName) {
-		// is the specified class a full package or is it relative to the location of the LocalLogBackendFactory.class
-		if (factoryClassName.contains(".")) {
-			// NOTE: may not get here but others could add full class names to the above list
-			this.factory = detectFactory(factoryClassName);
-		} else {
-			// the name is a suffix and we tack on the package from the local log factory
-			this.factory = detectFactory(LocalLogBackendFactory.class.getPackage().getName() + '.' + factoryClassName);
-		}
+		this.factory = detectFactory(factoryClassName);
 	}
 
 	@Override
@@ -125,6 +118,10 @@ public enum LogBackendType implements LogBackendFactory {
 			if (!logBackendFactory.isAvailable()) {
 				return false;
 			} else {
+				/*
+				 * We make this call here to exercise the class because we have seen that sometimes (Android) can have
+				 * fake classes that only throw if they are really used.
+				 */
 				logBackendFactory.createLogBackend("test").isLevelEnabled(Level.INFO);
 				return true;
 			}
@@ -138,22 +135,41 @@ public enum LogBackendType implements LogBackendFactory {
 	 */
 	private LogBackendFactory detectFactory(String factoryClassName) {
 		try {
+			// this might throw if there is some issue with the package which (I gather) can happen when obfuscated
+			String fullClassName;
+			if (factoryClassName.indexOf('.') >= 0) {
+				fullClassName = factoryClassName;
+			} else {
+				// NOTE: in some situations class.getPackage() will return null -- maybe due to obfuscation
+				Package pack = LocalLogBackendFactory.class.getPackage();
+				if (pack == null) {
+					// I doubt that this is going to be able to find the class but who knows
+					fullClassName = factoryClassName;
+				} else {
+					fullClassName = pack.getName() + '.' + factoryClassName;
+				}
+			}
+
 			// sometimes the constructor works but it's not fully wired
-			LogBackendFactory factory = (LogBackendFactory) Class.forName(factoryClassName).newInstance();
+			LogBackendFactory factory = (LogBackendFactory) Class.forName(fullClassName).newInstance();
 			// we may really need to use the class before we see issues
 			factory.createLogBackend("test").isLevelEnabled(Level.INFO);
 			if (factory.isAvailable()) {
 				return factory;
 			} else {
-				String queuedWarning = "Factory class " + factoryClassName + " for log type " + this
+				/*
+				 * We don't immediately report on this issue because this log factory will most likely never be used. If
+				 * it is, the first thing that the factory will do is log a warning.
+				 */
+				String queuedWarning = "Factory class " + fullClassName + " for log type " + this
 						+ ", is not available, using local log";
 				return new LocalLogBackendFactory(queuedWarning);
 			}
 		} catch (Throwable th) {
 			/*
-			 * We catch throwable here because we could get linkage errors. We don't immediately report on this issue
-			 * because this log factory will most likely never be used. If it is, the first thing that the factory will
-			 * so is use the first LogBackend generated to log this warning.
+			 * We catch throwable here because we could get linkage errors or obfuscation issues. We don't immediately
+			 * report on this issue because this log factory will most likely never be used. If it is, the first thing
+			 * that the factory will do is log a warning.
 			 */
 			String queuedWarning = "Unable to create instance of class " + factoryClassName + " for log type " + this
 					+ ", using local log: " + th;

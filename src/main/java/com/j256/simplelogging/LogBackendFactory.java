@@ -10,9 +10,9 @@ package com.j256.simplelogging;
 public interface LogBackendFactory {
 
 	/**
-	 * Return true if the backend factory is available and can be used. If the backend available on the classpath and
-	 * wired correctly. Typically the factory wouldn't have been able to be instantiated if the classes weren't there
-	 * but sometimes there are some additional checks to see if the factory is fully available.
+	 * Return true if the backend factory is available on the classpath and wired correctly. Typically the factory is
+	 * available if it can be instantiated, but sometimes there are some additional checks needed to test if it is fully
+	 * available.
 	 */
 	public boolean isAvailable();
 
